@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaming Leaderboard System Diagrams</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2196F3, #21CBF3);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        
+        .tab-container {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            background: #f5f5f5;
+            border: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            background: white;
+            color: #2196F3;
+            border-bottom: 3px solid #2196F3;
+        }
+        
+        .tab:hover {
+            background: #e9e9e9;
+        }
+        
+        .tab.active:hover {
+            background: white;
+        }
+        
+        .content {
+            padding: 40px;
+            min-height: 800px;
+        }
+        
+        .diagram-section {
+            display: none;
+        }
+        
+        .diagram-section.active {
+            display: block;
+        }
+        
+        /* Sequence Diagram Styles */
+        .sequence-diagram {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        .actors {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            min-width: 1200px;
+        }
+        
+        .actor {
+            text-align: center;
+            min-width: 120px;
+        }
+        
+        .actor-box {
+            background: #2196F3;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        .lifeline {
+            width: 2px;
+            background: #ddd;
+            height: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .messages {
+            position: relative;
+            height: 600px;
+        }
+        
+        .message {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #333;
+        }
+        
+        .message::after {
+            content: '';
+            position: absolute;
+            right: -5px;
+            top: -3px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid #333;
+            border-top: 4px solid transparent;
+            border-bottom: 4px solid transparent;
+        }
+        
+        .message-label {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            white-space: nowrap;
+            border: 1px solid #ddd;
+        }
+        
+        /* Flow Diagram Styles */
+        .flow-diagram {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .flow-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .flow-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .flow-box {
+            background: white;
+            border: 2px solid #2196F3;
+            border-radius: 10px;
+            padding: 15px;
+            min-width: 150px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .flow-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        }
+        
+        .flow-box.process {
+            background: #E3F2FD;
+            border-color: #1976D2;
+        }
+        
+        .flow-box.storage {
+            background: #E8F5E8;
+            border-color: #4CAF50;
+        }
+        
+        .flow-box.cache {
+            background: #FFF3E0;
+            border-color: #FF9800;
+        }
+        
+        .arrow {
+            font-size: 24px;
+            color: #666;
+            animation: pulse 2s infinite;
+        }
+        
+        .arrow.down {
+            transform: rotate(90deg);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+        
+        .explanation {
+            background: #f0f8ff;
+            border-left: 4px solid #2196F3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .step-counter {
+            background: #2196F3;
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .timing-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 13px;
+        }
+        
+        .performance-badge {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 Distributed Gaming Leaderboard System</h1>
+            <p>Visual Flow & Sequence Diagrams</p>
+        </div>
+        
+        <div class="tab-container">
+            <button class="tab active" onclick="showDiagram('score-update')">Score Update Flow</button>
+            <button class="tab" onclick="showDiagram('leaderboard-query')">Leaderboard Query Flow</button>
+            <button class="tab" onclick="showDiagram('system-architecture')">System Architecture</button>
+        </div>
+        
+        <div class="content">
+            <!-- Score Update Flow -->
+            <div id="score-update" class="diagram-section active">
+                <h2>🔄 Score Update Flow - End to End Journey</h2>
+                <p>This diagram shows what happens when a player achieves a new score in the game. Think of this as following a single score update from the moment it's generated until it's visible in leaderboards worldwide.</p>
+                
+                <div class="flow-diagram">
+                    <div class="flow-container">
+                        <!-- Step 1 -->
+                        <div class="flow-row">
+                            <div class="flow-box">
+                                <strong>🎯 Player Action</strong><br>
+                                Player scores 95,000 points
+                                <div class="performance-badge">&lt; 1ms</div>
+                            </div>
+                        </div>
+                        
+                        <div class="arrow down">→</div>
+                        
+                        <!-- Step 2 -->
+                        <div class="flow-row">
+                            <div class="flow-box process">
+                                <strong>🖥️ Regional Game Server</strong><br>
+                                • Validate score<br>
+                                • Anti-cheat check<br>
+                                • Immediate player feedback
+                                <div class="performance-badge">&lt; 10ms</div>
+                            </div>
+                        </div>
+                        
+                        <div class="arrow down">→</div>
+                        
+                        <!-- Step 3 -->
+                        <div class="flow-row">
+                            <div class="flow-box process">
+                                <strong>📨 Message Queue</strong><br>
+                                Kafka/Kinesis<br>
+                                Score event published
+                                <div class="performance-badge">&lt; 5ms</div>
+                            </div>
+                            <div class="arrow">→</div>
+                            <div class="flow-box process">
+                                <strong>⚡ Stream Processing</strong><br>
+                                • Deduplication<br>
+                                • Validation<br>
+                                • Routing logic
+                                <div class="performance-badge">&lt; 50ms</div>
+                            </div>
+                        </div>
+                        
+                        <div class="arrow down">→</div>
+                        
+                        <!-- Step 4 - Parallel Processing -->
+                        <div class="flow-row">
+                            <div class="flow-box storage">
+                                <strong>🔥 Hot Storage</strong><br>
+                                Redis Cluster<br>
+                                Top players updated
+                                <div class="performance-badge">&lt; 10ms</div>
+                            </div>
+                            <div class="flow-box storage">
+                                <strong>💾 Warm Storage</strong><br>
+                                DynamoDB/Cassandra<br>
+                                Player score record
+                                <div class="performance-badge">&lt; 100ms</div>
+                            </div>
+                            <div class="flow-box storage">
+                                <strong>❄️ Cold Storage</strong><br>
+                                S3/HDFS<br>
+                                Batch scheduled
+                                <div class="performance-badge">Minutes</div>
+                            </div>
+                        </div>
+                        
+                        <div class="arrow down">→</div>
+                        
+                        <!-- Step 5 -->
+                        <div class="flow-row">
+                            <div class="flow-box process">
+                                <strong>🧮 Rank Calculator</strong><br>
+                                Background job determines<br>
+                                if rank changed significantly
+                                <div class="performance-badge">5-15 min</div>
+                            </div>
+                        </div>
+                        
+                        <div class="arrow down">→</div>
+                        
+                        <!-- Step 6 -->
+                        <div class="flow-row">
+                            <div class="flow-box cache">
+                                <strong>🗑️ Cache Invalidation</strong><br>
+                                Affected leaderboard<br>
+                                segments cleared
+                                <div class="performance-badge">&lt; 1ms</div>
+                            </div>
+                            <div class="arrow">→</div>
+                            <div class="flow-box process">
+                                <strong>🌍 Global Replication</strong><br>
+                                Updates propagated to<br>
+                                other regions
+                                <div class="performance-badge">1-5 min</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="explanation">
+                    <h3>🔍 Key Insights for Score Updates</h3>
+                    <p><span class="step-counter">1</span><strong>Immediate Feedback:</strong> Players see their score update instantly through optimistic updates, even while the system processes the change globally.</p>
+                    <p><span class="step-counter">2</span><strong>Parallel Processing:</strong> Different storage systems are updated simultaneously rather than sequentially, reducing overall latency.</p>
+                    <p><span class="step-counter">3</span><strong>Smart Prioritization:</strong> Only top players get real-time rank updates, while others get batched updates for efficiency.</p>
+                    <p><span class="step-counter">4</span><strong>Regional Optimization:</strong> Each region processes its own updates first, then synchronizes globally.</p>
+                </div>
+                
+                <div class="timing-info">
+                    <strong>⏱️ Performance Expectations:</strong><br>
+                    Player sees score update: &lt; 10ms | Score persisted globally: &lt; 100ms | Rank visible worldwide: 5-15 minutes
+                </div>
+            </div>
+            
+            <!-- Leaderboard Query Flow -->
+            <div id="leaderboard-query" class="diagram-section">
+                <h2>🔍 Leaderboard Query Flow - How Players See Rankings</h2>
+                <p>This shows the journey when a player requests to see the leaderboard. The system is designed to serve most requests from cache layers for maximum speed.</p>
+                
+                <div class="flow-diagram">
+                    <div class="flow-container">
+                        <!-- Step 1 -->
+                        <div class="flow-row">
+                            <div class="flow-box">
+                                <strong>📱 Player Request</strong><br>
+                                "Show me ranks 500-600"
+                                <div class="performance-badge">Start</div>
+                            </div>
+                        </div>
+                        
+                        <div class="arrow down">→</div>
+                        
+                        <!-- Step 2 -->
+                        <div class="flow-row">
+                            <div class="flow-box cache">
+                                <strong>🌐 CDN Edge Cache</strong><br>
+                                CloudFlare/CloudFront<br>
+                                Geographic edge servers
+                                <div class="performance-badge">&lt; 20ms</div>
+                            </div>
+                        </div>
+                        
+                        <div class="arrow down">→</div>
+                        
+                        <!-- Decision Point -->
+                        <div class="flow-row">
+                            <div class="flow-box" style="background: #ffe6e6; border-color: #ff4444;">
+                                <strong>❓ Cache Hit?</strong><br>
+                                Is data fresh enough?
+                            </div>
+                        </div>
+                        
+                        <!-- Cache Hit Path -->
+                        <div class="flow-row">
+                            <div class="flow-box" style="background: #e6ffe6; border-color: #44ff44;">
+                                <strong>✅ Cache Hit</strong><br>
+                                Return cached leaderboard<br>
+                                <strong>END (Fast Path)</strong>
+                                <div class="performance-badge">&lt; 20ms</div>
+                            </div>
+                            <div style="margin: 0 50px;"></div>
+                            <div class="flow-box" style="background: #ffe6e6; border-color: #ff4444;">
+                                <strong>❌ Cache Miss</strong><br>
+                                Continue to backend<br>
+                                <strong>CONTINUE</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="arrow down">→</div>
+                        
+                        <!-- Step 3 -->
+                        <div class="flow-row">
+                            <div class="flow-box process">
+                                <strong>🚪 API Gateway</strong><br>
+                                • Route to nearest region<br>
+                                • Rate limiting<br>
+                                • Load balancing
+                                <div class="performance-badge">&lt; 10ms</div>
+                            </div>
+                        </div>
+                        
+                        <div class="arrow down">→</div>
+                        
+                        <!-- Step 4 -->
+                        <div class="flow-row">
+                            <div class="flow-box cache">
+                                <strong>⚡ App Cache (Redis)</strong><br>
+                                Regional Redis cluster<br>
+                                Leaderboard segments
+                                <div class="performance-badge">&lt; 5ms</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Another Decision -->
+                        <div class="arrow down">→</div>
+                        <div class="flow-row">
+                            <div class="flow-box" style="background: #ffe6e6; border-color: #ff4444;">
+                                <strong>❓ Cache Hit?</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="arrow down">→</div>
+                        
+                        <!-- Database Query -->
+                        <div class="flow-row">
+                            <div class="flow-box storage">
+                                <strong>💾 Database Query</strong><br>
+                                DynamoDB/Cassandra<br>
+                                Fetch rank range 500-600
+                                <div class="performance-badge">&lt; 50ms</div>
+                            </div>
+                        </div>
+                        
+                        <div class="arrow down">→</div>
+                        
+                        <!-- Step 5 -->
+                        <div class="flow-row">
+                            <div class="flow-box process">
+                                <strong>🔧 Response Assembly</strong><br>
+                                • Format leaderboard data<br>
+                                • Add player details<br>
+                                • Apply permissions
+                                <div class="performance-badge">&lt; 10ms</div>
+                            </div>
+                        </div>
+                        
+                        <div class="arrow down">→</div>
+                        
+                        <!-- Step 6 -->
+                        <div class="flow-row">
+                            <div class="flow-box cache">
+                                <strong>💾 Update Caches</strong><br>
+                                Store in Redis and CDN<br>
+                                for future requests
+                                <div class="performance-badge">&lt; 5ms</div>
+                            </div>
+                            <div class="arrow">→</div>
+                            <div class="flow-box">
+                                <strong>📱 Response to Player</strong><br>
+                                Leaderboard displayed
+                                <div class="performance-badge">Total: &lt; 100ms</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="explanation">
+                    <h3>🎯 Query Optimization Strategies</h3>
+                    <p><span class="step-counter">1</span><strong>Multi-Layer Caching:</strong> Most requests (80%+) are served from CDN cache without hitting backend servers.</p>
+                    <p><span class="step-counter">2</span><strong>Geographic Routing:</strong> Players are automatically routed to the nearest data center for minimal network latency.</p>
+                    <p><span class="step-counter">3</span><strong>Intelligent TTL:</strong> Top rankings are cached for shorter periods (30s) while lower rankings can be cached longer (5 minutes).</p>
+                    <p><span class="step-counter">4</span><strong>Predictive Caching:</strong> Popular leaderboard segments are pre-computed and cached during low-traffic periods.</p>
+                </div>
+                
+                <div class="timing-info">
+                    <strong>⚡ Performance Breakdown:</strong><br>
+                    Cache Hit (Best): &lt; 20ms | Cache Miss (Worst): &lt; 100ms | Average Response: &lt; 50ms
+                </div>
+            </div>
+            
+            <!-- System Architecture -->
+            <div id="system-architecture" class="diagram-section">
+                <h2>🏗️ Complete System Architecture Overview</h2>
+                <p>This high-level view shows how all components work together to create a globally distributed, highly available leaderboard system.</p>
+                
+                <div class="flow-diagram">
+                    <div class="flow-container">
+                        <!-- Layer 1: Players -->
+                        <div class="flow-row">
+                            <div class="flow-box">
+                                <strong>🌍 Global Players</strong><br>
+                                Millions of concurrent users<br>
+                                across different regions
+                            </div>
+                        </div>
+                        
+                        <div class="arrow down">↕</div>
+                        
+                        <!-- Layer 2: CDN & Edge -->
+                        <div class="flow-row">
+                            <div class="flow-box cache">
+                                <strong>🌐 CDN Layer</strong><br>
+                                CloudFlare/CloudFront<br>
+                                Edge caching worldwide<br>
+                                <em>Latency: &lt; 20ms</em>
+                            </div>
+                        </div>
+                        
+                        <div class="arrow down">↕</div>
+                        
+                        <!-- Layer 3: Regional API Gateways -->
+                        <div class="flow-row">
+                            <div class="flow-box process">
+                                <strong>🌎 US-East Gateway</strong><br>
+                                API Gateway<br>
+                                Load Balancer
+                            </div>
+                            <div class="flow-box process">
+                                <strong>🌍 EU Gateway</strong><br>
+                                API Gateway<br>
+                                Load Balancer
+                            </div>
+                            <div class="flow-box process">
+                                <strong>🌏 Asia Gateway</strong><br>
+                                API Gateway<br>
+                                Load Balancer
+                            </div>
+                        </div>
+                        
+                        <div class="arrow down">↕</div>
+                        
+                        <!-- Layer 4: Regional Services -->
+                        <div class="flow-row">
+                            <div class="flow-box process">
+                                <strong>🎮 Game Servers</strong><br>
+                                Score validation<br>
+                                Player sessions<br>
+                                Anti-cheat systems
+                            </div>
+                            <div class="flow-box cache">
+                                <strong>⚡ Redis Clusters</strong><br>
+                                Hot leaderboard data<br>
+                                Sub-10ms queries<br>
+                                Cross-region replication
+                            </div>
+                            <div class="flow-box process">
+                                <strong>📊 Leaderboard APIs</strong><br>
+                                Query processing<br>
+                                Ranking logic<br>
+                                Response formatting
+                            </div>
+                        </div>
+                        
+                        <div class="arrow down">↕</div>
+                        
+                        <!-- Layer 5: Message Processing -->
+                        <div class="flow-row">
+                            <div class="flow-box process">
+                                <strong>📨 Kafka Clusters</strong><br>
+                                High-throughput messaging<br>
+                                100k+ updates/sec<br>
+                                Partitioned by player ID
+                            </div>
+                            <div class="arrow">→</div>
+                            <div class="flow-box process">
+                                <strong>⚡ Stream Processing</strong><br>
+                                Apache Flink/Storm<br>
+                                Real-time aggregation<br>
+                                Duplicate detection
+                            </div>
+                        </div>
+                        
+                        <div class="arrow down">↕</div>
+                        
+                        <!-- Layer 6: Storage Layer -->
+                        <div class="flow-row">
+                            <div class="flow-box storage">
+                                <strong>💾 DynamoDB</strong><br>
+                                Player scores<br>
+                                Multi-region tables<br>
+                                Auto-scaling
+                            </div>
+                            <div class="flow-box storage">
+                                <strong>❄️ S3 Data Lake</strong><br>
+                                Historical snapshots<br>
+                                Analytics data<br>
+                                ML training sets
+                            </div>
+                            <div class="flow-box process">
+                                <strong>🧮 Spark Clusters</strong><br>
+                                Batch rank calculation<br>
+                                Full leaderboard rebuild<br>
+                                Analytics processing
+                            </div>
+                        </div>
+                        
+                        <div class="arrow down">↕</div>
+                        
+                        <!-- Layer 7: Monitoring -->
+                        <div class="flow-row">
+                            <div class="flow-box" style="background: #f0f0ff; border-color: #6366f1;">
+                                <strong>📊 Monitoring Stack</strong><br>
+                                Metrics: Prometheus/CloudWatch<br>
+                                Logs: ELK Stack<br>
+                                Alerts: PagerDuty
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="explanation">
+                    <h3>🔧 Architecture Principles</h3>
+                    <p><span class="step-counter">1</span><strong>Regional Autonomy:</strong> Each region can operate independently, reducing dependency on cross-region communication.</p>
+                    <p><span class="step-counter">2</span><strong>Layered Caching:</strong> Multiple cache layers ensure that most requests never hit the database, maintaining high performance.</p>
+                    <p><span class="step-counter">3</span><strong>Horizontal Scaling:</strong> Every component can be scaled horizontally to handle increasing load.</p>
+                    <p><span class="step-counter">4</span><strong>Fault Tolerance:</strong> System gracefully degrades when components fail, serving stale data rather than errors.</p>
+                    <p><span class="step-counter">5</span><strong>Event-Driven Design:</strong> Loose coupling between components through message queues enables better scalability and reliability.</p>
+                </div>
+                
+                <div class="timing-info">
+                    <strong>🎯 System Capabilities:</strong><br>
+                    Concurrent Players: 10M+ | Score Updates: 100k/sec | Query Response: &lt; 100ms | Global Availability: 99.9%+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showDiagram(diagramId) {
+            // Hide all diagrams
+            const diagrams = document.querySelectorAll('.diagram-section');
+            diagrams.forEach(diagram => diagram.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected diagram
+            document.getElementById(diagramId).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+        
+        // Add some interactive animations
+        window.addEventListener('load', function() {
+            const flowBoxes = document.querySelectorAll('.flow-box');
+            flowBoxes.forEach((box, index) => {
+                setTimeout(() => {
+                    box.style.opacity = '0.3';
+                    setTimeout(() => {
+                        box.style.opacity = '1';
+                    }, 100);
+                }, index * 50);
+            });
+        });
+    </script>
+</body>
+</html>

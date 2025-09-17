@@ -1,0 +1,3 @@
+- A preemptive kernel may be more responsive, since there is less risk that a kernel-mode process will run for an arbitrarily long period before relinquishing  the processor to waiting processes. (Of course, this risk can also be minimized by designing kernel code that does not behave in this way.) 
+- Furthermore, a preemptive kernel is more suitable for real-time programming, as it will allow a real-time process to preempt a process currently running in the kernel. 
+- https://www.geeksforgeeks.org/difference-between-preemptive-and-non-preemptive-kernel-in-os/

@@ -1,0 +1,189 @@
+{
+  "main": {
+    "id": "bcf25d28046323d4",
+    "type": "split",
+    "children": [
+      {
+        "id": "93164c4fa9e3efe9",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "24f89b11ed88e8a1",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "HLD/problems/stock broker.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "stock broker"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "4cbd4ece0092998c",
+    "type": "split",
+    "children": [
+      {
+        "id": "821b12df5d5d08f8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "80adf5975e135de9",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "d79d45ecf20a870a",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "stock",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "bbe182ddd31b9cde",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 380
+  },
+  "right": {
+    "id": "36f4326f84202314",
+    "type": "split",
+    "children": [
+      {
+        "id": "1757cfc88995204b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8c8087eb9f1f57cb",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "DSA/ALGO/Line Sweep.md",
+                "collapseAll": true,
+                "extraContext": true,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": false
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Line Sweep"
+            }
+          },
+          {
+            "id": "1743f4dde85437f0",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 263,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "bases:Create new base": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "markdown-importer:Open format converter": false
+    }
+  },
+  "active": "24f89b11ed88e8a1",
+  "lastOpenFiles": [
+    "HLD/nginx.md",
+    "HLD/Pasted image 20250916222019.png",
+    "System Design/Course/4. High Availability/4.4 Replication Active-active.md",
+    "System Design/Course/4. High Availability/4.3 Redundancy Active-passive.md",
+    "System Design/Course/7. Database/6.3 Polyglot database.md",
+    "System Design/Course/7. Database/6.2 NoSQL database.md",
+    "System Design/Course/7. Database/6.1 Relational Database.md",
+    "System Design/Course/2. Web Architecture/2.1 REST API.md",
+    "System Design/Course/2. Web Architecture/2. Web Architecture.md",
+    "System Design/Course/4. High Availability/4.1 What is high availability.md",
+    "System Design/Course/4. High Availability/4.2 Fault Tolerance.md",
+    "System-Design-Primer/solutions/system_design/query_cache/query_cache.png",
+    "PLACEMENT PREP/MOCK TESTS/GUIDE.md",
+    "PLACEMENT PREP/MOCK TESTS/GOLDMAN.md",
+    "PLACEMENT PREP/MOCK TESTS/DBOI.md",
+    "PLACEMENT PREP/MOCK TESTS/Amazon.md",
+    "PLACEMENT PREP/LEETCODE TOP 150/Revisit.md",
+    "PLACEMENT PREP/LEETCODE TOP 150/Moore's Voting Algorithm.md",
+    "PLACEMENT PREP/CODING/ARRAYS/Maximum Unsorted Subarray.md",
+    "PLACEMENT PREP/CODING/ARRAYS/Hotel Bookings Possible.md",
+    "PLACEMENT PREP/CODING/ARRAYS/Find Permutation.md",
+    "PLACEMENT PREP/CODING/ARRAYS/1. ARRAY GUIDE.md",
+    "PLACEMENT PREP/APT/GUIDE.md",
+    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/11.-pattern-modified-binary-search/11.2-order-agnostic-binary-search-easy.md",
+    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/11.-pattern-modified-binary-search/11.1-introduction.md",
+    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/2.-pattern-two-pointers/2.4-triplet-sum-to-zero-medium.md",
+    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/2.-pattern-two-pointers/2.3-squaring-a-sorted-array-easy.md",
+    "HLD/problems/Screenshot 2025-07-27 at 10.52.23 PM.png",
+    "HLD/problems/leaderboard_sequence_diagram.html",
+    "HLD/problems/Pasted image 20250723233600.png",
+    "HLD/problems/Pasted image 20250725085622.png",
+    "LLD/problems",
+    "HLD/Pasted image 20250720211545.png",
+    "System-Design-Primer/solutions/system_design/web_crawler/web_crawler.png",
+    "System-Design-Primer/solutions/system_design/web_crawler/web_crawler_basic.png",
+    "System-Design-Primer/solutions/system_design/query_cache/query_cache_basic.png",
+    "System-Design-Primer/resources/study_guide.png",
+    "HLD/problems",
+    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/revision",
+    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/binary-search",
+    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/9.-pattern-two-heaps",
+    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/untitled",
+    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/1.-pattern-sliding-window",
+    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/16.-pattern-topological-sort-graph",
+    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/test-your-knowledge"
+  ]
+}

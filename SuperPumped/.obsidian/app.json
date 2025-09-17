@@ -1,0 +1,22 @@
+{
+  "obsidianCss": true,
+  "alwaysUpdateLinks": true,
+  "promptDelete": false,
+  "foldHeading": true,
+  "spellcheck": true,
+  "spellcheckDictionary": [
+    "Spotify",
+    "finshots",
+    "Youtube",
+    "Codeforces",
+    "Subarray",
+    "subarray",
+    "Demux",
+    "Comparator",
+    "radix",
+    "Leetcode",
+    "Polymorphism",
+    "polymorphism"
+  ],
+  "attachmentFolderPath": "./"
+}

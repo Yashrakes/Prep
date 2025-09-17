@@ -1,0 +1,114 @@
+{
+  "main": {
+    "id": "bcf25d28046323d4",
+    "type": "split",
+    "children": [
+      {
+        "id": "e2b16d80ca61ae6e",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "PLACEMENT PREP/CODING/ARRAYS/Find Permutation.md",
+            "mode": "source"
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "4cbd4ece0092998c",
+    "type": "split",
+    "children": [
+      {
+        "id": "821b12df5d5d08f8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "80adf5975e135de9",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "d79d45ecf20a870a",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "lecture",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 357
+  },
+  "right": {
+    "id": "36f4326f84202314",
+    "type": "split",
+    "children": [
+      {
+        "id": "1757cfc88995204b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8c8087eb9f1f57cb",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "PLACEMENT PREP/CODING/ARRAYS/Find Permutation.md",
+                "collapseAll": true,
+                "extraContext": true,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": false
+              }
+            }
+          },
+          {
+            "id": "1743f4dde85437f0",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "horizontal",
+    "width": 263,
+    "collapsed": true
+  },
+  "active": "e2b16d80ca61ae6e",
+  "lastOpenFiles": [
+    "PLACEMENT PREP/CODING/ARRAYS/Find Permutation.md",
+    "PLACEMENT PREP/CODING/ARRAYS/1. ARRAY GUIDE.md",
+    "PLACEMENT PREP/CODING/BACKTRACKING/BACKTRACKING GUIDE.md",
+    "PLACEMENT PREP/CODING/ALGORITHMS/ALGO GUIDE.md",
+    "System Design/Course/1. Tiers in Software Architecture/1. Different Tiers in Software Architecture.md",
+    "System Design/Course/7. Database/6.4 Types of Database.md",
+    "System Design/Course/7. Database/6.3 Polyglot database.md",
+    "System Design/Course/No SQL vs SQL.md",
+    "System Design/Course/0. System Design Reads.md",
+    "System Design/Course/7. Database/6.2 NoSQL database.md"
+  ]
+}
