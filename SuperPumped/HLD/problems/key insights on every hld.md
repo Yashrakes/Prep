@@ -6,4 +6,4 @@
 5. 1 mb = 10 power 6   
 6. 1 gb = 10 power 9    ,   1tb = 10 power 12 ,  1pb = 10 power 15 
 7. redis pub sub handle 100 gb of data 
-8. 
+8. non func req - > scalbility, consistency , availablilty, security , throughput, fault tolerance

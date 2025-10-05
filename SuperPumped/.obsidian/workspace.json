@@ -13,15 +13,28 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "HLD/problems/stock broker.md",
+                "file": "HLD/problems/key insights on every hld.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "stock broker"
+              "title": "key insights on every hld"
+            }
+          },
+          {
+            "id": "f4dc65e89f41bf0a",
+            "type": "leaf",
+            "state": {
+              "type": "release-notes",
+              "state": {
+                "currentVersion": "1.9.14"
+              },
+              "icon": "lucide-book-up",
+              "title": "Release Notes 1.9.14"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -138,8 +151,10 @@
       "markdown-importer:Open format converter": false
     }
   },
-  "active": "24f89b11ed88e8a1",
+  "active": "f4dc65e89f41bf0a",
   "lastOpenFiles": [
+    "HLD/2 Phase Locking.md",
+    "HLD/problems/stock broker.md",
     "HLD/nginx.md",
     "HLD/Pasted image 20250916222019.png",
     "System Design/Course/4. High Availability/4.4 Replication Active-active.md",
@@ -166,7 +181,6 @@
     "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/11.-pattern-modified-binary-search/11.2-order-agnostic-binary-search-easy.md",
     "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/11.-pattern-modified-binary-search/11.1-introduction.md",
     "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/2.-pattern-two-pointers/2.4-triplet-sum-to-zero-medium.md",
-    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/2.-pattern-two-pointers/2.3-squaring-a-sorted-array-easy.md",
     "HLD/problems/Screenshot 2025-07-27 at 10.52.23 PM.png",
     "HLD/problems/leaderboard_sequence_diagram.html",
     "HLD/problems/Pasted image 20250723233600.png",

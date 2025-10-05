@@ -28,6 +28,7 @@ public class Singleton {
     so thread b will consider it as not null , and threrad b willl not wait for synchronized and execute the
     code with partial initialized var instance,
     */
+
     public static Singleton getInstance(String data){
         Singleton result = instance; // by declaring this , we reduce the memory usage by 40 percent as volatile keyword each time need to read from memory6 , so we store it in a variable
         if(result==null) {
