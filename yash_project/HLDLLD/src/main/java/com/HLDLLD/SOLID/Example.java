@@ -1,6 +1,7 @@
 package com.HLDLLD.SOLID;
-
+//https://www.freecodecamp.org/news/solid-principles-for-programming-and-software-design/
 public class Example {
+
 //    Absolutely! The SOLID principles are 5 key principles of object-oriented design that help make software easier to understand, maintain, and extend. Let’s break them down one by one — with simple examples in Java.
 //
 //🔷 S – Single Responsibility Principle (SRP)

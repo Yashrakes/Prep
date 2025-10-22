@@ -13,24 +13,26 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "HLD/problems/key insights on every hld.md",
+                "file": "LLD/problems/ID genrator.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "key insights on every hld"
+              "title": "ID genrator"
             }
           },
           {
-            "id": "f4dc65e89f41bf0a",
+            "id": "4e5a1a6999ee28d2",
             "type": "leaf",
             "state": {
-              "type": "release-notes",
+              "type": "markdown",
               "state": {
-                "currentVersion": "1.9.14"
+                "file": "HLD/problems/Google DOCS.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-book-up",
-              "title": "Release Notes 1.9.14"
+              "icon": "lucide-file",
+              "title": "Google DOCS"
             }
           }
         ],
@@ -151,8 +153,18 @@
       "markdown-importer:Open format converter": false
     }
   },
-  "active": "f4dc65e89f41bf0a",
+  "active": "4e5a1a6999ee28d2",
   "lastOpenFiles": [
+    "HLD/problems/Ad Aggregator Streaming Architecture with Apache Flink and Amazon Kinesis.md",
+    "HLD/problems/Google DOCS.md",
+    "HLD/problems/dropbox, drive.md",
+    "revise_dsa/todo.md",
+    "revise_dsa/revise.md",
+    "LLD/problems/ID genrator.md",
+    "revise_dsa",
+    "LLD/problems/kafka.md",
+    "HLD/problems/gaming leader board.md",
+    "HLD/problems/key insights on every hld.md",
     "HLD/2 Phase Locking.md",
     "HLD/problems/stock broker.md",
     "HLD/nginx.md",
@@ -172,15 +184,6 @@
     "PLACEMENT PREP/MOCK TESTS/DBOI.md",
     "PLACEMENT PREP/MOCK TESTS/Amazon.md",
     "PLACEMENT PREP/LEETCODE TOP 150/Revisit.md",
-    "PLACEMENT PREP/LEETCODE TOP 150/Moore's Voting Algorithm.md",
-    "PLACEMENT PREP/CODING/ARRAYS/Maximum Unsorted Subarray.md",
-    "PLACEMENT PREP/CODING/ARRAYS/Hotel Bookings Possible.md",
-    "PLACEMENT PREP/CODING/ARRAYS/Find Permutation.md",
-    "PLACEMENT PREP/CODING/ARRAYS/1. ARRAY GUIDE.md",
-    "PLACEMENT PREP/APT/GUIDE.md",
-    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/11.-pattern-modified-binary-search/11.2-order-agnostic-binary-search-easy.md",
-    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/11.-pattern-modified-binary-search/11.1-introduction.md",
-    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/2.-pattern-two-pointers/2.4-triplet-sum-to-zero-medium.md",
     "HLD/problems/Screenshot 2025-07-27 at 10.52.23 PM.png",
     "HLD/problems/leaderboard_sequence_diagram.html",
     "HLD/problems/Pasted image 20250723233600.png",
@@ -197,7 +200,6 @@
     "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/9.-pattern-two-heaps",
     "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/untitled",
     "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/1.-pattern-sliding-window",
-    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/16.-pattern-topological-sort-graph",
-    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/test-your-knowledge"
+    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/16.-pattern-topological-sort-graph"
   ]
 }
