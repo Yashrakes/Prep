@@ -36,7 +36,7 @@ The challenge with distributed transactions is handling failures gracefully. Let
     - Participants are blocked in a "prepared" state, holding locks on resources
     - Recovery options:
         - Timeout-based: Participants can choose to abort after waiting a predetermined time
-        - Coordinator recovery protocol: When coordinator restarts, it reads its log and continues the protocol
+	        - Coordinator recovery protocol: When coordinator restarts, it reads its log and continues the protocol
         - Participant coordination: Participants can communicate with each other to determine if any received a commit message
 3. **Coordinator fails after deciding but before notifying all participants**:
     - Some participants may have committed while others are still waiting

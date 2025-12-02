@@ -120,4 +120,33 @@ Transactional Log Tailing is best for:
 - Data integration scenarios where you need to replicate all database changes to other systems
 - Systems with high write volumes where the overhead of outbox tables would be significant
 - When you need to capture changes made by multiple applications or direct database access
----
+
+
+
+## Example Scenario
+
+Imagine a microservice that manages user accounts and needs to send a "UserCreated" event to other services when a new user registers.
+
+Without a Solution (Dual-Write Problem)
+
+1. The service attempts to insert a new user record into the `users` database table.
+2. The insert succeeds.
+3. The service attempts to publish a "UserCreated" message to Kafka.
+4. _Network failure occurs._ The Kafka publish fails. The service is now in an **inconsistent state**: the user exists in the database, but no other service was notified. 
+
+With the Outbox Pattern and CDC
+
+1. The service inserts the user record into the `users` table **and** an event record into the `outbox` table within a **single database transaction**.
+    
+    sql
+    
+    ```
+    BEGIN TRANSACTION;
+    INSERT INTO users (id, name, email) VALUES (1, 'Alice', 'alice@example.com');
+    INSERT INTO outbox (event_type, payload) VALUES ('UserCreated', '{"userId": 1, "name": "Alice"}');
+    COMMIT TRANSACTION;
+    ```
+    
+    If either insert fails, the entire transaction rolls back, maintaining consistency.
+2. A separate CDC service (e.g., Debezium) tails the database's transaction log, detects the new entry in the `outbox` table, and publishes the event to the Kafka topic.
+3. Even if the CDC service or Kafka has a transient failure, the event remains safely persisted in the `outbox` table within the database until it can be successfully processed and published.

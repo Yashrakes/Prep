@@ -106,7 +106,7 @@
 - This prevents cascading failures and maintains partial system functionality even when some components are down.
 
 ### Regional Redundancy
-- For critical systems, organizations often deploy API gateways across multiple geographic regions. Combined with DNS routing services (like AWS Route 53), traffic can be directed to healthy regions if an entire region experiences an outage.
+- For critical systems, organizations often deploy API gateways across multiple geographic regions. Combined with DNS routing services (like AWS Route S3), traffic can be directed to healthy regions if an entire region experiences an outage.
 
 ### Real-world Example
 - Netflix's architecture provides a good illustration of this approach. 
