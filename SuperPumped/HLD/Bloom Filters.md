@@ -348,3 +348,88 @@ CopyEdit
 
 
 
+# ✅ Confusion Matrix (Base Concept)
+
+|Actual \ Predicted|Positive|Negative|
+|---|---|---|
+|**Positive**|**True Positive (TP)**|**False Negative (FN)**|
+|**Negative**|**False Positive (FP)**|**True Negative (TN)**|
+
+---
+
+# 1️⃣ True Positive (TP)
+
+### Definition
+
+> **Model says YES and reality is YES**
+
+### Example (Fraud Detection)
+
+- Transaction **is fraud**
+    
+- System **flags it as fraud**
+    
+
+✔ Correct detection
+
+---
+
+# 2️⃣ False Positive (FP) — _False Alarm_
+
+### Definition
+
+> **Model says YES but reality is NO**
+
+### Example (Fraud Detection)
+
+- Transaction **is genuine**
+    
+- System **flags it as fraud**
+    
+
+❌ Wrong → blocks user unnecessarily
+
+📌 **Also called Type-I Error**
+
+---
+
+# 3️⃣ False Negative (FN) — _Missed Detection_
+
+### Definition
+
+> **Model says NO but reality is YES**
+
+### Example (Fraud Detection)
+
+- Transaction **is fraud**
+    
+- System **does NOT flag it**
+    
+
+❌ Dangerous → fraud passes through
+
+📌 **Also called Type-II Error**
+
+---
+
+# 4️⃣ True Negative (TN)
+
+### Definition
+
+> **Model says NO and reality is NO**
+
+### Example
+
+- Transaction **is genuine**
+    
+- System **does NOT flag it**
+    
+
+✔ Correct non-action
+
+The four components are defined as:
+
+- **True Positive (TP):** The model correctly predicted the positive class (both actual and predicted are positive).
+- **True Negative (TN):** The model correctly predicted the negative class (both actual and predicted are negative).
+- **False Positive (FP):** The model incorrectly predicted the positive class when the actual class was negative (Type I error).
+- **False Negative (FN):** The model incorrectly predicted the negative class when the actual class was positive (Type II error).

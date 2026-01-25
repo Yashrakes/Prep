@@ -1,3 +1,6 @@
+https://www.youtube.com/watch?v=cL9If4X7aaE&list=PLrtCHHeadkHp92TyPt1Fj452_VGLipJnL&index=1
+
+![[Pasted image 20260102163301.png]]
 ## 🧩 The Real Problem
 
 When multiple servers or replicas handle user edits (like in Google Docs, or in any multi-leader setup), we want:
@@ -335,4 +338,30 @@ CDC consumers merge them **by server ID**, not by global version.
 
 ### TL;DR Example in One Line:
 
-`ServerA makes edit → version [A:2, B:0] ServerB makes edit → version [A:0, B:2] Database never confuses them because key = (server_id, version) Merged version becomes [A:2, B:2]`
+`ServerA makes edit → version [A:2, B:0] ServerB makes edit → version [A:0, B:2] Database never confuses them because key = (server_id, version) Merged version becomes [A:2, B:2]`\\\
+
+
+
+
+
+==**(CRDTs)** are the two primary approaches for real-time collaborative document editing==, ensuring that all users see the same consistent version despite concurrent edits. 
+
+- **OT relies on a central server** to transform and order operations, guaranteeing strong consistency. Google Docs uses OT.
+- **CRDTs use decentralized, mathematically guaranteed merging** of data structures, allowing for offline work and peer-to-peer syncing without a central authority. Tools like Notion and Figma use CRDT-inspired techniques. 
+
+Key Differences
+
+|Feature|Operational Transformation (OT)|Conflict-free Replicated Data Types (CRDT)|
+|---|---|---|
+|**Synchronization**|Requires a **central server** to coordinate and transform operations.|Works **peer-to-peer/decentralized**, merging changes locally.|
+|**Conflict Resolution**|Operations are transformed (adjusted) based on concurrent changes before being applied, ensuring they maintain user intent.|Operations are designed to be commutative and associative, meaning they can be applied in any order and still reach the same result (eventual consistency).|
+|**Offline Support**|Limited; generally requires an active server connection to guarantee correctness.|Excellent; users can work offline and sync changes automatically when they reconnect.|
+|**Complexity**|Complex logic and difficult to implement correctly (requires handling many edge cases and transformation functions).|Simpler mental model and easier to implement using available libraries (e.g., Yjs, Automerge).|
+|**Performance/Overhead**|Efficient on memory; local operations are fast as transformation happens on the server.|Higher memory overhead as it stores metadata (e.g., unique IDs) for every character.|
+
+Summary
+
+- If you need **strong, immediate consistency** managed by a central system (like Google Docs), **OT** is the established choice.
+- If you need **offline functionality, peer-to-peer architecture**, or simpler implementation using modern libraries, **CRDTs** offer a more flexible and resilient approach.
+
+

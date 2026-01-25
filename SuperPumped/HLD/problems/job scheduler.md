@@ -1,4 +1,4 @@
-
+ 
 ![[Screenshot 2025-07-27 at 10.52.23 PM.png]]
 
 
@@ -78,7 +78,7 @@ Absolutely! Let's break down this **Distributed Job Scheduler System Design** fr
 
 **💡 Why this?**
 
-- Stateless microservice – easily horizontally scalable.
+- Stateless micro service – easily horizontally scalable.
     
 - DynamoDB is a NoSQL DB with millisecond read/write for massive scale.
     

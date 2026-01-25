@@ -1,7 +1,7 @@
 # Understanding Service Mesh Architecture
 
-## Microservice Communication: The Starting Point
-- Before service meshes became popular, microservices typically communicated with each other through direct network calls. In traditional microservice architectures:
+## Micro service Communication: The Starting Point
+- Before service meshes became popular, micro services typically communicated with each other through direct network calls. In traditional micro service architectures:
 	1. Services would call each other directly via HTTP/REST, gRPC, or message queues
 	2. Each service needed to implement its own network communication code
 	3. Cross-cutting concerns like authentication, retries, and monitoring had to be coded into each service

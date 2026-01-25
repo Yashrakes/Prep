@@ -368,13 +368,13 @@ If a quadrant has no points, you **don’t split it further** — so storage ada
 
 ## **Scenario Comparison**
 
-|Scenario|Best Choice|Why|
-|---|---|---|
-|**Store millions of GPS points in MySQL and search nearby points**|Geohash|Prefix queries with variable precision|
-|**Game world collision detection**|Quadtree|Adaptive refinement around active areas|
-|**Heatmap generation at multiple zoom levels**|Geohash|Easy aggregation by truncating hashes|
-|**Sparse weather sensor network**|Quadtree|Avoid storing empty areas|
-|**Tile-based map server (like Google Maps)**|Quadtree|Natural mapping to zoom levels and tiles|
+| Scenario                                                           | Best Choice | Why                                      |     |
+| ------------------------------------------------------------------ | ----------- | ---------------------------------------- | --- |
+| **Store millions of GPS points in MySQL and search nearby points** | Geohash     | Prefix queries with variable precision   |     |
+| **Game world collision detection**                                 | Quadtree    | Adaptive refinement around active areas  |     |
+| **Heatmap generation at multiple zoom levels**                     | Geohash     | Easy aggregation by truncating hashes    |     |
+| **Sparse weather sensor network**                                  | Quadtree    | Avoid storing empty areas                |     |
+| **Tile-based map server (like Google Maps)**                       | Quadtree    | Natural mapping to zoom levels and tiles |     |
 
 ---
 

@@ -163,3 +163,713 @@ Design chat using Redis pub/sub for real-time messaging and other structures for
 This comprehensive guide covers the essential Redis knowledge needed for system design interviews. The real-world use cases demonstrate practical problem-solving approaches, while the Q&A section provides ready answers for common interview questions.
 
 ---
+append only file / redis database backup
+
+
+# 🔵 **RDB (Redis Database Backup / Snapshot)**
+
+### **What it is:**
+
+- A **point-in-time snapshot** of the Redis data saved to a file, usually `dump.rdb`.
+    
+
+### **How it works:**
+
+- Redis takes a **full snapshot** of all data at specific intervals:
+    
+    - Every X minutes
+        
+    - After Y number of writes
+        
+
+### **Pros:**
+
+✔ **Fast recovery** — loading an RDB file is extremely fast  
+✔ **Very compact** — uses compression  
+✔ **Good for backups**
+
+### **Cons:**
+
+❌ **Data loss window** — you may lose up to _the interval gap_ of writes  
+(E.g., if RDB runs every 5 minutes → you can lose up to 5 minutes of data)
+
+---
+
+# 🔴 **AOF (Append Only File)**
+
+### **What it is:**
+
+- A log file (`appendonly.aof`) that stores every **write operation** (`SET`, `HSET`, `LPUSH`, etc).
+    
+
+### **How it works:**
+
+- Each write command is appended to the file
+    
+- On restart, Redis **replays** the log to rebuild the data
+    
+
+### **Pros:**
+
+✔ **Much safer** — data loss typically only a few milliseconds  
+✔ **Real-time persistence** (depending on fsync policy)  
+✔ **Human readable** logs — easier to debug
+
+### **Cons:**
+
+❌ Larger file size  
+❌ Slower than RDB (but still fast)  
+❌ Needs rewriting/compaction periodically
+
+---
+
+# ⚡ **AOF Fsync Policies**
+
+|Mode|Durability|Speed|
+|---|---|---|
+|**always**|No data loss|Slowest|
+|**everysec** (default)|Lose ≤1 sec|Best balance|
+|**no**|Fastest|Not durable|
+
+---
+
+# 🟣 **Using Both RDB + AOF (best practice)**
+
+Redis supports running both:
+
+- RDB → fast full snapshot
+    
+- AOF → detailed log for minimal data loss
+    
+
+Redis merges both internally (since Redis 7) and stores as **one file** in "multi-persistence" format.
+
+This gives:
+
+- Fast restart
+    
+- Minimal data loss
+    
+- Backup + durability
+    
+
+---
+
+# 🟢 **Quick Comparison Table**
+
+|Feature|RDB|AOF|
+|---|---|---|
+|Durability|Medium|High|
+|File Size|Small|Large|
+|Recovery Speed|Fastest|Medium|
+|Restart Data Loss|Up to snapshot gap|~1 sec|
+|Use case|Backup|High-safety persistence|
+
+---
+
+# 🧠 **When to use what?**
+
+### **Use RDB if:**
+
+- You want fast startup
+    
+- You can tolerate some data loss
+    
+- Using Redis primarily as cache
+    
+
+### **Use AOF if:**
+
+- You want durability
+    
+- You don’t want to lose writes
+    
+- Using Redis as primary DB or queue
+    
+
+### **Use both if:**
+
+- You want the **best of both worlds** — recommended in production
+
+
+
+# LUA SCRIPTS
+
+
+Great question — **Lua in Redis** is a **very important interview topic**, especially for **atomicity, race conditions, and high-throughput systems**.
+
+I’ll explain this **from first principles → example → why it matters in system design**.
+
+---
+
+# 🔹 What Is a Lua Script in Redis?
+
+A **Lua script** is code that:
+
+- Runs **inside Redis**
+    
+- Executes **atomically**
+    
+- Blocks other Redis commands while running
+    
+- Allows **read + write in one operation**
+    
+
+📌 Think of it as **a mini transaction without locks**.
+
+---
+
+# 🔹 Why Lua Is Needed (Problem First)
+
+### Without Lua (Race Condition)
+
+`User A swipe → HSET User B swipe → HGET`
+
+Two requests arrive at the same time:
+
+`T1: A sets swipe T2: B sets swipe T3: A reads B → null T4: B reads A → null`
+
+❌ Match missed
+
+---
+
+# 🔹 With Lua (Atomic Execution)
+
+Lua guarantees:
+
+`SET + GET happens as ONE operation`
+
+✔ No race condition  
+✔ No lock  
+✔ No retry
+
+---
+
+# 🔹 How Redis Executes Lua
+
+1. Client sends `EVAL` command
+    
+2. Redis:
+    
+    - Pauses other commands
+        
+    - Runs Lua script completely
+        
+    - Returns result
+        
+3. Redis resumes normal traffic
+    
+
+📌 **Single-threaded execution = atomicity**
+
+---
+
+# 🔹 Anatomy of a Redis Lua Script
+
+`redis.call(command, key, arg1, arg2...)`
+
+- `KEYS[]` → Redis keys
+    
+- `ARGV[]` → Arguments
+    
+- `redis.call` → execute Redis command
+    
+
+---
+
+# 🔹 Simple Lua Example (Counter)
+
+### Lua Script
+
+`redis.call("INCR", KEYS[1]) return redis.call("GET", KEYS[1])`
+
+### Execution
+
+`EVAL script 1 counter`
+
+✔ Increment + read atomically
+
+---
+
+# 🔹 Your Swipe Example (Step-by-Step)
+
+### Lua Script
+
+`redis.call('HSET', KEYS[1], ARGV[1], ARGV[2]) return redis.call('HGET', KEYS[1], ARGV[3])`
+
+### Inputs
+
+`KEYS[1] = swipes:A:B ARGV[1] = A_swipe ARGV[2] = right ARGV[3] = B_swipe`
+
+### Execution Flow
+
+1. Store A's swipe
+    
+2. Read B's swipe
+    
+3. Return B's swipe (or null)
+    
+
+✔ Atomic  
+✔ Safe  
+✔ Fast
+
+---
+
+# 🔹 Why `KEYS` and `ARGV` Are Separate?
+
+|Reason|Benefit|
+|---|---|
+|Routing|Cluster-safe|
+|Security|Prevent key injection|
+|Optimization|Script caching|
+
+📌 Redis Cluster **requires all keys in KEYS[]**.
+
+---
+
+# 🔹 Lua Script Result Types
+
+Lua can return:
+
+- String
+    
+- Integer
+    
+- Array
+    
+- Nil
+    
+
+In C++:
+
+`reply->type == REDIS_REPLY_STRING`
+
+---
+
+# 🔹 Why Lua Is Better Than Transactions (MULTI)
+
+|MULTI/EXEC|Lua|
+|---|---|
+|No branching|✔ Branching|
+|Multiple round trips|❌|
+|Race-prone|✔ Atomic|
+|No logic|✔ Full logic|
+
+---
+
+# 🔹 Performance Characteristics
+
+|Aspect|Value|
+|---|---|
+|Execution|Single-threaded|
+|Latency|Very low|
+|Blocking|Yes (keep script short)|
+|Use case|Critical sections|
+
+📌 **Never write long loops in Lua**.
+
+---
+
+# 🔹 When to Use Lua (Interview Gold)
+
+✔ Match detection  
+✔ Rate limiting  
+✔ Deduplication  
+✔ Idempotency  
+✔ Leader election  
+✔ Distributed locks
+
+---
+
+# 🔹 When NOT to Use Lua
+
+❌ Heavy computation  
+❌ Long loops  
+❌ Large scans
+
+---
+
+# 🔹 Real System Design Example
+
+### Rate Limiter
+
+`if redis.call("INCR", KEYS[1]) == 1 then   redis.call("EXPIRE", KEYS[1], ARGV[1]) end return redis.call("GET", KEYS[1])`
+
+✔ Used by APIs, gateways, CDNs
+
+---
+
+# 🎯 Final Interview Answer (Memorize)
+
+> “Redis Lua scripts allow multiple Redis commands to execute atomically inside Redis. Redis blocks other commands while the script runs, preventing race conditions. This is commonly used for match detection, rate limiting, counters, and idempotency where correctness under concurrency is critical.”
+
+---
+
+# 🧠 One-Liner to Impress Interviewer
+
+> **“Lua scripts in Redis provide atomic read-modify-write without locks or transactions.”**
+
+
+
+
+# SORTED SETS
+
+
+Redis **Sorted Sets (ZSET)** are one of the **best tools to build leaderboards** because they keep elements **automatically sorted by score** and allow **fast rank queries**.
+
+Below is a **clear, interview-ready + practical explanation** with **example, schema, commands, and complexity**.
+
+---
+
+## 1️⃣ What is a Redis Sorted Set (ZSET)?
+
+A **Sorted Set** is:
+
+- A collection of **unique members**
+    
+- Each member has a **score (double)**
+    
+- Members are **sorted by score automatically**
+    
+
+`member  → playerId / userId score   → points / ranking metric`
+
+---
+
+## 2️⃣ Leaderboard Schema Design
+
+### 🔹 Key Design (Schema)
+
+`leaderboard:{gameId}`
+
+Example:
+
+`leaderboard:chess leaderboard:cod leaderboard:weekly`
+
+### 🔹 Value Structure (ZSET)
+
+|Member (string)|Score (number)|
+|---|---|
+|"user_101"|2500|
+|"user_102"|1800|
+|"user_103"|3200|
+
+---
+
+## 3️⃣ Adding / Updating Scores
+
+### 🔹 Command
+
+`ZADD leaderboard:chess 2500 user_101 ZADD leaderboard:chess 1800 user_102 ZADD leaderboard:chess 3200 user_103`
+
+✔ If the user already exists → **score is updated**  
+✔ Redis automatically re-orders leaderboard
+
+---
+
+## 4️⃣ Fetch Top N Players (Leaderboard View)
+
+### 🔹 Top 3 players (Highest score first)
+
+`ZREVRANGE leaderboard:chess 0 2 WITHSCORES`
+
+### 🔹 Output
+
+`user_103 3200 user_101 2500 user_102 1800`
+
+📌 `ZREVRANGE` = reverse order (highest score first)
+
+---
+
+## 5️⃣ Get Rank of a Player
+
+### 🔹 Player Rank (0-based)
+
+`ZREVRANK leaderboard:chess user_101`
+
+### 🔹 Output
+
+`1`
+
+📌 Meaning:
+
+- Rank 0 → highest score
+    
+- Rank 1 → second position
+    
+
+---
+
+## 6️⃣ Get Player Score
+
+`ZSCORE leaderboard:chess user_101`
+
+Output:
+
+`2500`
+
+---
+
+## 7️⃣ Get Players Around a User (Pagination / “Near Me” Ranking)
+
+### 🔹 Use Case:
+
+> Show 5 players above & below me
+
+`ZREVRANK leaderboard:chess user_101   → 1`
+
+`ZREVRANGE leaderboard:chess -2 4 WITHSCORES`
+
+This enables **social ranking views**.
+
+---
+
+## 8️⃣ Time-Based Leaderboards (Daily / Weekly)
+
+### 🔹 Key Strategy
+
+`leaderboard:daily:2025-12-19 leaderboard:weekly:2025-W51 leaderboard:alltime`
+
+### 🔹 Set Expiry for Daily Board
+
+`EXPIRE leaderboard:daily:2025-12-19 86400`
+
+---
+
+## 9️⃣ How Redis Implements Sorted Sets Internally (Interview Gold)
+
+Redis uses **two structures**:
+
+### 1️⃣ Hash Table
+
+`member → score`
+
+### 2️⃣ Skip List (sorted by score)
+
+`score → member (ordered)`
+
+📌 This gives:
+
+- **Fast lookup** → O(1)
+    
+- **Fast ordering** → O(log N)
+    
+
+---
+
+## 🔟 Time Complexity (Very Important)
+
+|Operation|Complexity|
+|---|---|
+|Add / Update Score (ZADD)|O(log N)|
+|Get Rank (ZRANK)|O(log N)|
+|Get Top N (ZREVRANGE)|O(log N + N)|
+|Get Score (ZSCORE)|O(1)|
+
+---
+
+## 1️⃣1️⃣ Handling Same Scores (Tie-Breaker)
+
+If two players have same score:
+
+- Redis orders by **lexicographical order of member**
+    
+- Or use **composite score**
+    
+
+### 🔹 Composite Score Trick
+
+`finalScore = points * 1_000_000 + (1_000_000 - timestamp)`
+
+This ensures:  
+✔ Higher score wins  
+✔ Earlier achiever ranks higher
+
+---
+
+## 1️⃣2️⃣ Real-World Leaderboard Flow
+
+`Game Server → Redis ZADD Client → Redis ZREVRANGE Client → Redis ZREVRANK`
+
+🔥 No sorting needed at application layer  
+🔥 Works with **millions of users**
+
+---
+
+## 1️⃣3️⃣ When NOT to Use Sorted Sets?
+
+❌ If leaderboard must persist forever with **huge historical data**  
+❌ If complex analytics needed → push data to **DB / OLAP**
+
+---
+
+## 1️⃣4️⃣ Interview One-Liner
+
+> “Redis Sorted Sets use a combination of HashMap and SkipList, enabling O(log N) updates and ranking, making them ideal for real-time leaderboards.”
+
+---
+
+If you want, next I can:
+
+- Implement **Java / Spring Boot leaderboard**
+    
+- Show **Redis Lua script** for atomic score updates
+    
+- Explain **how to scale leaderboard across shards**
+    
+
+Just tell me 👍
+
+but how score is mappeed to user what is type of sorted set
+
+Good question — this is the **core confusion most people have** 👍  
+Let’s clear it **very precisely**.
+
+---
+
+## 1️⃣ What _exactly_ is stored in a Redis Sorted Set?
+
+A **Sorted Set (ZSET)** stores **pairs** of:
+
+`(member, score)`
+
+### ✅ Types
+
+- **member** → `string` (binary-safe)
+    
+- **score** → `double` (floating-point number)
+    
+
+📌 There is **NO separate mapping table**.  
+The mapping is **intrinsic to the ZSET itself**.
+
+---
+
+## 2️⃣ How is score mapped to user?
+
+### Example Command
+
+`ZADD leaderboard:chess 2500 user_101`
+
+This means:
+
+`Key: leaderboard:chess Type: Sorted Set (ZSET)  Member → "user_101" Score  → 2500`
+
+So the **user ID IS the member**, and the **score is attached to it**.
+
+---
+
+## 3️⃣ Logical View (How YOU should think)
+
+`leaderboard:chess = {    ("user_101", 2500),    ("user_102", 1800),    ("user_103", 3200) }`
+
+🔹 Each **member is unique**  
+🔹 Each member has **exactly one score**  
+🔹 Updating score replaces the old score
+
+---
+
+## 4️⃣ Internal Redis Representation (Important)
+
+Redis stores Sorted Sets using **two internal structures**:
+
+### 1️⃣ Hash Table (Mapping)
+
+`user_101 → 2500 user_102 → 1800 user_103 → 3200`
+
+Used for:
+
+- `ZSCORE`
+    
+- Fast updates
+    
+- O(1) lookup
+    
+
+---
+
+### 2️⃣ Skip List (Ordered)
+
+`1800 → user_102 2500 → user_101 3200 → user_103`
+
+Used for:
+
+- Ranking
+    
+- Range queries
+    
+- Sorted access
+    
+
+📌 **Both structures reference the same data**
+
+---
+
+## 5️⃣ Why Redis Needs Both?
+
+|Operation|Structure Used|
+|---|---|
+|`ZSCORE user_101`|Hash Table|
+|`ZADD user_101`|Hash + Skip List|
+|`ZRANK user_101`|Skip List|
+|`ZREVRANGE 0 10`|Skip List|
+
+This is why **leaderboards are fast**.
+
+---
+
+## 6️⃣ What is the “type” of Sorted Set?
+
+### Redis Data Type
+
+`ZSET (Sorted Set)`
+
+### Value Type
+
+`ZSET<string member, double score>`
+
+Think of it as:
+
+`TreeMap<Double, Set<String>>   // ordered + HashMap<String, Double>      // direct lookup`
+
+(Conceptually, not literally)
+
+---
+
+## 7️⃣ Can score map to multiple users?
+
+✅ YES  
+Multiple users **can have the same score**
+
+Example:
+
+`ZADD leaderboard:chess 2000 user_201 ZADD leaderboard:chess 2000 user_202`
+
+Redis resolves ordering using:
+
+1. Score
+    
+2. Lexicographical order of member
+    
+
+---
+
+## 8️⃣ Why member is string and not userId (int)?
+
+Because:
+
+- Redis keys & values are binary-safe strings
+    
+- You can store:
+    
+
+`"user:101" "101" "IN:USER:101"`
+
+All valid.
+
+---
+
+## 9️⃣ Visual Summary
+
+`Redis Key: leaderboard:chess Type: ZSET  ┌───────────┬─────────┐ │ Member    │ Score   │ ├───────────┼─────────┤ │ user_103  │ 3200    │ │ user_101  │ 2500    │ │ user_102  │ 1800    │ └───────────┴─────────┘`
