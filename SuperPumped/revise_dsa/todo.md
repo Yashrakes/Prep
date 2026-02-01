@@ -6,4 +6,7 @@ binary search + rolling hash
 https://leetcode.com/problems/longest-duplicate-substring/solutions/3786707/hard-question-with-easiest-solution/
 
 
+3D DP
+lc - 546
 
+rolling hash  1044, 686

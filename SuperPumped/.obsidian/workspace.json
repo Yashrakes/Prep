@@ -41,16 +41,72 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "HLD/problems/company wise/amazon hld.md",
+                "file": "HLD/0. Index.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "amazon hld"
+              "title": "0. Index"
+            }
+          },
+          {
+            "id": "8425f2a00bc4ed1b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "HLD/0. Index.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "0. Index"
+            }
+          },
+          {
+            "id": "b85759e24098ab79",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "HLD/problems/Google DOCS.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Google DOCS"
+            }
+          },
+          {
+            "id": "16dd068bc723fc58",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "HLD/problems/ALL HLDS DIAGRAM.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "ALL HLDS DIAGRAM"
+            }
+          },
+          {
+            "id": "cefacedddbe61ef1",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "HLD/problems/google calendar.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "google calendar"
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 5
       }
     ],
     "direction": "vertical"
@@ -82,7 +138,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "stock",
+                "query": "patch",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -107,7 +163,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 380
+    "width": 413.0024719238281
   },
   "right": {
     "id": "36f4326f84202314",
@@ -167,49 +223,48 @@
       "markdown-importer:Open format converter": false
     }
   },
-  "active": "78d18d87cc3227a5",
+  "active": "16dd068bc723fc58",
   "lastOpenFiles": [
-    "Untitled.md",
-    "HLD/problems/company wise/amazon hld.md",
-    "HLD/problems/company wise",
-    "Untitled 1.md",
-    "Untitled",
-    "HLD/Idempotency.md",
-    "HLD/Java HashMap Internals.md",
-    "HLD/Monolith vs Microservice.md",
-    "HLD/hadoop vs aws batch vs apache spark.md",
-    "HLD/geohashing vs quad trees.md",
-    "HLD/dynamo vs casandra.md",
-    "HLD/Dynamo db.md",
-    "HLD/Dual Write Problem.md",
-    "HLD/DNS.md",
+    "HLD/problems/Google DOCS.md",
+    "HLD/problems/ALL HLDS DIAGRAM.md",
     "HLD/CDN.md",
+    "HLD/problems/Pasted image 20260201164236.png",
+    "HLD/problems/Pasted image 20260201164150.png",
+    "HLD/Write ahead log.md",
+    "HLD/problems/key insights on every hld.md",
+    "HLD/Vector clocks.md",
+    "HLD/problems/Distributed messaging queue Kafka.md",
+    "HLD/problems/zoom.md",
+    "HLD/problems/Pasted image 20260201113301.png",
+    "HLD/problems/Pasted image 20260201113245.png",
     "HLD/KAFKA.md",
-    "HLD/Pasted image 20250916222019.png",
-    "HLD/Pasted image 20250720211545.png",
-    "HLD/Distributed Caching Strategies.md",
-    "HLD/Design High Availability System.md",
-    "HLD/Design Key Value Store.md",
-    "HLD/Design Chat Application.md",
-    "HLD/Decomposition Pattern.md",
-    "HLD/database performance improve.md",
+    "HLD/KAFKA vs FLINK vs KINESIS.md",
+    "HLD/problems/Ad Aggregator Streaming Architecture with Apache Flink and Amazon Kinesis.md",
+    "HLD/problems/Pasted image 20260201105754.png",
+    "HLD/problems/gaming leader board.md",
+    "HLD/problems/Pasted image 20260130092557.png",
+    "HLD/problems/Pasted image 20260130092424.png",
+    "HLD/problems/Pasted image 20260130084838.png",
+    "HLD/problems/company wise/amazon hld.md",
     "HLD/Database Indexing.md",
+    "HLD/database performance improve.md",
+    "HLD/Cursor vs Offset Pagination.md",
     "HLD/CQRS Pattern.md",
-    "HLD/Concurrency Control.md",
-    "HLD/problems/TO DO.md",
-    "HLD/Understanding Server Throughput Limits.md",
-    "HLD/Service Mesh.md",
+    "HLD/Distributed Caching Strategies.md",
+    "HLD/problems/Pasted image 20260127140930.png",
+    "HLD/problems/google calendar.md",
+    "HLD/problems/Online Auction.md",
+    "HLD/problems/dropbox, drive.md",
+    "HLD/problems/File Chunking (Dropbox design).md",
+    "HLD/problems/Pasted image 20260127005953.png",
+    "HLD/problems/job scheduler.md",
+    "HLD/problems/Rate limiter.md",
+    "HLD/problems/Twitter_Timeline_System_Design_In_Depth.md",
+    "HLD/problems/company wise",
+    "Untitled",
     "revise_dsa",
-    "System-Design-Primer/solutions/system_design/query_cache/query_cache.png",
-    "HLD/problems/Screenshot 2025-07-27 at 10.52.23 PM.png",
     "HLD/problems/leaderboard_sequence_diagram.html",
-    "HLD/problems/Pasted image 20250723233600.png",
-    "HLD/problems/Pasted image 20250725085622.png",
     "LLD/problems",
-    "System-Design-Primer/solutions/system_design/web_crawler/web_crawler.png",
-    "System-Design-Primer/solutions/system_design/web_crawler/web_crawler_basic.png",
-    "System-Design-Primer/solutions/system_design/query_cache/query_cache_basic.png",
-    "System-Design-Primer/resources/study_guide.png",
     "HLD/problems",
     "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/revision",
     "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/binary-search",
