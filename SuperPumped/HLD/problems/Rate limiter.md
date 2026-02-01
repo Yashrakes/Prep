@@ -1,5 +1,5 @@
 
-![[Pasted image 20250725085622.png]]
+![[rate limiter 2.png]]
 
 ## Detailed Architecture Explanation
 

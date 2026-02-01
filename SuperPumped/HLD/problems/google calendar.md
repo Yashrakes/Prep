@@ -1,6 +1,5 @@
 https://systemdesignschool.io/problems/google-calendar/solution
 
-
 ## 1️⃣ What are we designing? (Problem Statement)
 
 Design **Google Calendar** — a distributed system that allows users to:

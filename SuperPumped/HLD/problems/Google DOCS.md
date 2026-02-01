@@ -1,6 +1,6 @@
 https://www.youtube.com/watch?v=cL9If4X7aaE&list=PLrtCHHeadkHp92TyPt1Fj452_VGLipJnL&index=1
 
-![[Pasted image 20260102163301.png]]
+![[google docs.png]]
 ## 🧩 The Real Problem
 
 When multiple servers or replicas handle user edits (like in Google Docs, or in any multi-leader setup), we want:

@@ -1,5 +1,5 @@
  
-![[Screenshot 2025-07-27 at 10.52.23 PM.png]]
+![[job scheduler.png]]
 
 
 Absolutely! Let's break down this **Distributed Job Scheduler System Design** from the diagram in a structured, interview-ready way. I’ll cover:
