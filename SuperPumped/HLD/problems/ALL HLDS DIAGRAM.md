@@ -18,10 +18,12 @@
 ![Pasted image 20250725085622.png](app://62f56c1d963eb3e96efec9a6258cd55e886d/Users/yashagarwal/Documents/prep/SuperPumped/HLD/problems/Pasted%20image%2020250725085622.png?1753413982233)
 ## WHATSAPP
 ## LEETCODE
+![[leetcode.png]]
 ## TINDER
 ## WHATSAPP
 ## FB NEWS FEED
 ## TICKET MASTER
+![[ticketmaster.png]]
 ## LOCAL DELIVERY SYSTEM
 ![[local delivery system 2.png]]
 

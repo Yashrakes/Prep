@@ -9,23 +9,21 @@ write ahead logs vs databases
 back of envelop 
 - [ ] Design a Project Management Tool Like Jira  
 - [ ] Design a Real-Time Collaboration Tool  
-- [ ] Design a Scalable Notification System  
+- [x] Design a Scalable Notification System  
 - [ ] Design a Search System for Knowledge Base Articles  
 - [ ] Design an API Gateway for Atlassian Services  
 - [ ] Design a Version Control System for Documentation  
 - [ ] Design a Real-Time Analytics Platform  
 - [ ] Design a Scalable User Authentication and Authorization System  
 - [ ] Design a Workflow Automation System  
-- [ ] Design a Logging and Monitoring System  
+- [x] Design a Logging and Monitoring System  
 - [x] Design a Rate Limiter  
-- [ ] Design a parking  
+- [x] Design a parking  
 - [ ] Database Design  
 - [ ] Design Snake Game  
-- [ ] Design a Ticketing System like Jira  
 - [x] Design a URL Shortening Service  
-- [ ] Design a Notification System  
-- [ ] Design a Distributed Messaging System  
-- [ ] Design a Scalable Chat Application  
+- [x] Design a Distributed Messaging System  
+- [x] Design a Scalable Chat Application  
 - [x] online leaderboard
 - [x] Design a Job Scheduler  
 

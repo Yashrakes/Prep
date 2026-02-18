@@ -27,84 +27,16 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "revise_dsa/todo.md",
+                "file": "HLD/problems/Database/METRIX MONITORING.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "todo"
-            }
-          },
-          {
-            "id": "78d18d87cc3227a5",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "HLD/0. Index.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "0. Index"
-            }
-          },
-          {
-            "id": "8425f2a00bc4ed1b",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "HLD/0. Index.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "0. Index"
-            }
-          },
-          {
-            "id": "b85759e24098ab79",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "HLD/problems/Google DOCS.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Google DOCS"
-            }
-          },
-          {
-            "id": "16dd068bc723fc58",
-            "type": "leaf",
-            "state": {
-              "type": "image",
-              "state": {
-                "file": "HLD/Attachments/Pasted image 20250723233600.png"
-              },
-              "icon": "lucide-image",
-              "title": "Pasted image 20250723233600"
-            }
-          },
-          {
-            "id": "cefacedddbe61ef1",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "HLD/problems/google calendar.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "google calendar"
+              "title": "METRIX MONITORING"
             }
           }
         ],
-        "currentTab": 5
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -161,7 +93,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 413.0024719238281
+    "width": 502.0024719238281
   },
   "right": {
     "id": "36f4326f84202314",
@@ -221,44 +153,45 @@
       "markdown-importer:Open format converter": false
     }
   },
-  "active": "80adf5975e135de9",
+  "active": "4e5a1a6999ee28d2",
   "lastOpenFiles": [
-    "HLD/Attachments/rate limiter 2.png",
-    "HLD/Attachments/rate llimiter.png",
-    "HLD/Attachments/google docs.png",
-    "HLD/problems/Google DOCS.md",
-    "HLD/Attachments/Pasted image 20260201105754.png",
-    "HLD/Attachments/web crawler.png",
-    "HLD/Attachments/job scheduler.png",
-    "HLD/problems/Screenshot 2026-01-26 at 12.08.16 AM.png",
-    "HLD/Attachments/key value store 3.png",
-    "HLD/problems/Pasted image 20260126000830.png",
-    "HLD/Attachments/key value store 2.png",
-    "HLD/Attachments/key value store 1.png",
+    "HLD/problems/Database/GAMING LEADERBOARD.md",
+    "HLD/problems/Database/METRIX MONITORING.md",
+    "HLD/problems/Database/KEY VALUE STORE.md",
+    "HLD/problems/Database/NOTIFICATION SYSTEM.md",
+    "HLD/problems/Database/TOP K Video.md",
+    "HLD/problems/Database/TYPEAHEAD SYSTEM.md",
+    "HLD/problems/job.md",
+    "HLD/Dual Write Problem.md",
     "HLD/problems/ALL HLDS DIAGRAM.md",
-    "HLD/CDN.md",
-    "HLD/Write ahead log.md",
-    "HLD/problems/key insights on every hld.md",
-    "HLD/Vector clocks.md",
-    "HLD/problems/Distributed messaging queue Kafka.md",
-    "HLD/problems/zoom.md",
-    "HLD/KAFKA.md",
-    "HLD/KAFKA vs FLINK vs KINESIS.md",
-    "HLD/problems/Ad Aggregator Streaming Architecture with Apache Flink and Amazon Kinesis.md",
-    "HLD/problems/gaming leader board.md",
-    "HLD/problems/company wise/amazon hld.md",
-    "HLD/Database Indexing.md",
-    "HLD/database performance improve.md",
-    "HLD/Cursor vs Offset Pagination.md",
-    "HLD/CQRS Pattern.md",
-    "HLD/Distributed Caching Strategies.md",
     "HLD/problems/google calendar.md",
-    "HLD/problems/Online Auction.md",
-    "HLD/problems/dropbox, drive.md",
-    "HLD/problems/File Chunking (Dropbox design).md",
-    "HLD/problems/job scheduler.md",
-    "HLD/problems/Rate limiter.md",
-    "HLD/problems/Twitter_Timeline_System_Design_In_Depth.md",
+    "HLD/problems/Database/GOOGLE DOCS.md",
+    "HLD/OT AND CRDT.md",
+    "HLD/problems/DATABASE COMPARISONS.md",
+    "HLD/problems/Database",
+    "LLD/CONCURRENCY.md",
+    "revise_dsa/todo.md",
+    "LLD/Elevator.md",
+    "HLD/dynamo vs casandra.md",
+    "HLD/Dynamo db.md",
+    "HLD/Load Balancer Algorithms.md",
+    "HLD/KAFKA vs FLINK vs KINESIS.md",
+    "HLD/sharding_combined.md",
+    "HLD/SQL vs NoSQL.md",
+    "HLD/Transport Layer.md",
+    "HLD/webrtc vs rtmp vs sfu.md",
+    "HLD/Vector clocks.md",
+    "HLD/Write ahead log.md",
+    "HLD/Attachments/key value store 1.png",
+    "HLD/Attachments/key value store 2.png",
+    "HLD/Attachments/key value store 3.png",
+    "HLD/Pasted image 20250916222019.png",
+    "HLD/Pasted image 20250720211545.png",
+    "HLD/Attachments/leetcode.png",
+    "HLD/Attachments/ticketmaster.png",
+    "HLD/Attachments/google docs.png",
+    "HLD/Attachments/Pasted image 20250723233600.png",
+    "HLD/Attachments/Pasted image 20250522171545.png",
     "HLD/problems/company wise",
     "Untitled",
     "revise_dsa",
@@ -267,7 +200,6 @@
     "HLD/problems",
     "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/revision",
     "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/binary-search",
-    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/9.-pattern-two-heaps",
-    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/untitled"
+    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/9.-pattern-two-heaps"
   ]
 }
