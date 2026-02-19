@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "HLD/problems/Database/JOB SCHEDULER.md",
+                "file": "HLD/problems/Database/DROPBOX.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "JOB SCHEDULER"
+              "title": "DROPBOX"
             }
           }
         ],
@@ -155,18 +155,21 @@
   },
   "active": "4e5a1a6999ee28d2",
   "lastOpenFiles": [
+    "HLD/problems/Database/GOOGLE DOCS.md",
+    "HLD/problems/Database/DROPBOX.md",
+    "HLD/problems/Database/Untitled.md",
     "HLD/problems/Database/METRIX MONITORING.md",
     "HLD/problems/Database/JOB SCHEDULER.md",
+    "HLD/problems/job.md",
+    "HLD/problems/company wise/amazon hld.md",
     "HLD/problems/Database/GAMING LEADERBOARD.md",
     "HLD/problems/Database/KEY VALUE STORE.md",
     "HLD/problems/Database/NOTIFICATION SYSTEM.md",
     "HLD/problems/Database/TOP K Video.md",
     "HLD/problems/Database/TYPEAHEAD SYSTEM.md",
-    "HLD/problems/job.md",
     "HLD/Dual Write Problem.md",
     "HLD/problems/ALL HLDS DIAGRAM.md",
     "HLD/problems/google calendar.md",
-    "HLD/problems/Database/GOOGLE DOCS.md",
     "HLD/OT AND CRDT.md",
     "HLD/problems/DATABASE COMPARISONS.md",
     "HLD/problems/Database",
@@ -179,9 +182,6 @@
     "HLD/KAFKA vs FLINK vs KINESIS.md",
     "HLD/sharding_combined.md",
     "HLD/SQL vs NoSQL.md",
-    "HLD/Transport Layer.md",
-    "HLD/webrtc vs rtmp vs sfu.md",
-    "HLD/Vector clocks.md",
     "HLD/Attachments/key value store 1.png",
     "HLD/Attachments/key value store 2.png",
     "HLD/Attachments/key value store 3.png",
