@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "HLD/problems/Database/DROPBOX.md",
+                "file": "HLD/problems/Database/TICKET MASTER.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "DROPBOX"
+              "title": "TICKET MASTER"
             }
           }
         ],
@@ -153,11 +153,14 @@
       "markdown-importer:Open format converter": false
     }
   },
-  "active": "4e5a1a6999ee28d2",
+  "active": "80adf5975e135de9",
   "lastOpenFiles": [
+    "HLD/problems/Database/FB NEWS FEED.md",
+    "HLD/problems/Database/TICKET MASTER.md",
+    "HLD/problems/Database/DELIVERY SYSTEM.md",
+    "HLD/problems/Database/ADD CLICK AGGREGATOR.md",
     "HLD/problems/Database/GOOGLE DOCS.md",
     "HLD/problems/Database/DROPBOX.md",
-    "HLD/problems/Database/Untitled.md",
     "HLD/problems/Database/METRIX MONITORING.md",
     "HLD/problems/Database/JOB SCHEDULER.md",
     "HLD/problems/job.md",
@@ -179,9 +182,6 @@
     "HLD/dynamo vs casandra.md",
     "HLD/Dynamo db.md",
     "HLD/Load Balancer Algorithms.md",
-    "HLD/KAFKA vs FLINK vs KINESIS.md",
-    "HLD/sharding_combined.md",
-    "HLD/SQL vs NoSQL.md",
     "HLD/Attachments/key value store 1.png",
     "HLD/Attachments/key value store 2.png",
     "HLD/Attachments/key value store 3.png",
