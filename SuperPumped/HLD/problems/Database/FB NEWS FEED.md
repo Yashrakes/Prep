@@ -1174,13 +1174,4 @@ Downstream consumers handle cleanup
 > **Cassandra stores posts partitioned by author_id because Facebook's write-heavy workload (4,000 posts/second creating 1.3M fan-out writes/second) requires append-only sequential writes that Cassandra handles at 100K+ writes/second per node versus PostgreSQL's 10K/second bottlenecked by B-tree index maintenance and row locking — Redis stores pre-computed feeds as sorted sets (ZADD with timestamp scores) so opening the app queries one key returning 50 post IDs in 5ms instead of querying Cassandra 338 times for each friend's posts taking 1,690ms, enabling sub-500ms feed loads even with 5,000 friends — Graph databases optimize social connections because queries like "friend suggestions from friends-of-friends who aren't my friends" are 2-hop graph traversals that Neo4j completes in 20ms using native adjacency lists versus PostgreSQL's self-join recursive CTEs taking 500ms scanning 114K rows — the hybrid fan-out strategy fans out on write for regular users (338 Redis writes in 50ms) but fans out on read for celebrities (zero writes, fetch celebrity posts on-demand from Cassandra during feed generation) preventing Kim Kardashian's 364 million followers from causing 16-minute write delays, while ensuring regular users' friends see posts instantly within 100ms through parallel Redis fan-out batched into single pipeline commands — immediate self-consistency is achieved by synchronously writing to the author's own Redis feed before returning success so users see their posts instantly, while friend propagation happens asynchronously in parallel without blocking the response, and post edits/deletes cascade to all 338 friend feeds through Redis ZREM commands completing in 30ms total maintaining eventual consistency across the social graph.**
 
 Would you like me to explain how the ML ranking algorithm computes personalized feed scores using collaborative filtering and recency decay, or how the real-time notification system uses WebSockets and Redis Pub/Sub to push updates to users currently viewing a post when someone likes or comments on it?
-
-You are out of free [messages](https://support.claude.com/en/articles/11647753-understanding-usage-and-length-limits) until 5:30 PM
-
-[Upgrade](/upgrade?hide_free=true)
-
-  
-
-Sonnet 4.5
-
-[Claude is AI and can make mistakes](https://support.anthropic.com/en/articles/8525154-claude-is-providing-incorrect-or-misleading-responses-what-s-going-on)
+ 
