@@ -74,8 +74,8 @@ USING GIST (location);
 GIST (Generalized Search Tree) = spatial index
 Organizes points geographically
 Uses bounding boxes and R-tree structure
-
-
+[[
+]]
 Query: "Find users within 10 miles"
 ────────────────────────────────────────────────
 SELECT user_id, name, age, photos

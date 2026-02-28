@@ -13,30 +13,15 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "LLD/problems/ID genrator.md",
+                "file": "HLD/problems/Database/GOOGLE CALENDAR.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "ID genrator"
-            }
-          },
-          {
-            "id": "4e5a1a6999ee28d2",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "HLD/problems/Database/TICKET MASTER.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "TICKET MASTER"
+              "title": "GOOGLE CALENDAR"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -153,35 +138,36 @@
       "markdown-importer:Open format converter": false
     }
   },
-  "active": "4e5a1a6999ee28d2",
+  "active": "24f89b11ed88e8a1",
   "lastOpenFiles": [
-    "HLD/problems/Database/TINDER.md",
-    "HLD/problems/Database/TOP K Video.md",
-    "HLD/problems/Database/KEY VALUE STORE.md",
     "HLD/problems/Database/METRIX MONITORING.md",
-    "HLD/problems/Database/NOTIFICATION SYSTEM.md",
+    "HLD/tradeoffs Analysis of Sharding Approaches_ Pros, Cons, and Trade-offs.pdf",
+    "HLD/Database Sharding and Partitioning in Distributed Systems.pdf",
+    "HLD/problems/Database/ZOOM.md",
     "HLD/problems/Database/TICKET MASTER.md",
-    "HLD/problems/Database/TYPEAHEAD SYSTEM.md",
+    "HLD/problems/Database/RATE LIMITER.md",
+    "HLD/problems/Database/KEY VALUE STORE.md",
+    "HLD/problems/Database/GOOGLE CALENDAR.md",
+    "HLD/problems/Database/JOB SCHEDULER.md",
+    "HLD/problems/Database/GOOGLE DOCS.md",
+    "HLD/problems/Database/GAMING LEADERBOARD.md",
+    "HLD/problems/Database/FB POST SEARCH.md",
     "HLD/problems/Database/FB NEWS FEED.md",
-    "HLD/problems/DATABASE COMPARISONS.md",
     "HLD/problems/Database/DROPBOX.md",
     "HLD/problems/Database/DELIVERY SYSTEM.md",
     "HLD/problems/Database/ADD CLICK AGGREGATOR.md",
-    "HLD/problems/Database/GOOGLE DOCS.md",
-    "HLD/problems/Database/JOB SCHEDULER.md",
+    "HLD/problems/Database/WHATSAPP.md",
+    "HLD/problems/Database/TINDER.md",
+    "LLD/problems/ID genrator.md",
     "HLD/problems/job.md",
-    "HLD/problems/company wise/amazon hld.md",
-    "HLD/problems/Database/GAMING LEADERBOARD.md",
-    "HLD/Dual Write Problem.md",
+    "HLD/problems/Database/NOTIFICATION SYSTEM.md",
     "HLD/problems/ALL HLDS DIAGRAM.md",
-    "HLD/problems/google calendar.md",
-    "HLD/OT AND CRDT.md",
+    "HLD/problems/Database/LEETCODE.md",
+    "HLD/problems/Database/TOP K Video.md",
+    "HLD/problems/Database/TYPEAHEAD SYSTEM.md",
+    "HLD/problems/DATABASE COMPARISONS.md",
+    "HLD/problems/company wise/amazon hld.md",
     "HLD/problems/Database",
-    "LLD/CONCURRENCY.md",
-    "revise_dsa/todo.md",
-    "LLD/Elevator.md",
-    "HLD/dynamo vs casandra.md",
-    "HLD/Dynamo db.md",
     "HLD/Attachments/key value store 1.png",
     "HLD/Attachments/key value store 2.png",
     "HLD/Attachments/key value store 3.png",
@@ -198,8 +184,6 @@
     "HLD/problems/leaderboard_sequence_diagram.html",
     "LLD/problems",
     "HLD/problems",
-    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/revision",
-    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/binary-search",
-    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/9.-pattern-two-heaps"
+    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/revision"
   ]
 }

@@ -356,7 +356,7 @@ Indexes:
   PRIMARY KEY (rule_id)
   INDEX (resource, enabled)
   INDEX (tier)
-
+ 
 
 User_Tiers table:
 ────────────────────────────────────────────────
