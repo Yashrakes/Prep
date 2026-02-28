@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "HLD/problems/Database/GOOGLE CALENDAR.md",
+                "file": "LLD/problems/kafka.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "GOOGLE CALENDAR"
+              "title": "kafka"
             }
           }
         ]
@@ -138,8 +138,18 @@
       "markdown-importer:Open format converter": false
     }
   },
-  "active": "24f89b11ed88e8a1",
+  "active": "80adf5975e135de9",
   "lastOpenFiles": [
+    "LLD DOCS/logging_system_lld.docx",
+    "LLD DOCS/splitwise_lld.docx",
+    "LLD DOCS/parking_lot_lld.docx",
+    "LLD DOCS",
+    "Java/LLD DOCS/splitwise_lld.docx",
+    "Java/LLD DOCS/parking_lot_lld.docx",
+    "Java/LLD DOCS/logging_system_lld.docx",
+    "Java/LLD DOCS",
+    "HLD/problems/Database/GOOGLE CALENDAR.md",
+    "LLD/problems/parking_lot_lld.docx",
     "HLD/problems/Database/METRIX MONITORING.md",
     "HLD/tradeoffs Analysis of Sharding Approaches_ Pros, Cons, and Trade-offs.pdf",
     "HLD/Database Sharding and Partitioning in Distributed Systems.pdf",
@@ -147,7 +157,6 @@
     "HLD/problems/Database/TICKET MASTER.md",
     "HLD/problems/Database/RATE LIMITER.md",
     "HLD/problems/Database/KEY VALUE STORE.md",
-    "HLD/problems/Database/GOOGLE CALENDAR.md",
     "HLD/problems/Database/JOB SCHEDULER.md",
     "HLD/problems/Database/GOOGLE DOCS.md",
     "HLD/problems/Database/GAMING LEADERBOARD.md",
@@ -167,7 +176,6 @@
     "HLD/problems/Database/TYPEAHEAD SYSTEM.md",
     "HLD/problems/DATABASE COMPARISONS.md",
     "HLD/problems/company wise/amazon hld.md",
-    "HLD/problems/Database",
     "HLD/Attachments/key value store 1.png",
     "HLD/Attachments/key value store 2.png",
     "HLD/Attachments/key value store 3.png",
@@ -177,13 +185,6 @@
     "HLD/Attachments/ticketmaster.png",
     "HLD/Attachments/google docs.png",
     "HLD/Attachments/Pasted image 20250723233600.png",
-    "HLD/Attachments/Pasted image 20250522171545.png",
-    "HLD/problems/company wise",
-    "Untitled",
-    "revise_dsa",
-    "HLD/problems/leaderboard_sequence_diagram.html",
-    "LLD/problems",
-    "HLD/problems",
-    "Grokking-the-Coding-Interview-Patterns-for-Coding-Questions-master/revision"
+    "HLD/Attachments/Pasted image 20250522171545.png"
   ]
 }
