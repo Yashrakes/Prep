@@ -1,0 +1,16 @@
+# HTTP client - used for all ML-Core API calls
+requests>=2.31.0
+
+# Jira API client (used in JiraFetcher)
+jira>=3.5.2
+
+# Confluence / Atlassian API client (used in ConfluenceFetcher)
+atlassian-python-api>=3.41.0
+
+# Bitbucket is accessed via raw requests (no extra lib needed)
+
+# Environment variable management (.env file support)
+python-dotenv>=1.0.0
+
+# CLI and utility
+tqdm>=4.66.0        # progress bars during ingestion batches
