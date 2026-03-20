@@ -279,6 +279,86 @@ T+302:  Worker B executes job successfully
         → No lost job
         → No duplicate execution
         → Automatic recovery
+        
+        
+ # 🔴 Problem 1: Lost Job (worker crashes after pop)
+
+### ❌ Naive approach (WRONG)
+
+LPOP queue
+
+- Removes job permanently
+    
+- If worker crashes → job is gone forever ❌
+    
+
+---
+
+## ✅ Solution in Redis: Reliable Queue Pattern
+
+### 👉 Use `BRPOPLPUSH` (or `RPOPLPUSH`)
+
+BRPOPLPUSH main_queue processing_queue
+
+### 🔁 What happens:
+
+1. Job moves from:
+    
+    main_queue → processing_queue
+    
+2. Worker processes job
+    
+3. After success:
+    
+    LREM processing_queue job_12345
+    
+
+---
+
+### 🧠 Why this works
+
+If worker crashes:
+
+- Job is still in `processing_queue`
+    
+- A **recovery worker / cron** can requeue it
+    
+
+RPOPLPUSH processing_queue main_queue
+
+👉 So no job is lost ✅
+
+---
+
+# 🔴 Problem 2: Duplicate execution
+
+Even with above approach:
+
+- Worker A processes job
+    
+- Crashes before removing from `processing_queue`
+    
+- Job gets retried
+    
+- Worker B processes again → duplicate ❌
+    
+
+---
+
+## ✅ Solution 1: Idempotency (MOST IMPORTANT)
+
+👉 Make job execution **safe to run multiple times**
+
+Example:
+
+- Email → store `email_sent = true`
+    
+- Payment → use transaction ID
+    
+
+If already processed → skip
+
+👉 This is **mandatory in distributed systems**
 ```
 
 ### The Redlock Algorithm for Multiple Redis Instances

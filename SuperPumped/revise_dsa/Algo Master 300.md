@@ -42,138 +42,136 @@ Track your progress by checking off problems as you solve them!
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-21-30)
 
-- [ ]  **21.** [Single Number](https://leetcode.com/problems/single-number) 🟢 Easy
-- [ ]  **22.** [Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water) 🔴 Hard
-- [ ]  **23.** [Sort Items by Groups Respecting Dependencies](https://leetcode.com/problems/sort-items-by-groups-respecting-dependencies) 🔴 Hard
-- [ ]  **24.** [01 Matrix](https://leetcode.com/problems/01-matrix) 🟡 Medium
-- [ ]  **25.** [Unique Binary Search Trees II](https://leetcode.com/problems/unique-binary-search-trees-ii) 🟡 Medium
-- [ ]  **26.** [Kth Largest Element in a Stream](https://leetcode.com/problems/kth-largest-element-in-a-stream) 🟢 Easy
-- [ ]  **27.** [Find Duplicate Subtrees](https://leetcode.com/problems/find-duplicate-subtrees) 🟡 Medium
-- [ ]  **28.** [Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal) 🟡 Medium
-- [ ]  **29.** [Evaluate Reverse Polish Notation](https://leetcode.com/problems/evaluate-reverse-polish-notation) 🟡 Medium
-- [ ]  **30.** [Is Subsequence](https://leetcode.com/problems/is-subsequence) 🟢 Easy
+- [x]  **21.** [Single Number](https://leetcode.com/problems/single-number) 🟢 Easy
+- [x]  **22.** [Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water) 🔴 Hard
+- [x]  **23.** [Sort Items by Groups Respecting Dependencies](https://leetcode.com/problems/sort-items-by-groups-respecting-dependencies) 🔴 Hard
+- [x]  **24.** [01 Matrix](https://leetcode.com/problems/01-matrix) 🟡 Medium
+- [x]  **25.** [Unique Binary Search Trees II](https://leetcode.com/problems/unique-binary-search-trees-ii) 🟡 Medium
+- [x]  **26.** [Kth Largest Element in a Stream](https://leetcode.com/problems/kth-largest-element-in-a-stream) 🟢 Easy
+- [x]  **27.** [Find Duplicate Subtrees](https://leetcode.com/problems/find-duplicate-subtrees) 🟡 Medium
+- [x]  **28.** [Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal) 🟡 Medium
+- [x]  **29.** [Evaluate Reverse Polish Notation](https://leetcode.com/problems/evaluate-reverse-polish-notation) 🟡 Medium
+- [x]  **30.** [Is Subsequence](https://leetcode.com/problems/is-subsequence) 🟢 Easy
 
 ### Problems 31-40
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-31-40)
 
-- [ ]  **31.** [Number of Provinces](https://leetcode.com/problems/number-of-provinces) 🟡 Medium
-- [ ]  **32.** [Longest Increasing Path in a Matrix](https://leetcode.com/problems/longest-increasing-path-in-a-matrix) 🔴 Hard
-- [ ]  **33.** [Reveal Cards In Increasing Order](https://leetcode.com/problems/reveal-cards-in-increasing-order) 🟡 Medium
-    - [ ]  VGOOD, Mathematical Stimulation, Offset Calc is still Pending for Intuition!
-- [ ]  **34.** [Jump Game VI](https://leetcode.com/problems/jump-game-vi) 🟡 Medium
-- [ ]  **35.** [Stock Price Fluctuation](https://leetcode.com/problems/stock-price-fluctuation) 🟡 Medium
-- [ ]  **36.** [Find K Pairs with Smallest Sums](https://leetcode.com/problems/find-k-pairs-with-smallest-sums) 🟡 Medium
-- [ ]  **37.** [Implement Trie (Prefix Tree)](https://leetcode.com/problems/implement-trie-prefix-tree) 🟡 Medium
-- [ ]  **38.** [Minimum Add to Make Parentheses Valid](https://leetcode.com/problems/minimum-add-to-make-parentheses-valid) 🟡 Medium
-- [ ]  **39.** [Insert Interval](https://leetcode.com/problems/insert-interval) 🟡 Medium
-    - [ ]  Good IMPL
-- [ ]  **40.** [Spiral Matrix](https://leetcode.com/problems/spiral-matrix) 🟡 Medium
+- [x]  **31.** [Number of Provinces](https://leetcode.com/problems/number-of-provinces) 🟡 Medium
+- [x]  **32.** [Longest Increasing Path in a Matrix](https://leetcode.com/problems/longest-increasing-path-in-a-matrix) 🔴 Hard
+- [x]  **33.** [Reveal Cards In Increasing Order](https://leetcode.com/problems/reveal-cards-in-increasing-order) 🟡 Medium
+- [x]  **34.** [Jump Game VI](https://leetcode.com/problems/jump-game-vi) 🟡 Medium
+- [x]  **35.** [Stock Price Fluctuation](https://leetcode.com/problems/stock-price-fluctuation) 🟡 Medium
+- [x]  **36.** [Find K Pairs with Smallest Sums](https://leetcode.com/problems/find-k-pairs-with-smallest-sums) 🟡 Medium
+- [x]  **37.** [Implement Trie (Prefix Tree)](https://leetcode.com/problems/implement-trie-prefix-tree) 🟡 Medium
+- [x]  **38.** [Minimum Add to Make Parentheses Valid](https://leetcode.com/problems/minimum-add-to-make-parentheses-valid) 🟡 Medium
+- [x]  **39.** [Insert Interval](https://leetcode.com/problems/insert-interval) 🟡 Medium
+- [x]  **40.** [Spiral Matrix](https://leetcode.com/problems/spiral-matrix) 🟡 Medium
 
 ### Problems 41-50
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-41-50)
 
-- [ ]  **41.** [Rotate Image](https://leetcode.com/problems/rotate-image) 🟡 Medium
-- [ ]  **42.** [Largest Rectangle in Histogram](https://leetcode.com/problems/largest-rectangle-in-histogram) 🔴 Hard
-- [ ]  **43.** [Construct Binary Tree from Preorder and Inorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal) 🟡 Medium
-- [ ]  **44.** [Path with Maximum Probability](https://leetcode.com/problems/path-with-maximum-probability) 🟡 Medium
-- [ ]  **45.** [Sum of Two Integers](https://leetcode.com/problems/sum-of-two-integers) 🟡 Medium
-- [ ]  **46.** [Number of Visible People in a Queue](https://leetcode.com/problems/number-of-visible-people-in-a-queue) 🔴 Hard
-- [ ]  **47.** [Combination Sum](https://leetcode.com/problems/combination-sum) 🟡 Medium
-- [ ]  **48.** [Employee Importance](https://leetcode.com/problems/employee-importance) 🟡 Medium
-- [ ]  **49.** [Making A Large Island](https://leetcode.com/problems/making-a-large-island) 🔴 Hard
-- [ ]  **50.** [Best Time to Buy and Sell Stock III](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii) 🔴 Hard
+- [x]  **41.** [Rotate Image](https://leetcode.com/problems/rotate-image) 🟡 Medium
+- [x]  **42.** [Largest Rectangle in Histogram](https://leetcode.com/problems/largest-rectangle-in-histogram) 🔴 Hard
+- [x]  **43.** [Construct Binary Tree from Preorder and Inorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal) 🟡 Medium
+- [x]  **44.** [Path with Maximum Probability](https://leetcode.com/problems/path-with-maximum-probability) 🟡 Medium
+- [x]  **45.** [Sum of Two Integers](https://leetcode.com/problems/sum-of-two-integers) 🟡 Medium
+- [x]  **46.** [Number of Visible People in a Queue](https://leetcode.com/problems/number-of-visible-people-in-a-queue) 🔴 Hard
+- [x]  **47.** [Combination Sum](https://leetcode.com/problems/combination-sum) 🟡 Medium
+- [x]  **48.** [Employee Importance](https://leetcode.com/problems/employee-importance) 🟡 Medium
+- [x]  **49.** [Making A Large Island](https://leetcode.com/problems/making-a-large-island) 🔴 Hard
+- [x]  **50.** [Best Time to Buy and Sell Stock III](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii) 🔴 Hard
 
 ### Problems 51-60
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-51-60)
 
-- [ ]  **51.** [Pacific Atlantic Water Flow](https://leetcode.com/problems/pacific-atlantic-water-flow) 🟡 Medium
-- [ ]  **52.** [Course Schedule II](https://leetcode.com/problems/course-schedule-ii) 🟡 Medium
-- [ ]  **53.** [Count Numbers with Unique Digits](https://leetcode.com/problems/count-numbers-with-unique-digits) 🟡 Medium
-- [ ]  **54.** [Remove Duplicates from Sorted Array](https://leetcode.com/problems/remove-duplicates-from-sorted-array) 🟢 Easy
-- [ ]  **55.** [Russian Doll Envelopes](https://leetcode.com/problems/russian-doll-envelopes) 🔴 Hard
-- [ ]  **56.** [Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list) 🟡 Medium
-- [ ]  **57.** [Copy List with Random Pointer](https://leetcode.com/problems/copy-list-with-random-pointer) 🟡 Medium
-- [ ]  **58.** [Count of Smaller Numbers After Self](https://leetcode.com/problems/count-of-smaller-numbers-after-self) 🔴 Hard
-- [ ]  **59.** [Generate Parentheses](https://leetcode.com/problems/generate-parentheses) 🟡 Medium
-- [ ]  **60.** [Number of Islands](https://leetcode.com/problems/number-of-islands) 🟡 Medium
+- [x]  **51.** [Pacific Atlantic Water Flow](https://leetcode.com/problems/pacific-atlantic-water-flow) 🟡 Medium
+- [x]  **52.** [Course Schedule II](https://leetcode.com/problems/course-schedule-ii) 🟡 Medium
+- [x]  **53.** [Count Numbers with Unique Digits](https://leetcode.com/problems/count-numbers-with-unique-digits) 🟡 Medium
+- [x]  **54.** [Remove Duplicates from Sorted Array](https://leetcode.com/problems/remove-duplicates-from-sorted-array) 🟢 Easy
+- [x]  **55.** [Russian Doll Envelopes](https://leetcode.com/problems/russian-doll-envelopes) 🔴 Hard
+- [x]  **56.** [Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list) 🟡 Medium
+- [x]  **57.** [Copy List with Random Pointer](https://leetcode.com/problems/copy-list-with-random-pointer) 🟡 Medium
+- [x]  **58.** [Count of Smaller Numbers After Self](https://leetcode.com/problems/count-of-smaller-numbers-after-self) 🔴 Hard
+- [x]  **59.** [Generate Parentheses](https://leetcode.com/problems/generate-parentheses) 🟡 Medium
+- [x]  **60.** [Number of Islands](https://leetcode.com/problems/number-of-islands) 🟡 Medium
 
 ### Problems 61-70
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-61-70)
 
-- [ ]  **61.** [Count Square Submatrices with All Ones](https://leetcode.com/problems/count-square-submatrices-with-all-ones) 🟡 Medium
-- [ ]  **62.** [Maximum Sum of Distinct Subarrays With Length K](https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k) 🟡 Medium
-- [ ]  **63.** [Minimum Height Trees](https://leetcode.com/problems/minimum-height-trees) 🟡 Medium
-- [ ]  **64.** [My Calendar II](https://leetcode.com/problems/my-calendar-ii) 🟡 Medium
-- [ ]  **65.** [Product of Array Except Self](https://leetcode.com/problems/product-of-array-except-self) 🟡 Medium
-- [ ]  **66.** [Triangle](https://leetcode.com/problems/triangle) 🟡 Medium
-- [ ]  **67.** [Design Linked List](https://leetcode.com/problems/design-linked-list) 🟡 Medium
-- [ ]  **68.** [Knight Probability in Chessboard](https://leetcode.com/problems/knight-probability-in-chessboard) 🟡 Medium
-- [ ]  **69.** [Number of Good Pairs](https://leetcode.com/problems/number-of-good-pairs) 🟢 Easy
-- [ ]  **70.** [Ransom Note](https://leetcode.com/problems/ransom-note) 🟢 Easy
+- [x]  **61.** [Count Square Submatrices with All Ones](https://leetcode.com/problems/count-square-submatrices-with-all-ones) 🟡 Medium
+- [x]  **62.** [Maximum Sum of Distinct Subarrays With Length K](https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k) 🟡 Medium
+- [x]  **63.** [Minimum Height Trees](https://leetcode.com/problems/minimum-height-trees) 🟡 Medium
+- [x]  **64.** [My Calendar II](https://leetcode.com/problems/my-calendar-ii) 🟡 Medium
+- [x]  **65.** [Product of Array Except Self](https://leetcode.com/problems/product-of-array-except-self) 🟡 Medium
+- [x]  **66.** [Triangle](https://leetcode.com/problems/triangle) 🟡 Medium
+- [x]  **67.** [Design Linked List](https://leetcode.com/problems/design-linked-list) 🟡 Medium
+- [x]  **68.** [Knight Probability in Chessboard](https://leetcode.com/problems/knight-probability-in-chessboard) 🟡 Medium
+- [x]  **69.** [Number of Good Pairs](https://leetcode.com/problems/number-of-good-pairs) 🟢 Easy
+- [x]  **70.** [Ransom Note](https://leetcode.com/problems/ransom-note) 🟢 Easy
 
 ### Problems 71-80
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-71-80)
 
-- [ ]  **71.** [Number of 1 Bits](https://leetcode.com/problems/number-of-1-bits) 🟢 Easy
-- [ ]  **72.** [House Robber](https://leetcode.com/problems/house-robber) 🟡 Medium
-- [ ]  **73.** [Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit](https://leetcode.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit) 🟡 Medium
-- [ ]  **74.** [Removing Stars From a String](https://leetcode.com/problems/removing-stars-from-a-string) 🟡 Medium
-- [ ]  **75.** [Jump Game II](https://leetcode.com/problems/jump-game-ii) 🟡 Medium
-- [ ]  **76.** [Number of Good Ways to Split a String](https://leetcode.com/problems/number-of-good-ways-to-split-a-string) 🟡 Medium
-- [ ]  **77.** [Next Greater Element I](https://leetcode.com/problems/next-greater-element-i) 🟢 Easy
-- [ ]  **78.** [Design Twitter](https://leetcode.com/problems/design-twitter) 🟡 Medium
-- [ ]  **79.** [Convert Sorted Array to Binary Search Tree](https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree) 🟢 Easy
-- [ ]  **80.** [132 Pattern](https://leetcode.com/problems/132-pattern) 🟡 Medium
+- [x]  **71.** [Number of 1 Bits](https://leetcode.com/problems/number-of-1-bits) 🟢 Easy
+- [x]  **72.** [House Robber](https://leetcode.com/problems/house-robber) 🟡 Medium
+- [x]  **73.** [Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit](https://leetcode.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit) 🟡 Medium
+- [x]  **74.** [Removing Stars From a String](https://leetcode.com/problems/removing-stars-from-a-string) 🟡 Medium
+- [x]  **75.** [Jump Game II](https://leetcode.com/problems/jump-game-ii) 🟡 Medium
+- [x]  **76.** [Number of Good Ways to Split a String](https://leetcode.com/problems/number-of-good-ways-to-split-a-string) 🟡 Medium
+- [x]  **77.** [Next Greater Element I](https://leetcode.com/problems/next-greater-element-i) 🟢 Easy
+- [x]  **78.** [Design Twitter](https://leetcode.com/problems/design-twitter) 🟡 Medium
+- [x]  **79.** [Convert Sorted Array to Binary Search Tree](https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree) 🟢 Easy
+- [x]  **80.** [132 Pattern](https://leetcode.com/problems/132-pattern) 🟡 Medium
 
 ### Problems 81-90
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-81-90)
 
-- [ ]  **81.** [Interleaving String](https://leetcode.com/problems/interleaving-string) 🟡 Medium
-- [ ]  **82.** [Lowest Common Ancestor of a Binary Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree) 🟡 Medium
-- [ ]  **83.** [House Robber III](https://leetcode.com/problems/house-robber-iii) 🟡 Medium
-- [ ]  **84.** [Bitwise AND of Numbers Range](https://leetcode.com/problems/bitwise-and-of-numbers-range) 🟡 Medium
-- [ ]  **85.** [Binary Search Tree Iterator](https://leetcode.com/problems/binary-search-tree-iterator) 🟡 Medium
-- [ ]  **86.** [Best Sightseeing Pair](https://leetcode.com/problems/best-sightseeing-pair) 🟡 Medium
-- [ ]  **87.** [Sliding Window Median](https://leetcode.com/problems/sliding-window-median) 🔴 Hard
-- [ ]  **88.** [Same Tree](https://leetcode.com/problems/same-tree) 🟢 Easy
-- [ ]  **89.** [Palindrome Partitioning](https://leetcode.com/problems/palindrome-partitioning) 🟡 Medium
-- [ ]  **90.** [Last Stone Weight II](https://leetcode.com/problems/last-stone-weight-ii) 🟡 Medium
+- [x]  **81.** [Interleaving String](https://leetcode.com/problems/interleaving-string) 🟡 Medium
+- [x]  **82.** [Lowest Common Ancestor of a Binary Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree) 🟡 Medium
+- [x]  **83.** [House Robber III](https://leetcode.com/problems/house-robber-iii) 🟡 Medium
+- [x]  **84.** [Bitwise AND of Numbers Range](https://leetcode.com/problems/bitwise-and-of-numbers-range) 🟡 Medium
+- [x]  **85.** [Binary Search Tree Iterator](https://leetcode.com/problems/binary-search-tree-iterator) 🟡 Medium
+- [x]  **86.** [Best Sightseeing Pair](https://leetcode.com/problems/best-sightseeing-pair) 🟡 Medium
+- [x]  **87.** [Sliding Window Median](https://leetcode.com/problems/sliding-window-median) 🔴 Hard
+- [x]  **88.** [Same Tree](https://leetcode.com/problems/same-tree) 🟢 Easy
+- [x]  **89.** [Palindrome Partitioning](https://leetcode.com/problems/palindrome-partitioning) 🟡 Medium
+- [x]  **90.** [Last Stone Weight II](https://leetcode.com/problems/last-stone-weight-ii) 🟡 Medium
 
 ### Problems 91-100
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-91-100)
 
-- [ ]  **91.** [Search Suggestions System](https://leetcode.com/problems/search-suggestions-system) 🟡 Medium
-- [ ]  **92.** [Find Median from Data Stream](https://leetcode.com/problems/find-median-from-data-stream) 🔴 Hard
-- [ ]  **93.** [Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list) 🟡 Medium
-- [ ]  **94.** [Permutation in String](https://leetcode.com/problems/permutation-in-string) 🟡 Medium
-- [ ]  **95.** [Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence) 🟡 Medium
-- [ ]  **96.** [Time Needed to Inform All Employees](https://leetcode.com/problems/time-needed-to-inform-all-employees) 🟡 Medium
-- [ ]  **97.** [Shortest Path in a Grid with Obstacles Elimination](https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination) 🔴 Hard
-- [ ]  **98.** [Valid Square](https://leetcode.com/problems/valid-square) 🟡 Medium
-- [ ]  **99.** [Minimum Cost to Hire K Workers](https://leetcode.com/problems/minimum-cost-to-hire-k-workers) 🔴 Hard
-- [ ]  **100.** [Number of Digit One](https://leetcode.com/problems/number-of-digit-one) 🔴 Hard
+- [x]  **91.** [Search Suggestions System](https://leetcode.com/problems/search-suggestions-system) 🟡 Medium
+- [x]  **92.** [Find Median from Data Stream](https://leetcode.com/problems/find-median-from-data-stream) 🔴 Hard
+- [x]  **93.** [Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list) 🟡 Medium
+- [x]  **94.** [Permutation in String](https://leetcode.com/problems/permutation-in-string) 🟡 Medium
+- [x]  **95.** [Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence) 🟡 Medium
+- [x]  **96.** [Time Needed to Inform All Employees](https://leetcode.com/problems/time-needed-to-inform-all-employees) 🟡 Medium
+- [x]  **97.** [Shortest Path in a Grid with Obstacles Elimination](https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination) 🔴 Hard
+- [x]  **98.** [Valid Square](https://leetcode.com/problems/valid-square) 🟡 Medium
+- [x]  **99.** [Minimum Cost to Hire K Workers](https://leetcode.com/problems/minimum-cost-to-hire-k-workers) 🔴 Hard
+- [x]  **100.** [Number of Digit One](https://leetcode.com/problems/number-of-digit-one) 🔴 Hard
 
 ### Problems 101-110
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-101-110)
 
-- [ ]  **101.** [Minimum Interval to Include Each Query](https://leetcode.com/problems/minimum-interval-to-include-each-query) 🔴 Hard
-- [ ]  **102.** [Word Ladder](https://leetcode.com/problems/word-ladder) 🔴 Hard
-- [ ]  **103.** [Top K Frequent Words](https://leetcode.com/problems/top-k-frequent-words) 🟡 Medium
-- [ ]  **104.** [Minimum Number of Work Sessions to Finish the Tasks](https://leetcode.com/problems/minimum-number-of-work-sessions-to-finish-the-tasks) 🟡 Medium
-- [ ]  **105.** [Max Value of Equation](https://leetcode.com/problems/max-value-of-equation) 🔴 Hard
-- [ ]  **106.** [All Paths From Source to Target](https://leetcode.com/problems/all-paths-from-source-to-target) 🟡 Medium
-- [ ]  **107.** [Edit Distance](https://leetcode.com/problems/edit-distance) 🟡 Medium
-- [ ]  **108.** [Min Cost Climbing Stairs](https://leetcode.com/problems/min-cost-climbing-stairs) 🟢 Easy
-- [ ]  **109.** [Maximum Profit in Job Scheduling](https://leetcode.com/problems/maximum-profit-in-job-scheduling) 🔴 Hard
-- [ ]  **110.** [All Nodes Distance K in Binary Tree](https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree) 🟡 Medium
+- [x]  **101.** [Minimum Interval to Include Each Query](https://leetcode.com/problems/minimum-interval-to-include-each-query) 🔴 Hard
+- [x]  **102.** [Word Ladder](https://leetcode.com/problems/word-ladder) 🔴 Hard
+- [x]  **103.** [Top K Frequent Words](https://leetcode.com/problems/top-k-frequent-words) 🟡 Medium
+- [x]  **104.** [Minimum Number of Work Sessions to Finish the Tasks](https://leetcode.com/problems/minimum-number-of-work-sessions-to-finish-the-tasks) 🟡 Medium
+- [x]  **105.** [Max Value of Equation](https://leetcode.com/problems/max-value-of-equation) 🔴 Hard
+- [x]  **106.** [All Paths From Source to Target](https://leetcode.com/problems/all-paths-from-source-to-target) 🟡 Medium
+- [x]  **107.** [Edit Distance](https://leetcode.com/problems/edit-distance) 🟡 Medium
+- [x]  **108.** [Min Cost Climbing Stairs](https://leetcode.com/problems/min-cost-climbing-stairs) 🟢 Easy
+- [x]  **109.** [Maximum Profit in Job Scheduling](https://leetcode.com/problems/maximum-profit-in-job-scheduling) 🔴 Hard
+- [x]  **110.** [All Nodes Distance K in Binary Tree](https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree) 🟡 Medium
 
 ### Problems 111-120
 

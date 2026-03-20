@@ -987,3 +987,292 @@ NoSQL databases: partial writes can persist
 > **PostgreSQL with row-level locking via SELECT FOR UPDATE is non-negotiable for Ticketmaster because preventing double booking of unique seats requires ACID transactions with exclusive locks that guarantee only one user can lock seat A-1-1 even when 2 million users click it simultaneously within milliseconds — NoSQL databases like MongoDB, DynamoDB, and Cassandra either lack true row-level locking, have limited multi-document transactions (100 items max for DynamoDB), or rely on slow Paxos-based lightweight transactions that cannot handle 500K requests/second, making them unsuitable for unique inventory where double booking has zero tolerance — Redis virtual queue solves the thundering herd problem by admitting users at a controlled rate of 100/second instead of overwhelming PostgreSQL with 2M concurrent SELECT FOR UPDATE queries, randomizing queue order at sale start for fairness so early arrivals get no advantage over bots, and enforcing 10-minute hold TTLs that automatically expire in Redis releasing seats back to availability without manual cleanup jobs, while also providing sub-millisecond updates to "seats remaining" counters that PostgreSQL aggregations would make too slow for real-time display — together they enable Ticketmaster's magic of selling 70,000 seats to 2 million competing buyers in under 10 minutes with absolute zero double bookings, fair lottery-based queue access, automatic lock expiration when users abandon checkout, and graceful handling of payment failures through ACID transaction rollbacks that leave no orphaned seat locks or inconsistent inventory counts.**
 
 
+
+
+The user fills out their payment details on the checkout page. The client uses Stripe.js to tokenize the card details — our server never sees raw credit card numbers (this is standard for PCI compliance). The client sends the resulting payment token along with the bookingId to our server, which creates a Stripe PaymentIntent. Stripe processes the payment and notifies our system via webhook that the payment was successful. Webhooks Server-to-server HTTP callbacks that notify external systems when events occur. Unlike polling, webhooks push updates in real-time when something changes. For clients, it's basically "here's an API endpoint I want you to call". can you exmplain this thing
+
+Let’s break your flow step-by-step using **Stripe** and **Stripe.js** so the **entire architecture and security reasoning becomes clear**. This is a **very common real-world payment flow**.
+
+---
+
+# 1. The Core Problem
+
+When a user enters card details:
+
+Card Number  
+Expiry  
+CVV
+
+If your backend server receives this directly, then your system must comply with **very strict PCI-DSS security rules**.
+
+That means:
+
+- heavy audits
+    
+- encrypted storage
+    
+- strict infrastructure requirements
+    
+
+So companies avoid touching raw card data.
+
+---
+
+# 2. Solution: Tokenization Using Stripe.js
+
+The client browser uses **Stripe.js**.
+
+Flow:
+
+User Browser  
+     |  
+Stripe.js  
+     |  
+Stripe Servers
+
+### Step 1 – User enters card details
+
+Card: 4242 4242 4242 4242  
+Expiry: 12/26  
+CVV: 123
+
+These details **go directly to Stripe**, not to your backend.
+
+---
+
+### Step 2 – Stripe returns a Token
+
+Stripe converts card details into a **token**.
+
+Example:
+
+tok_1N83XYZabc123
+
+This token represents the card.
+
+Important:
+
+Token ≠ Card number
+
+It is just a reference.
+
+So now:
+
+Client → Your Server
+
+sends:
+
+{  
+ "bookingId": "B123",  
+ "paymentToken": "tok_1N83XYZabc123"  
+}
+
+Your backend **never sees the card number**.
+
+---
+
+# 3. Backend Creates PaymentIntent
+
+Your backend then calls **Stripe API**.
+
+Example:
+
+Server → Stripe API
+
+Request:
+
+POST /payment_intents  
+{  
+ "amount": 50000,  
+ "currency": "inr",  
+ "payment_method": "tok_1N83XYZabc123"  
+}
+
+Stripe creates a **PaymentIntent**.
+
+PaymentIntent represents the **payment lifecycle**.
+
+Possible states:
+
+requires_payment_method  
+requires_confirmation  
+processing  
+succeeded  
+failed
+
+---
+
+# 4. Stripe Processes the Payment
+
+Stripe now communicates with:
+
+Stripe → Card Network → Bank
+
+Example networks:
+
+- Visa
+    
+- Mastercard
+    
+
+The bank checks:
+
+balance  
+fraud rules  
+3D secure
+
+Then response comes.
+
+---
+
+# 5. How Does Your System Know Payment Succeeded?
+
+Two methods exist:
+
+### Option 1 — Polling ❌
+
+Your server keeps asking Stripe:
+
+Is payment done?  
+Is payment done?  
+Is payment done?
+
+This is inefficient.
+
+---
+
+### Option 2 — Webhooks ✅
+
+A **webhook is an HTTP endpoint your server exposes**.
+
+Example endpoint:
+
+POST /stripe/webhook
+
+You give this endpoint URL to Stripe.
+
+Now Stripe will **call your server automatically**.
+
+---
+
+# 6. Webhook Flow
+
+After payment success:
+
+Stripe → Your Webhook API
+
+Request:
+
+{  
+ "event": "payment_intent.succeeded",  
+ "paymentIntentId": "pi_9837ABC",  
+ "amount": 50000  
+}
+
+Your server receives this event.
+
+Then you update booking.
+
+Example:
+
+Booking Service  
+    |  
+Update booking status = CONFIRMED
+
+---
+
+# 7. Full Payment Architecture
+
+User  
+ |  
+Browser  
+ |  
+Stripe.js  
+ |        (card details go here)  
+Stripe  
+ |  
+Token  
+ |  
+Client → Backend API  
+ |  
+Create PaymentIntent  
+ |  
+Stripe processes payment  
+ |  
+Webhook → Your Server  
+ |  
+Booking Confirmed
+
+---
+
+# 8. Why Webhooks Are Important
+
+Suppose:
+
+User closes browser  
+Network drops  
+App crashes
+
+Client never receives response.
+
+But webhook ensures:
+
+Server still gets payment confirmation
+
+So booking is confirmed.
+
+---
+
+# 9. Real Ticket Booking Flow (BookMyShow-like)
+
+User selects seat  
+      |  
+Seat locked (Redis)  
+      |  
+User enters card  
+      |  
+Stripe.js tokenizes card  
+      |  
+Backend creates PaymentIntent  
+      |  
+Payment success webhook  
+      |  
+DB transaction → booking confirmed  
+      |  
+Seat lock released
+
+---
+
+# 10. Example Webhook Handler (Java)
+
+@PostMapping("/stripe/webhook")  
+public void handleStripeEvent(@RequestBody String payload) {  
+  
+    Event event = StripeEventParser.parse(payload);  
+  
+    if(event.getType().equals("payment_intent.succeeded")) {  
+  
+        String paymentId = event.getPaymentIntentId();  
+  
+        bookingService.confirmBooking(paymentId);  
+    }  
+}
+
+---
+
+# 11. Why This Architecture Is Used
+
+|Problem|Solution|
+|---|---|
+|PCI compliance|Stripe.js tokenization|
+|Card security|Backend never sees card|
+|Async payments|Webhooks|
+|Reliability|Server-to-server callback|
+
+---
+
+✅ **Simple one-line summary**
+
+A **webhook is just an API endpoint your server exposes so Stripe can notify your system automatically when payment events happen.**
+
+

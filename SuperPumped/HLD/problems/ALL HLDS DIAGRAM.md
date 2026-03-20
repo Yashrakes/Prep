@@ -35,6 +35,7 @@
 ## GOOGLE DOCS
 ![Pasted image 20260102163301.png](app://62f56c1d963eb3e96efec9a6258cd55e886d/Users/yashagarwal/Documents/prep/SuperPumped/HLD/problems/Pasted%20image%2020260102163301.png?1767351781455)
 ## JOB SCHEDULER
+![[Pasted image 20260320125018.png]]
 ![Screenshot 2025-07-27 at 10.52.23 PM.png](app://62f56c1d963eb3e96efec9a6258cd55e886d/Users/yashagarwal/Documents/prep/SuperPumped/HLD/problems/Screenshot%202025-07-27%20at%2010.52.23%20PM.png?1753637685091)
 ## METRIX MONITERING SYSTEM
 ![[metrics monitoring.png]]
