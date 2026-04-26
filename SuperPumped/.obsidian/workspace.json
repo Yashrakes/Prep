@@ -25,12 +25,12 @@
             "id": "9a0239634e069a59",
             "type": "leaf",
             "state": {
-              "type": "release-notes",
+              "type": "pdf",
               "state": {
-                "currentVersion": "1.12.7"
+                "file": "HLD/problems/System-Design-Alex-Xu-Vol-2.pdf"
               },
-              "icon": "lucide-book-up",
-              "title": "Release Notes 1.12.7"
+              "icon": "lucide-file-text",
+              "title": "System-Design-Alex-Xu-Vol-2"
             }
           }
         ],
@@ -153,6 +153,8 @@
   },
   "active": "9a0239634e069a59",
   "lastOpenFiles": [
+    "HLD/problems/System-Design-Alex-Xu-Vol-1.pdf",
+    "HLD/problems/System-Design-Alex-Xu-Vol-2.pdf",
     "LLD DOCS/junit_interview_guide.html",
     "LLD DOCS/java_lld_20_problems.html",
     "LLD DOCS/lld_interview_prep_java.html",
@@ -196,8 +198,6 @@
     "HLD/problems/Database/JOB SCHEDULER.md",
     "LLD DOCS/Distributed_Job_Scheduler_LLD_Guide.docx",
     "HLD/OPTIMISTIC VS PESSIMIST.md",
-    "HLD/long polling vs web socket.md",
-    "HLD/Oauth 2.0/Kafka_LLD_Interview_Guide.docx",
-    "HLD/Oauth 2.0"
+    "HLD/long polling vs web socket.md"
   ]
 }
