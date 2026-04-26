@@ -14,6 +14,7 @@
 13. - Memory access time: ~100 nanoseconds (0.0001 ms)
      SSD access time: ~0.1 millisecond
      HDD access time: ~10 millisecond
+    A typical SSD can handle around 100,000 IOPS
  
 
 

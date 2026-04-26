@@ -177,211 +177,211 @@ Track your progress by checking off problems as you solve them!
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-111-120)
 
-- [ ]  **111.** [Reverse Integer](https://leetcode.com/problems/reverse-integer) 🟡 Medium
-- [ ]  **112.** [Set Matrix Zeroes](https://leetcode.com/problems/set-matrix-zeroes) 🟡 Medium
-- [ ]  **113.** [Median of Two Sorted Arrays](https://leetcode.com/problems/median-of-two-sorted-arrays) 🔴 Hard
-- [ ]  **114.** [Distinct Subsequences](https://leetcode.com/problems/distinct-subsequences) 🔴 Hard
-- [ ]  **115.** [Find Eventual Safe States](https://leetcode.com/problems/find-eventual-safe-states) 🟡 Medium
-- [ ]  **116.** [Binary Tree Postorder Traversal](https://leetcode.com/problems/binary-tree-postorder-traversal) 🟢 Easy
-- [ ]  **117.** [Design HashMap](https://leetcode.com/problems/design-hashmap) 🟢 Easy
-- [ ]  **118.** [Open the Lock](https://leetcode.com/problems/open-the-lock) 🟡 Medium
-- [ ]  **119.** [LRU Cache](https://leetcode.com/problems/lru-cache) 🟡 Medium
-- [ ]  **120.** [Valid Parentheses](https://leetcode.com/problems/valid-parentheses) 🟢 Easy
+- [x]  **111.** [Reverse Integer](https://leetcode.com/problems/reverse-integer) 🟡 Medium
+- [x]  **112.** [Set Matrix Zeroes](https://leetcode.com/problems/set-matrix-zeroes) 🟡 Medium
+- [x]  **113.** [Median of Two Sorted Arrays](https://leetcode.com/problems/median-of-two-sorted-arrays) 🔴 Hard
+- [x]  **114.** [Distinct Subsequences](https://leetcode.com/problems/distinct-subsequences) 🔴 Hard
+- [x]  **115.** [Find Eventual Safe States](https://leetcode.com/problems/find-eventual-safe-states) 🟡 Medium
+- [x]  **116.** [Binary Tree Postorder Traversal](https://leetcode.com/problems/binary-tree-postorder-traversal) 🟢 Easy
+- [x]  **117.** [Design HashMap](https://leetcode.com/problems/design-hashmap) 🟢 Easy
+- [x]  **118.** [Open the Lock](https://leetcode.com/problems/open-the-lock) 🟡 Medium
+- [x]  **119.** [LRU Cache](https://leetcode.com/problems/lru-cache) 🟡 Medium
+- [x]  **120.** [Valid Parentheses](https://leetcode.com/problems/valid-parentheses) 🟢 Easy
 
 ### Problems 121-130
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-121-130)
 
-- [ ]  **121.** [Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree) 🔴 Hard
-- [ ]  **122.** [Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray) 🟡 Medium
-- [ ]  **123.** [Maximum Sum Circular Subarray](https://leetcode.com/problems/maximum-sum-circular-subarray) 🟡 Medium
-- [ ]  **124.** [Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters) 🟡 Medium
-- [ ]  **125.** [Path Sum III](https://leetcode.com/problems/path-sum-iii) 🟡 Medium
-- [ ]  **126.** [Linked List Cycle II](https://leetcode.com/problems/linked-list-cycle-ii) 🟡 Medium
-- [ ]  **127.** [Remove All Adjacent Duplicates In String](https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string) 🟢 Easy
-- [ ]  **128.** [Remove Duplicate Letters](https://leetcode.com/problems/remove-duplicate-letters) 🟡 Medium
-- [ ]  **129.** [Binary Tree Inorder Traversal](https://leetcode.com/problems/binary-tree-inorder-traversal) 🟢 Easy
-- [ ]  **130.** [Number of Zero-Filled Subarrays](https://leetcode.com/problems/number-of-zero-filled-subarrays) 🟡 Medium
+- [x]  **121.** [Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree) 🔴 Hard
+- [x]  **122.** [Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray) 🟡 Medium
+- [x]  **123.** [Maximum Sum Circular Subarray](https://leetcode.com/problems/maximum-sum-circular-subarray) 🟡 Medium
+- [x]  **124.** [Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters) 🟡 Medium
+- [x]  **125.** [Path Sum III](https://leetcode.com/problems/path-sum-iii) 🟡 Medium
+- [x]  **126.** [Linked List Cycle II](https://leetcode.com/problems/linked-list-cycle-ii) 🟡 Medium
+- [x]  **127.** [Remove All Adjacent Duplicates In String](https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string) 🟢 Easy
+- [x]  **128.** [Remove Duplicate Letters](https://leetcode.com/problems/remove-duplicate-letters) 🟡 Medium
+- [x]  **129.** [Binary Tree Inorder Traversal](https://leetcode.com/problems/binary-tree-inorder-traversal) 🟢 Easy
+- [x]  **130.** [Number of Zero-Filled Subarrays](https://leetcode.com/problems/number-of-zero-filled-subarrays) 🟡 Medium
 
 ### Problems 131-140
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-131-140)
 
-- [ ]  **131.** [Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum) 🔴 Hard
-- [ ]  **132.** [Minimum Number of Refueling Stops](https://leetcode.com/problems/minimum-number-of-refueling-stops) 🔴 Hard
-- [ ]  **133.** [Binary Tree Preorder Traversal](https://leetcode.com/problems/binary-tree-preorder-traversal) 🟢 Easy
-- [ ]  **134.** [Search a 2D Matrix](https://leetcode.com/problems/search-a-2d-matrix) 🟡 Medium
-- [ ]  **135.** [Rotate Array](https://leetcode.com/problems/rotate-array) 🟡 Medium
-- [ ]  **136.** [Invert Binary Tree](https://leetcode.com/problems/invert-binary-tree) 🟢 Easy
-- [ ]  **137.** [3Sum](https://leetcode.com/problems/3sum) 🟡 Medium
-- [ ]  **138.** [Burst Balloons](https://leetcode.com/problems/burst-balloons) 🔴 Hard
-- [ ]  **139.** [Binary Tree Zigzag Level Order Traversal](https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal) 🟡 Medium
-- [ ]  **140.** [Accounts Merge](https://leetcode.com/problems/accounts-merge) 🟡 Medium
+- [x]  **131.** [Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum) 🔴 Hard
+- [x]  **132.** [Minimum Number of Refueling Stops](https://leetcode.com/problems/minimum-number-of-refueling-stops) 🔴 Hard
+- [x]  **133.** [Binary Tree Preorder Traversal](https://leetcode.com/problems/binary-tree-preorder-traversal) 🟢 Easy
+- [x]  **134.** [Search a 2D Matrix](https://leetcode.com/problems/search-a-2d-matrix) 🟡 Medium
+- [x]  **135.** [Rotate Array](https://leetcode.com/problems/rotate-array) 🟡 Medium
+- [x]  **136.** [Invert Binary Tree](https://leetcode.com/problems/invert-binary-tree) 🟢 Easy
+- [x]  **137.** [3Sum](https://leetcode.com/problems/3sum) 🟡 Medium
+- [x]  **138.** [Burst Balloons](https://leetcode.com/problems/burst-balloons) 🔴 Hard
+- [x]  **139.** [Binary Tree Zigzag Level Order Traversal](https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal) 🟡 Medium
+- [x]  **140.** [Accounts Merge](https://leetcode.com/problems/accounts-merge) 🟡 Medium
 
 ### Problems 141-150
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-141-150)
 
-- [ ]  **141.** [Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock) 🟢 Easy
-- [ ]  **142.** [Reconstruct Itinerary](https://leetcode.com/problems/reconstruct-itinerary) 🔴 Hard
-- [ ]  **143.** [Trim a Binary Search Tree](https://leetcode.com/problems/trim-a-binary-search-tree) 🟡 Medium
-- [ ]  **144.** [Redundant Connection](https://leetcode.com/problems/redundant-connection) 🟡 Medium
-- [ ]  **145.** [Palindrome Linked List](https://leetcode.com/problems/palindrome-linked-list) 🟢 Easy
-- [ ]  **146.** [Design Add and Search Words Data Structure](https://leetcode.com/problems/design-add-and-search-words-data-structure) 🟡 Medium
-- [ ]  **147.** [Kth Smallest Element in a Sorted Matrix](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix) 🟡 Medium
-- [ ]  **148.** [Add Two Numbers](https://leetcode.com/problems/add-two-numbers) 🟡 Medium
-- [ ]  **149.** [Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k) 🟡 Medium
-- [ ]  **150.** [Kth Smallest Element in a BST](https://leetcode.com/problems/kth-smallest-element-in-a-bst) 🟡 Medium
+- [x]  **141.** [Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock) 🟢 Easy
+- [x]  **142.** [Reconstruct Itinerary](https://leetcode.com/problems/reconstruct-itinerary) 🔴 Hard
+- [x]  **143.** [Trim a Binary Search Tree](https://leetcode.com/problems/trim-a-binary-search-tree) 🟡 Medium
+- [x]  **144.** [Redundant Connection](https://leetcode.com/problems/redundant-connection) 🟡 Medium
+- [x]  **145.** [Palindrome Linked List](https://leetcode.com/problems/palindrome-linked-list) 🟢 Easy
+- [x]  **146.** [Design Add and Search Words Data Structure](https://leetcode.com/problems/design-add-and-search-words-data-structure) 🟡 Medium
+- [x]  **147.** [Kth Smallest Element in a Sorted Matrix](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix) 🟡 Medium
+- [x]  **148.** [Add Two Numbers](https://leetcode.com/problems/add-two-numbers) 🟡 Medium
+- [x]  **149.** [Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k) 🟡 Medium
+- [x]  **150.** [Kth Smallest Element in a BST](https://leetcode.com/problems/kth-smallest-element-in-a-bst) 🟡 Medium
 
 ### Problems 151-160
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-151-160)
 
-- [ ]  **151.** [Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group) 🔴 Hard
-- [ ]  **152.** [Min Cost to Connect All Points](https://leetcode.com/problems/min-cost-to-connect-all-points) 🟡 Medium
-- [ ]  **153.** [Split Array into Consecutive Subsequences](https://leetcode.com/problems/split-array-into-consecutive-subsequences) 🟡 Medium
-- [ ]  **154.** [Minimum Size Subarray Sum](https://leetcode.com/problems/minimum-size-subarray-sum) 🟡 Medium
-- [ ]  **155.** [Shortest Path Visiting All Nodes](https://leetcode.com/problems/shortest-path-visiting-all-nodes) 🔴 Hard
-- [ ]  **156.** [Game of Life](https://leetcode.com/problems/game-of-life) 🟡 Medium
-- [ ]  **157.** [Maximum Frequency Stack](https://leetcode.com/problems/maximum-frequency-stack) 🔴 Hard
-- [ ]  **158.** [Reverse Bits](https://leetcode.com/problems/reverse-bits) 🟢 Easy
-- [ ]  **159.** [House Robber II](https://leetcode.com/problems/house-robber-ii) 🟡 Medium
-- [ ]  **160.** [Maximum Width of Binary Tree](https://leetcode.com/problems/maximum-width-of-binary-tree) 🟡 Medium
+- [x]  **151.** [Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group) 🔴 Hard
+- [x]  **152.** [Min Cost to Connect All Points](https://leetcode.com/problems/min-cost-to-connect-all-points) 🟡 Medium
+- [x]  **153.** [Split Array into Consecutive Subsequences](https://leetcode.com/problems/split-array-into-consecutive-subsequences) 🟡 Medium
+- [x]  **154.** [Minimum Size Subarray Sum](https://leetcode.com/problems/minimum-size-subarray-sum) 🟡 Medium
+- [x]  **155.** [Shortest Path Visiting All Nodes](https://leetcode.com/problems/shortest-path-visiting-all-nodes) 🔴 Hard
+- [x]  **156.** [Game of Life](https://leetcode.com/problems/game-of-life) 🟡 Medium
+- [x]  **157.** [Maximum Frequency Stack](https://leetcode.com/problems/maximum-frequency-stack) 🔴 Hard
+- [x]  **158.** [Reverse Bits](https://leetcode.com/problems/reverse-bits) 🟢 Easy
+- [x]  **159.** [House Robber II](https://leetcode.com/problems/house-robber-ii) 🟡 Medium
+- [x]  **160.** [Maximum Width of Binary Tree](https://leetcode.com/problems/maximum-width-of-binary-tree) 🟡 Medium
 
 ### Problems 161-170
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-161-170)
 
-- [ ]  **161.** [Contiguous Array](https://leetcode.com/problems/contiguous-array) 🟡 Medium
-- [ ]  **162.** [Basic Calculator II](https://leetcode.com/problems/basic-calculator-ii) 🟡 Medium
-- [ ]  **163.** [Single-Threaded CPU](https://leetcode.com/problems/single-threaded-cpu) 🟡 Medium
-- [ ]  **164.** [Continuous Subarray Sum](https://leetcode.com/problems/continuous-subarray-sum) 🟡 Medium
-- [ ]  **165.** [Maximum Average Subarray I](https://leetcode.com/problems/maximum-average-subarray-i) 🟢 Easy
-- [ ]  **166.** [Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree) 🟡 Medium
-- [ ]  **167.** [Cherry Pickup](https://leetcode.com/problems/cherry-pickup) 🔴 Hard
-- [ ]  **168.** [Bus Routes](https://leetcode.com/problems/bus-routes) 🔴 Hard
-- [ ]  **169.** [Reorganize String](https://leetcode.com/problems/reorganize-string) 🟡 Medium
-- [ ]  **170.** [Sort Characters By Frequency](https://leetcode.com/problems/sort-characters-by-frequency) 🟡 Medium
+- [x]  **161.** [Contiguous Array](https://leetcode.com/problems/contiguous-array) 🟡 Medium
+- [x]  **162.** [Basic Calculator II](https://leetcode.com/problems/basic-calculator-ii) 🟡 Medium
+- [x]  **163.** [Single-Threaded CPU](https://leetcode.com/problems/single-threaded-cpu) 🟡 Medium
+- [x]  **164.** [Continuous Subarray Sum](https://leetcode.com/problems/continuous-subarray-sum) 🟡 Medium
+- [x]  **165.** [Maximum Average Subarray I](https://leetcode.com/problems/maximum-average-subarray-i) 🟢 Easy
+- [x]  **166.** [Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree) 🟡 Medium
+- [x]  **167.** [Cherry Pickup](https://leetcode.com/problems/cherry-pickup) 🔴 Hard
+- [x]  **168.** [Bus Routes](https://leetcode.com/problems/bus-routes) 🔴 Hard
+- [x]  **169.** [Reorganize String](https://leetcode.com/problems/reorganize-string) 🟡 Medium
+- [x]  **170.** [Sort Characters By Frequency](https://leetcode.com/problems/sort-characters-by-frequency) 🟡 Medium
 
 ### Problems 171-180
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-171-180)
 
-- [ ]  **171.** [My Calendar I](https://leetcode.com/problems/my-calendar-i) 🟡 Medium
-- [ ]  **172.** [Candy](https://leetcode.com/problems/candy) 🔴 Hard
-- [ ]  **173.** [Minimize Malware Spread](https://leetcode.com/problems/minimize-malware-spread) 🔴 Hard
-- [ ]  **174.** [Best Time to Buy and Sell Stock with Cooldown](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown) 🟡 Medium
-- [ ]  **175.** [Perfect Squares](https://leetcode.com/problems/perfect-squares) 🟡 Medium
-- [ ]  **176.** [Count Complete Tree Nodes](https://leetcode.com/problems/count-complete-tree-nodes) 🟢 Easy
-- [ ]  **177.** [Two Sum II - Input Array Is Sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted) 🟡 Medium
-- [ ]  **178.** [Maximum Number of Points with Cost](https://leetcode.com/problems/maximum-number-of-points-with-cost) 🟡 Medium
-- [ ]  **179.** [Target Sum](https://leetcode.com/problems/target-sum) 🟡 Medium
-- [ ]  **180.** [Process Tasks Using Servers](https://leetcode.com/problems/process-tasks-using-servers) 🟡 Medium
+- [x]  **171.** [My Calendar I](https://leetcode.com/problems/my-calendar-i) 🟡 Medium
+- [x]  **172.** [Candy](https://leetcode.com/problems/candy) 🔴 Hard
+- [x]  **173.** [Minimize Malware Spread](https://leetcode.com/problems/minimize-malware-spread) 🔴 Hard
+- [x]  **174.** [Best Time to Buy and Sell Stock with Cooldown](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown) 🟡 Medium
+- [x]  **175.** [Perfect Squares](https://leetcode.com/problems/perfect-squares) 🟡 Medium
+- [x]  **176.** [Count Complete Tree Nodes](https://leetcode.com/problems/count-complete-tree-nodes) 🟢 Easy
+- [x]  **177.** [Two Sum II - Input Array Is Sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted) 🟡 Medium
+- [x]  **178.** [Maximum Number of Points with Cost](https://leetcode.com/problems/maximum-number-of-points-with-cost) 🟡 Medium
+- [x]  **179.** [Target Sum](https://leetcode.com/problems/target-sum) 🟡 Medium
+- [x]  **180.** [Process Tasks Using Servers](https://leetcode.com/problems/process-tasks-using-servers) 🟡 Medium
 
 ### Problems 181-190
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-181-190)
 
-- [ ]  **181.** [Convert Sorted List to Binary Search Tree](https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree) 🟡 Medium
-- [ ]  **182.** [The Skyline Problem](https://leetcode.com/problems/the-skyline-problem) 🔴 Hard
-- [ ]  **183.** [Koko Eating Bananas](https://leetcode.com/problems/koko-eating-bananas) 🟡 Medium
-- [ ]  **184.** [Partition List](https://leetcode.com/problems/partition-list) 🟡 Medium
-- [ ]  **185.** [Populating Next Right Pointers in Each Node II](https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii) 🟡 Medium
-- [ ]  **186.** [Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array) 🟡 Medium
-- [ ]  **187.** [Design a Food Rating System](https://leetcode.com/problems/design-a-food-rating-system) 🟡 Medium
-- [ ]  **188.** [Diameter of Binary Tree](https://leetcode.com/problems/diameter-of-binary-tree) 🟢 Easy
-- [ ]  **189.** [Longest Palindromic Subsequence](https://leetcode.com/problems/longest-palindromic-subsequence) 🟡 Medium
-- [ ]  **190.** [Maximum Number of Events That Can Be Attended](https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended) 🟡 Medium
+- [x]  **181.** [Convert Sorted List to Binary Search Tree](https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree) 🟡 Medium
+- [x]  **182.** [The Skyline Problem](https://leetcode.com/problems/the-skyline-problem) 🔴 Hard
+- [x]  **183.** [Koko Eating Bananas](https://leetcode.com/problems/koko-eating-bananas) 🟡 Medium
+- [x]  **184.** [Partition List](https://leetcode.com/problems/partition-list) 🟡 Medium
+- [x]  **185.** [Populating Next Right Pointers in Each Node II](https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii) 🟡 Medium
+- [x]  **186.** [Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array) 🟡 Medium
+- [x]  **187.** [Design a Food Rating System](https://leetcode.com/problems/design-a-food-rating-system) 🟡 Medium
+- [x]  **188.** [Diameter of Binary Tree](https://leetcode.com/problems/diameter-of-binary-tree) 🟢 Easy
+- [x]  **189.** [Longest Palindromic Subsequence](https://leetcode.com/problems/longest-palindromic-subsequence) 🟡 Medium
+- [x]  **190.** [Maximum Number of Events That Can Be Attended](https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended) 🟡 Medium
 
 ### Problems 191-200
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-191-200)
 
-- [ ]  **191.** [Minimum Absolute Difference in BST](https://leetcode.com/problems/minimum-absolute-difference-in-bst) 🟢 Easy
-- [ ]  **192.** [Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence) 🟡 Medium
-- [ ]  **193.** [Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists) 🔴 Hard
-- [ ]  **194.** [Single Number III](https://leetcode.com/problems/single-number-iii) 🟡 Medium
-- [ ]  **195.** [Longest Valid Parentheses](https://leetcode.com/problems/longest-valid-parentheses) 🔴 Hard
-- [ ]  **196.** [Minimum Path Sum](https://leetcode.com/problems/minimum-path-sum) 🟡 Medium
-- [ ]  **197.** [Numbers At Most N Given Digit Set](https://leetcode.com/problems/numbers-at-most-n-given-digit-set) 🔴 Hard
-- [ ]  **198.** [Binary Tree Paths](https://leetcode.com/problems/binary-tree-paths) 🟢 Easy
-- [ ]  **199.** [N-Queens](https://leetcode.com/problems/n-queens) 🔴 Hard
-- [ ]  **200.** [Daily Temperatures](https://leetcode.com/problems/daily-temperatures) 🟡 Medium
+- [x]  **191.** [Minimum Absolute Difference in BST](https://leetcode.com/problems/minimum-absolute-difference-in-bst) 🟢 Easy
+- [x]  **192.** [Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence) 🟡 Medium
+- [x]  **193.** [Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists) 🔴 Hard
+- [x]  **194.** [Single Number III](https://leetcode.com/problems/single-number-iii) 🟡 Medium
+- [x]  **195.** [Longest Valid Parentheses](https://leetcode.com/problems/longest-valid-parentheses) 🔴 Hard
+- [x]  **196.** [Minimum Path Sum](https://leetcode.com/problems/minimum-path-sum) 🟡 Medium
+- [x]  **197.** [Numbers At Most N Given Digit Set](https://leetcode.com/problems/numbers-at-most-n-given-digit-set) 🔴 Hard
+- [x]  **198.** [Binary Tree Paths](https://leetcode.com/problems/binary-tree-paths) 🟢 Easy
+- [x]  **199.** [N-Queens](https://leetcode.com/problems/n-queens) 🔴 Hard
+- [x]  **200.** [Daily Temperatures](https://leetcode.com/problems/daily-temperatures) 🟡 Medium
 
 ### Problems 201-210
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-201-210)
 
-- [ ]  **201.** [Rotting Oranges](https://leetcode.com/problems/rotting-oranges) 🟡 Medium
-- [ ]  **202.** [Snapshot Array](https://leetcode.com/problems/snapshot-array) 🟡 Medium
-- [ ]  **203.** [First Missing Positive](https://leetcode.com/problems/first-missing-positive) 🔴 Hard
-- [ ]  **204.** [Path With Minimum Effort](https://leetcode.com/problems/path-with-minimum-effort) 🟡 Medium
-- [ ]  **205.** [Insert Delete GetRandom O(1)](https://leetcode.com/problems/insert-delete-getrandom-o1) 🟡 Medium
-- [ ]  **206.** [Longest Duplicate Substring](https://leetcode.com/problems/longest-duplicate-substring) 🔴 Hard
-- [ ]  **207.** [Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum) 🟡 Medium
-- [ ]  **208.** [Counting Bits](https://leetcode.com/problems/counting-bits) 🟢 Easy
-- [ ]  **209.** [Min Stack](https://leetcode.com/problems/min-stack) 🟡 Medium
-- [ ]  **210.** [Subsets](https://leetcode.com/problems/subsets) 🟡 Medium
+- [x]  **201.** [Rotting Oranges](https://leetcode.com/problems/rotting-oranges) 🟡 Medium
+- [x]  **202.** [Snapshot Array](https://leetcode.com/problems/snapshot-array) 🟡 Medium
+- [x]  **203.** [First Missing Positive](https://leetcode.com/problems/first-missing-positive) 🔴 Hard
+- [x]  **204.** [Path With Minimum Effort](https://leetcode.com/problems/path-with-minimum-effort) 🟡 Medium
+- [x]  **205.** [Insert Delete GetRandom O(1)](https://leetcode.com/problems/insert-delete-getrandom-o1) 🟡 Medium
+- [x]  **206.** [Longest Duplicate Substring](https://leetcode.com/problems/longest-duplicate-substring) 🔴 Hard
+- [x]  **207.** [Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum) 🟡 Medium
+- [x]  **208.** [Counting Bits](https://leetcode.com/problems/counting-bits) 🟢 Easy
+- [x]  **209.** [Min Stack](https://leetcode.com/problems/min-stack) 🟡 Medium
+- [x]  **210.** [Subsets](https://leetcode.com/problems/subsets) 🟡 Medium
 
 ### Problems 211-220
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-211-220)
 
-- [ ]  **211.** [Word Search II](https://leetcode.com/problems/word-search-ii) 🔴 Hard
-- [ ]  **212.** [Zigzag Conversion](https://leetcode.com/problems/zigzag-conversion) 🟡 Medium
-- [ ]  **213.** [Cracking the Safe](https://leetcode.com/problems/cracking-the-safe) 🔴 Hard
-- [ ]  **214.** [Valid Sudoku](https://leetcode.com/problems/valid-sudoku) 🟡 Medium
-- [ ]  **215.** [Merge Two Sorted Lists](https://leetcode.com/problems/merge-two-sorted-lists) 🟢 Easy
-- [ ]  **216.** [Isomorphic Strings](https://leetcode.com/problems/isomorphic-strings) 🟢 Easy
-- [ ]  **217.** [Contains Duplicate II](https://leetcode.com/problems/contains-duplicate-ii) 🟢 Easy
-- [ ]  **218.** [Time Needed to Buy Tickets](https://leetcode.com/problems/time-needed-to-buy-tickets) 🟢 Easy
-- [ ]  **219.** [Longest Common Prefix](https://leetcode.com/problems/longest-common-prefix) 🟢 Easy
-- [ ]  **220.** [Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array) 🟡 Medium
+- [x]  **211.** [Word Search II](https://leetcode.com/problems/word-search-ii) 🔴 Hard
+- [x]  **212.** [Zigzag Conversion](https://leetcode.com/problems/zigzag-conversion) 🟡 Medium
+- [x]  **213.** [Cracking the Safe](https://leetcode.com/problems/cracking-the-safe) 🔴 Hard
+- [x]  **214.** [Valid Sudoku](https://leetcode.com/problems/valid-sudoku) 🟡 Medium
+- [x]  **215.** [Merge Two Sorted Lists](https://leetcode.com/problems/merge-two-sorted-lists) 🟢 Easy
+- [x]  **216.** [Isomorphic Strings](https://leetcode.com/problems/isomorphic-strings) 🟢 Easy
+- [x]  **217.** [Contains Duplicate II](https://leetcode.com/problems/contains-duplicate-ii) 🟢 Easy
+- [x]  **218.** [Time Needed to Buy Tickets](https://leetcode.com/problems/time-needed-to-buy-tickets) 🟢 Easy
+- [x]  **219.** [Longest Common Prefix](https://leetcode.com/problems/longest-common-prefix) 🟢 Easy
+- [x]  **220.** [Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array) 🟡 Medium
 
 ### Problems 221-230
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-221-230)
 
-- [ ]  **221.** [Number of Matching Subsequences](https://leetcode.com/problems/number-of-matching-subsequences) 🟡 Medium
-- [ ]  **222.** [Sum of Distances in Tree](https://leetcode.com/problems/sum-of-distances-in-tree) 🔴 Hard
-- [ ]  **223.** [Max Points on a Line](https://leetcode.com/problems/max-points-on-a-line) 🔴 Hard
-- [ ]  **224.** [Number of Ways to Arrive at Destination](https://leetcode.com/problems/number-of-ways-to-arrive-at-destination) 🟡 Medium
-- [ ]  **225.** [Minimum Number of Arrows to Burst Balloons](https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons) 🟡 Medium
-- [ ]  **226.** [Construct Binary Tree from Inorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal) 🟡 Medium
-- [ ]  **227.** [Decode Ways](https://leetcode.com/problems/decode-ways) 🟡 Medium
-- [ ]  **228.** [Repeated String Match](https://leetcode.com/problems/repeated-string-match) 🟡 Medium
-- [ ]  **229.** [Maximum XOR of Two Numbers in an Array](https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array) 🟡 Medium
-- [ ]  **230.** [Number of Longest Increasing Subsequence](https://leetcode.com/problems/number-of-longest-increasing-subsequence) 🟡 Medium
+- [x]  **221.** [Number of Matching Subsequences](https://leetcode.com/problems/number-of-matching-subsequences) 🟡 Medium
+- [x]  **222.** [Sum of Distances in Tree](https://leetcode.com/problems/sum-of-distances-in-tree) 🔴 Hard
+- [x]  **223.** [Max Points on a Line](https://leetcode.com/problems/max-points-on-a-line) 🔴 Hard
+- [x]  **224.** [Number of Ways to Arrive at Destination](https://leetcode.com/problems/number-of-ways-to-arrive-at-destination) 🟡 Medium
+- [x]  **225.** [Minimum Number of Arrows to Burst Balloons](https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons) 🟡 Medium
+- [x]  **226.** [Construct Binary Tree from Inorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal) 🟡 Medium
+- [x]  **227.** [Decode Ways](https://leetcode.com/problems/decode-ways) 🟡 Medium
+- [x]  **228.** [Repeated String Match](https://leetcode.com/problems/repeated-string-match) 🟡 Medium
+- [x]  **229.** [Maximum XOR of Two Numbers in an Array](https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array) 🟡 Medium
+- [x]  **230.** [Number of Longest Increasing Subsequence](https://leetcode.com/problems/number-of-longest-increasing-subsequence) 🟡 Medium
 
 ### Problems 231-240
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-231-240)
 
-- [ ]  **231.** [Maximum Number of Balloons](https://leetcode.com/problems/maximum-number-of-balloons) 🟢 Easy
-- [ ]  **232.** [Range Sum Query - Mutable](https://leetcode.com/problems/range-sum-query-mutable) 🟡 Medium
-- [ ]  **233.** [Unique Paths II](https://leetcode.com/problems/unique-paths-ii) 🟡 Medium
-- [ ]  **234.** [Find Peak Element](https://leetcode.com/problems/find-peak-element) 🟡 Medium
-- [ ]  **235.** [Clone Graph](https://leetcode.com/problems/clone-graph) 🟡 Medium
-- [ ]  **236.** [Substring with Concatenation of All Words](https://leetcode.com/problems/substring-with-concatenation-of-all-words) 🔴 Hard
-- [ ]  **237.** [Surrounded Regions](https://leetcode.com/problems/surrounded-regions) 🟡 Medium
-- [ ]  **238.** [Random Pick with Weight](https://leetcode.com/problems/random-pick-with-weight) 🟡 Medium
-- [ ]  **239.** [Valid Palindrome](https://leetcode.com/problems/valid-palindrome) 🟢 Easy
-- [ ]  **240.** [Encode and Decode TinyURL](https://leetcode.com/problems/encode-and-decode-tinyurl) 🟡 Medium
+- [x]  **231.** [Maximum Number of Balloons](https://leetcode.com/problems/maximum-number-of-balloons) 🟢 Easy
+- [x]  **232.** [Range Sum Query - Mutable](https://leetcode.com/problems/range-sum-query-mutable) 🟡 Medium
+- [x]  **233.** [Unique Paths II](https://leetcode.com/problems/unique-paths-ii) 🟡 Medium
+- [x]  **234.** [Find Peak Element](https://leetcode.com/problems/find-peak-element) 🟡 Medium
+- [x]  **235.** [Clone Graph](https://leetcode.com/problems/clone-graph) 🟡 Medium
+- [x]  **236.** [Substring with Concatenation of All Words](https://leetcode.com/problems/substring-with-concatenation-of-all-words) 🔴 Hard
+- [x]  **237.** [Surrounded Regions](https://leetcode.com/problems/surrounded-regions) 🟡 Medium
+- [x]  **238.** [Random Pick with Weight](https://leetcode.com/problems/random-pick-with-weight) 🟡 Medium
+- [x]  **239.** [Valid Palindrome](https://leetcode.com/problems/valid-palindrome) 🟢 Easy
+- [x]  **240.** [Encode and Decode TinyURL](https://leetcode.com/problems/encode-and-decode-tinyurl) 🟡 Medium
 
 ### Problems 241-250
 
 [](https://github.com/MahirRatanpara/ObsNotesSync/blob/main/MahirNotes/DSA/Problem%20List/Current/AlgoMaster%20300%20-%20Randomised%20Problem%20List.md#problems-241-250)
 
-- [ ]  **241.** [Non-overlapping Intervals](https://leetcode.com/problems/non-overlapping-intervals) 🟡 Medium
-- [ ]  **242.** [Subarray Sums Divisible by K](https://leetcode.com/problems/subarray-sums-divisible-by-k) 🟡 Medium
-- [ ]  **243.** [Reverse Pairs](https://leetcode.com/problems/reverse-pairs) 🔴 Hard
-- [ ]  **244.** [Construct Quad Tree](https://leetcode.com/problems/construct-quad-tree) 🟡 Medium
-- [ ]  **245.** [Swap Nodes in Pairs](https://leetcode.com/problems/swap-nodes-in-pairs) 🟡 Medium
-- [ ]  **246.** [Fair Distribution of Cookies](https://leetcode.com/problems/fair-distribution-of-cookies) 🟡 Medium
-- [ ]  **247.** [Reverse Linked List](https://leetcode.com/problems/reverse-linked-list) 🟢 Easy
-- [ ]  **248.** [Minimum Distance Between BST Nodes](https://leetcode.com/problems/minimum-distance-between-bst-nodes) 🟢 Easy
-- [ ]  **249.** [Best Time to Buy and Sell Stock II](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii) 🟡 Medium
-- [ ]  **250.** [Factorial Trailing Zeroes](https://leetcode.com/problems/factorial-trailing-zeroes) 🟡 Medium
+- [x]  **241.** [Non-overlapping Intervals](https://leetcode.com/problems/non-overlapping-intervals) 🟡 Medium
+- [x]  **242.** [Subarray Sums Divisible by K](https://leetcode.com/problems/subarray-sums-divisible-by-k) 🟡 Medium
+- [x]  **243.** [Reverse Pairs](https://leetcode.com/problems/reverse-pairs) 🔴 Hard
+- [x]  **244.** [Construct Quad Tree](https://leetcode.com/problems/construct-quad-tree) 🟡 Medium
+- [x]  **245.** [Swap Nodes in Pairs](https://leetcode.com/problems/swap-nodes-in-pairs) 🟡 Medium
+- [x]  **246.** [Fair Distribution of Cookies](https://leetcode.com/problems/fair-distribution-of-cookies) 🟡 Medium
+- [x]  **247.** [Reverse Linked List](https://leetcode.com/problems/reverse-linked-list) 🟢 Easy
+- [x]  **248.** [Minimum Distance Between BST Nodes](https://leetcode.com/problems/minimum-distance-between-bst-nodes) 🟢 Easy
+- [x]  **249.** [Best Time to Buy and Sell Stock II](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii) 🟡 Medium
+- [x]  **250.** [Factorial Trailing Zeroes](https://leetcode.com/problems/factorial-trailing-zeroes) 🟡 Medium
 
 ### Problems 251-260
 

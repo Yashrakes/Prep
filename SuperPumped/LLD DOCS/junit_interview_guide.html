@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JUnit Interview Guide — Java & Spring Boot</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap');
+  :root {
+    --bg:#0a0e1a;--surface:#111827;--surface2:#1a2235;--border:#1e2d45;
+    --accent:#00d4ff;--accent2:#7c3aed;--accent3:#10b981;--accent4:#f59e0b;
+    --danger:#ef4444;--text:#e2e8f0;--muted:#64748b;--code-bg:#0d1117;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh;}
+  .header{background:linear-gradient(135deg,#0a0e1a 0%,#0f172a 50%,#0a0e1a 100%);border-bottom:1px solid var(--border);padding:28px 32px 24px;position:relative;overflow:hidden;}
+  .header::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;background:radial-gradient(circle,rgba(0,212,255,0.08) 0%,transparent 70%);pointer-events:none;}
+  .header-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);color:var(--accent);font-size:11px;font-weight:700;letter-spacing:2px;padding:4px 12px;border-radius:20px;margin-bottom:12px;text-transform:uppercase;}
+  .header h1{font-size:26px;font-weight:800;background:linear-gradient(90deg,#fff 0%,var(--accent) 60%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;}
+  .header p{color:var(--muted);font-size:13px;margin-top:8px;}
+  .nav{display:flex;gap:4px;padding:14px 32px;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;flex-wrap:wrap;}
+  .nav-btn{padding:7px 14px;border-radius:8px;border:1px solid transparent;background:transparent;color:var(--muted);font-family:'Syne',sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s;}
+  .nav-btn:hover{color:var(--text);background:var(--surface2);}
+  .nav-btn.active{background:rgba(0,212,255,0.1);border-color:rgba(0,212,255,0.3);color:var(--accent);}
+  .content{padding:28px 32px;max-width:100%;}
+  .section{display:none;}.section.active{display:block;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px 24px;margin-bottom:18px;position:relative;overflow:hidden;}
+  .card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--accent);border-radius:12px 0 0 12px;}
+  .card.green::before{background:var(--accent3);}.card.purple::before{background:var(--accent2);}.card.amber::before{background:var(--accent4);}.card.red::before{background:var(--danger);}
+  .card h3{font-size:15px;font-weight:700;color:var(--accent);margin-bottom:10px;}
+  .card.green h3{color:var(--accent3);}.card.purple h3{color:var(--accent2);}.card.amber h3{color:var(--accent4);}.card.red h3{color:var(--danger);}
+  .card p,.card li{font-size:13.5px;line-height:1.75;color:#94a3b8;}
+  .card ul{padding-left:18px;}.card li{margin-bottom:5px;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;}
+  @media(max-width:700px){.grid2{grid-template-columns:1fr;}}
+  .code-wrap{background:var(--code-bg);border:1px solid var(--border);border-radius:10px;margin:14px 0;overflow:hidden;}
+  .code-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#161b22;border-bottom:1px solid var(--border);}
+  .code-lang{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--accent);letter-spacing:1px;text-transform:uppercase;}
+  .copy-btn{background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);color:var(--accent);font-size:10px;font-family:'Syne',sans-serif;font-weight:700;padding:4px 10px;border-radius:5px;cursor:pointer;letter-spacing:1px;transition:all .2s;}
+  .copy-btn:hover{background:rgba(0,212,255,0.15);}
+  pre{padding:16px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.7;color:#e2e8f0;}
+  .kw{color:#c792ea;}.ann{color:#80cbc4;}.str{color:#c3e88d;}.cm{color:#546e7a;font-style:italic;}.cls{color:#ffcb6b;}.fn{color:#82aaff;}.num{color:#f78c6c;}
+  .tbl-wrap{overflow-x:auto;margin:14px 0;border-radius:10px;border:1px solid var(--border);}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;}
+  th{background:#161b22;color:var(--accent);font-weight:700;padding:10px 14px;text-align:left;letter-spacing:.5px;font-size:11px;text-transform:uppercase;}
+  td{padding:9px 14px;border-top:1px solid var(--border);color:#94a3b8;vertical-align:top;}
+  tr:hover td{background:rgba(255,255,255,.02);}
+  code.inline{background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.15);color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 6px;border-radius:4px;}
+  .section-title{font-size:20px;font-weight:800;color:var(--text);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+  .section-title span{background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);color:var(--accent);font-size:12px;padding:4px 10px;border-radius:6px;}
+  .tip{background:rgba(16,185,129,0.05);border:1px solid rgba(16,185,129,0.2);border-radius:8px;padding:12px 16px;font-size:13px;color:#6ee7b7;margin:12px 0;}
+  .tip strong{color:var(--accent3);}
+  .warn{background:rgba(245,158,11,0.05);border:1px solid rgba(245,158,11,0.2);border-radius:8px;padding:12px 16px;font-size:13px;color:#fcd34d;margin:12px 0;}
+  .qa-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden;}
+  .qa-q{padding:16px 20px;cursor:pointer;display:flex;align-items:flex-start;gap:12px;transition:background .2s;}
+  .qa-q:hover{background:var(--surface2);}
+  .qa-badge{background:rgba(0,212,255,0.15);color:var(--accent);border:1px solid rgba(0,212,255,0.3);font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;white-space:nowrap;margin-top:2px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;}
+  .qa-badge.hard{background:rgba(239,68,68,0.12);color:var(--danger);border-color:rgba(239,68,68,.25);}
+  .qa-badge.med{background:rgba(245,158,11,0.12);color:var(--accent4);border-color:rgba(245,158,11,.25);}
+  .qa-badge.easy{background:rgba(16,185,129,0.12);color:var(--accent3);border-color:rgba(16,185,129,.25);}
+  .qa-text{font-size:14px;font-weight:600;color:var(--text);flex:1;}
+  .qa-arrow{color:var(--muted);font-size:16px;transition:transform .3s;margin-top:1px;}
+  .qa-item.open .qa-arrow{transform:rotate(90deg);color:var(--accent);}
+  .qa-ans{display:none;padding:0 20px 20px;border-top:1px solid var(--border);}
+  .qa-item.open .qa-ans{display:block;}
+  .qa-ans p{font-size:13.5px;line-height:1.75;color:#94a3b8;margin-top:14px;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-badge">🧪 Interview Prep</div>
+  <h1>JUnit & Testing — Java &amp; Spring Boot</h1>
+  <p>Complete interview-level reference — Annotations, Mockito, Controller Tests, Service Tests, Core Java, Advanced Patterns</p>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="show('fundamentals',this)">Fundamentals</button>
+  <button class="nav-btn" onclick="show('annotations',this)">Annotations</button>
+  <button class="nav-btn" onclick="show('mockito',this)">Mockito</button>
+  <button class="nav-btn" onclick="show('service',this)">Service Tests</button>
+  <button class="nav-btn" onclick="show('controller',this)">Controller Tests</button>
+  <button class="nav-btn" onclick="show('corejava',this)">Core Java</button>
+  <button class="nav-btn" onclick="show('advanced',this)">Advanced</button>
+  <button class="nav-btn" onclick="show('qa',this)">Interview Q&amp;A</button>
+</div>
+
+<div class="content">
+
+<!-- FUNDAMENTALS -->
+<div id="fundamentals" class="section active">
+  <div class="section-title">🔬 JUnit Fundamentals <span>CORE</span></div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>⚡ What is JUnit?</h3>
+      <p>JUnit is the standard unit testing framework for Java. <strong>JUnit 5 (Jupiter)</strong> is the current version. It's modular: <code class="inline">junit-jupiter-api</code> for writing tests, <code class="inline">junit-jupiter-engine</code> for running them, and <code class="inline">junit-vintage-engine</code> for JUnit 4 compatibility.</p>
+    </div>
+    <div class="card green">
+      <h3>🔄 JUnit 4 vs JUnit 5</h3>
+      <ul>
+        <li>JUnit 5 uses <code class="inline">@Test</code> from <code class="inline">org.junit.jupiter</code>, not <code class="inline">org.junit</code></li>
+        <li>No <code class="inline">public</code> modifier needed on test methods in JUnit 5</li>
+        <li><code class="inline">@Before/@After</code> replaced with <code class="inline">@BeforeEach/@AfterEach</code></li>
+        <li>Supports nested tests, parameterized tests, extensions</li>
+        <li><code class="inline">@RunWith</code> replaced with <code class="inline">@ExtendWith</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card purple">
+    <h3>📐 The AAA Pattern — Golden Rule of Unit Testing</h3>
+    <p>Every test should follow <strong>Arrange → Act → Assert</strong>. Arrange sets up data/mocks. Act calls the method under test. Assert verifies the result. This is the most important pattern interviewers look for.</p>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-header"><span class="code-lang">Java — AAA Pattern</span><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+<pre><span class="kw">import</span> org.junit.jupiter.api.Test;
+<span class="kw">import static</span> org.junit.jupiter.api.Assertions.*;
+
+<span class="kw">class</span> <span class="cls">CalculatorTest</span> {
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">add_ShouldReturnSumOfTwoNumbers</span>() {
+        <span class="cm">// ARRANGE — set up inputs</span>
+        <span class="cls">Calculator</span> calculator = <span class="kw">new</span> <span class="cls">Calculator</span>();
+        <span class="kw">int</span> a = <span class="num">5</span>, b = <span class="num">3</span>, expected = <span class="num">8</span>;
+
+        <span class="cm">// ACT — call the method under test</span>
+        <span class="kw">int</span> result = calculator.<span class="fn">add</span>(a, b);
+
+        <span class="cm">// ASSERT — verify the outcome</span>
+        <span class="fn">assertEquals</span>(expected, result, <span class="str">"5 + 3 should equal 8"</span>);
+    }
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">divide_ShouldThrowException_WhenDivisorIsZero</span>() {
+        <span class="cls">Calculator</span> calculator = <span class="kw">new</span> <span class="cls">Calculator</span>();
+
+        <span class="cm">// assertThrows captures the exception for further assertion</span>
+        <span class="cls">ArithmeticException</span> ex = <span class="fn">assertThrows</span>(
+            <span class="cls">ArithmeticException</span>.<span class="kw">class</span>,
+            () -> calculator.<span class="fn">divide</span>(<span class="num">10</span>, <span class="num">0</span>)
+        );
+        <span class="fn">assertEquals</span>(<span class="str">"/ by zero"</span>, ex.<span class="fn">getMessage</span>());
+    }
+}</pre>
+  </div>
+
+  <div class="card amber">
+    <h3>📊 Types of Testing in Spring Boot</h3>
+    <ul>
+      <li><strong>Unit Tests:</strong> Test one class in isolation. Use Mockito to mock dependencies. No Spring context, milliseconds fast.</li>
+      <li><strong>Slice Tests:</strong> <code class="inline">@WebMvcTest</code>, <code class="inline">@DataJpaTest</code> — load only a relevant layer of the context.</li>
+      <li><strong>Integration Tests:</strong> Load full context with <code class="inline">@SpringBootTest</code>. Test multiple layers together.</li>
+      <li><strong>E2E Tests:</strong> Real HTTP with <code class="inline">TestRestTemplate</code> or Testcontainers for real DB.</li>
+    </ul>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Assertion</th><th>What It Checks</th><th>Example</th></tr>
+      <tr><td><code class="inline">assertEquals(a,b)</code></td><td>Two values are equal (uses .equals())</td><td><code class="inline">assertEquals(5, result)</code></td></tr>
+      <tr><td><code class="inline">assertNotEquals(a,b)</code></td><td>Two values differ</td><td><code class="inline">assertNotEquals(0, result)</code></td></tr>
+      <tr><td><code class="inline">assertTrue(condition)</code></td><td>Condition is true</td><td><code class="inline">assertTrue(list.isEmpty())</code></td></tr>
+      <tr><td><code class="inline">assertFalse(condition)</code></td><td>Condition is false</td><td><code class="inline">assertFalse(user.isAdmin())</code></td></tr>
+      <tr><td><code class="inline">assertNull(obj)</code></td><td>Object is null</td><td><code class="inline">assertNull(repo.findById(99))</code></td></tr>
+      <tr><td><code class="inline">assertNotNull(obj)</code></td><td>Object is not null</td><td><code class="inline">assertNotNull(response)</code></td></tr>
+      <tr><td><code class="inline">assertThrows(Ex, lambda)</code></td><td>Lambda throws that exception</td><td><code class="inline">assertThrows(NPE.class, () -> ...)</code></td></tr>
+      <tr><td><code class="inline">assertAll(executables...)</code></td><td>All assertions run even if one fails</td><td>Groups related assertions in one block</td></tr>
+      <tr><td><code class="inline">assertIterableEquals(a,b)</code></td><td>Two collections equal (contents + order)</td><td>Deep equality on lists</td></tr>
+      <tr><td><code class="inline">assertInstanceOf(Cls, obj)</code></td><td>Object is instance of class (JUnit 5.8+)</td><td><code class="inline">assertInstanceOf(Dog.class, animal)</code></td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ANNOTATIONS -->
+<div id="annotations" class="section">
+  <div class="section-title">🏷️ Annotations Deep Dive <span>ALL ANNOTATIONS</span></div>
+
+  <div class="card">
+    <h3>@Test</h3>
+    <p>Marks a method as a test. In JUnit 5, the method does not need to be <code class="inline">public</code> — package-private works. The test fails if any exception is thrown, passes if it completes normally. Putting it on a <code class="inline">private</code> method causes a JUnit error.</p>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-header"><span class="code-lang">Java — Lifecycle Annotations</span><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+<pre><span class="ann">@TestInstance</span>(TestInstance.Lifecycle.PER_CLASS) <span class="cm">// one instance for all tests</span>
+<span class="kw">class</span> <span class="cls">UserServiceTest</span> {
+
+    <span class="kw">private</span> <span class="cls">UserService</span> userService;
+
+    <span class="cm">/**
+     * @BeforeAll — runs ONCE before any test in the class.
+     * Must be static by default. With PER_CLASS it can be an instance method.
+     * Use for expensive one-time setup: DB connections, schema creation.
+     */</span>
+    <span class="ann">@BeforeAll</span>
+    <span class="kw">void</span> <span class="fn">initAll</span>() {
+        System.out.<span class="fn">println</span>(<span class="str">"Runs once before all tests"</span>);
+    }
+
+    <span class="cm">/**
+     * @BeforeEach — runs before EVERY test method.
+     * Key use: re-create objects to prevent test pollution (shared state bugs).
+     */</span>
+    <span class="ann">@BeforeEach</span>
+    <span class="kw">void</span> <span class="fn">setUp</span>() {
+        userService = <span class="kw">new</span> <span class="cls">UserService</span>(); <span class="cm">// fresh instance each time</span>
+    }
+
+    <span class="ann">@Test</span>
+    <span class="ann">@DisplayName</span>(<span class="str">"Should return user when valid ID given"</span>)
+    <span class="kw">void</span> <span class="fn">findUser</span>() { <span class="cm">/* ... */</span> }
+
+    <span class="ann">@Test</span>
+    <span class="ann">@Disabled</span>(<span class="str">"Bug #1234 — fix pending, skipping to unblock CI"</span>)
+    <span class="kw">void</span> <span class="fn">skippedTest</span>() { <span class="cm">/* ... */</span> }
+
+    <span class="cm">/**
+     * @AfterEach — runs after every test.
+     * Use for cleanup: closing files, resetting state, clearing DB rows.
+     */</span>
+    <span class="ann">@AfterEach</span>
+    <span class="kw">void</span> <span class="fn">tearDown</span>() { System.out.<span class="fn">println</span>(<span class="str">"After each test"</span>); }
+
+    <span class="cm">/**
+     * @AfterAll — runs ONCE after all tests are done.
+     * Use for global cleanup: stopping servers, closing pool connections.
+     */</span>
+    <span class="ann">@AfterAll</span>
+    <span class="kw">void</span> <span class="fn">tearDownAll</span>() { System.out.<span class="fn">println</span>(<span class="str">"Final cleanup"</span>); }
+}</pre>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-header"><span class="code-lang">Java — Parameterized Tests (Very Common Interview Topic)</span><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+<pre><span class="kw">import</span> org.junit.jupiter.params.ParameterizedTest;
+<span class="kw">import</span> org.junit.jupiter.params.provider.*;
+
+<span class="kw">class</span> <span class="cls">ParameterizedExamples</span> {
+
+    <span class="cm">// @ValueSource — single-value injection for simple cases</span>
+    <span class="ann">@ParameterizedTest</span>
+    <span class="ann">@ValueSource</span>(strings = {<span class="str">"yash@example.com"</span>, <span class="str">"admin@bank.com"</span>})
+    <span class="kw">void</span> <span class="fn">validEmail_ShouldPass</span>(<span class="cls">String</span> email) {
+        <span class="fn">assertTrue</span>(<span class="cls">EmailValidator</span>.<span class="fn">isValid</span>(email));
+    }
+
+    <span class="cm">// @CsvSource — multiple columns per row (great for input/output pairs)</span>
+    <span class="ann">@ParameterizedTest</span>
+    <span class="ann">@CsvSource</span>({
+        <span class="str">"5, 3, 8"</span>,
+        <span class="str">"10, 0, 10"</span>,
+        <span class="str">"-1, 1, 0"</span>
+    })
+    <span class="kw">void</span> <span class="fn">add_ShouldReturnCorrectSum</span>(<span class="kw">int</span> a, <span class="kw">int</span> b, <span class="kw">int</span> expected) {
+        <span class="fn">assertEquals</span>(expected, <span class="kw">new</span> <span class="cls">Calculator</span>().<span class="fn">add</span>(a, b));
+    }
+
+    <span class="cm">// @MethodSource — for complex objects that can't be expressed in CSV</span>
+    <span class="ann">@ParameterizedTest</span>
+    <span class="ann">@MethodSource</span>(<span class="str">"provideUsers"</span>)
+    <span class="kw">void</span> <span class="fn">user_ShouldBeValid</span>(<span class="cls">User</span> user, <span class="kw">boolean</span> expectedValid) {
+        <span class="fn">assertEquals</span>(expectedValid, <span class="cls">UserValidator</span>.<span class="fn">isValid</span>(user));
+    }
+
+    <span class="kw">static</span> <span class="cls">Stream</span>&lt;<span class="cls">Arguments</span>&gt; <span class="fn">provideUsers</span>() {
+        <span class="kw">return</span> Stream.<span class="fn">of</span>(
+            Arguments.<span class="fn">of</span>(<span class="kw">new</span> <span class="cls">User</span>(<span class="str">"Yash"</span>, <span class="str">"yash@test.com"</span>), <span class="kw">true</span>),
+            Arguments.<span class="fn">of</span>(<span class="kw">new</span> <span class="cls">User</span>(<span class="str">""</span>, <span class="str">""</span>), <span class="kw">false</span>)
+        );
+    }
+
+    <span class="cm">// @NullAndEmptySource — tests null AND empty string as inputs automatically</span>
+    <span class="ann">@ParameterizedTest</span>
+    <span class="ann">@NullAndEmptySource</span>
+    <span class="kw">void</span> <span class="fn">nullOrEmpty_ShouldFailValidation</span>(<span class="cls">String</span> value) {
+        <span class="fn">assertFalse</span>(<span class="cls">StringValidator</span>.<span class="fn">isValid</span>(value));
+    }
+
+    <span class="cm">// @EnumSource — test with all or selected enum values</span>
+    <span class="ann">@ParameterizedTest</span>
+    <span class="ann">@EnumSource</span>(value = <span class="cls">UserRole</span>.<span class="kw">class</span>, names = {<span class="str">"ADMIN"</span>, <span class="str">"USER"</span>})
+    <span class="kw">void</span> <span class="fn">activeRoles_ShouldHavePermissions</span>(<span class="cls">UserRole</span> role) {
+        <span class="fn">assertNotNull</span>(<span class="cls">PermissionService</span>.<span class="fn">getPermissions</span>(role));
+    }
+}</pre>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-header"><span class="code-lang">Java — Nested, Repeated, Conditional, Tagged Tests</span><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+<pre><span class="kw">class</span> <span class="cls">OrderServiceTest</span> {
+
+    <span class="cm">/**
+     * @Nested — groups related tests into inner classes.
+     * Each inner class can have its own @BeforeEach / @AfterEach.
+     * Great for separating "happy path" vs "error path" scenarios.
+     * Makes the test report very readable.
+     */</span>
+    <span class="ann">@Nested</span>
+    <span class="ann">@DisplayName</span>(<span class="str">"When order is valid"</span>)
+    <span class="kw">class</span> <span class="cls">ValidOrderTests</span> {
+        <span class="ann">@Test</span> <span class="kw">void</span> <span class="fn">shouldCreateOrder</span>() { <span class="cm">/* ... */</span> }
+        <span class="ann">@Test</span> <span class="kw">void</span> <span class="fn">shouldSendConfirmationEmail</span>() { <span class="cm">/* ... */</span> }
+    }
+
+    <span class="ann">@Nested</span>
+    <span class="ann">@DisplayName</span>(<span class="str">"When order is invalid"</span>)
+    <span class="kw">class</span> <span class="cls">InvalidOrderTests</span> {
+        <span class="ann">@Test</span> <span class="kw">void</span> <span class="fn">shouldThrowValidationException</span>() { <span class="cm">/* ... */</span> }
+    }
+
+    <span class="cm">// @RepeatedTest — runs same test N times. Useful for testing
+    // flaky/timing-sensitive logic or verifying idempotency.</span>
+    <span class="ann">@RepeatedTest</span>(<span class="num">5</span>)
+    <span class="kw">void</span> <span class="fn">idempotentOperation_ShouldAlwaysReturnSame</span>() { <span class="cm">/* ... */</span> }
+
+    <span class="cm">// @Tag — categorize tests so CI can run specific groups.
+    // In maven: mvn test -Dgroups="smoke" to run only smoke tests.</span>
+    <span class="ann">@Test</span>
+    <span class="ann">@Tag</span>(<span class="str">"smoke"</span>)
+    <span class="kw">void</span> <span class="fn">smokeTest</span>() { <span class="cm">/* ... */</span> }
+
+    <span class="cm">// @EnabledOnOs, @EnabledIfEnvironmentVariable — conditional execution</span>
+    <span class="ann">@Test</span>
+    <span class="ann">@EnabledIfEnvironmentVariable</span>(named = <span class="str">"ENV"</span>, matches = <span class="str">"PROD"</span>)
+    <span class="kw">void</span> <span class="fn">prodOnlyTest</span>() { <span class="cm">/* ... */</span> }
+
+    <span class="cm">// assertAll — run multiple assertions and get ALL failures at once.
+    // Without it, the first failure stops the rest from running.</span>
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">groupedAssertions</span>() {
+        <span class="cls">User</span> user = userService.<span class="fn">getUser</span>(<span class="num">1L</span>);
+        <span class="fn">assertAll</span>(
+            <span class="str">"user properties"</span>,
+            () -> <span class="fn">assertNotNull</span>(user),
+            () -> <span class="fn">assertEquals</span>(<span class="str">"Yash"</span>, user.<span class="fn">getName</span>()),
+            () -> <span class="fn">assertEquals</span>(<span class="str">"yash@test.com"</span>, user.<span class="fn">getEmail</span>()),
+            () -> <span class="fn">assertNotNull</span>(user.<span class="fn">getCreatedAt</span>())
+        );
+    }
+}</pre>
+  </div>
+</div>
+
+<!-- MOCKITO -->
+<div id="mockito" class="section">
+  <div class="section-title">🎭 Mockito &amp; Mocking <span>ESSENTIAL</span></div>
+
+  <div class="card">
+    <h3>🤔 Why Mock?</h3>
+    <p>Unit tests must test ONE class in isolation. If your <code class="inline">OrderService</code> depends on <code class="inline">UserRepository</code> and <code class="inline">EmailService</code>, you don't want to hit the real DB or send real emails in a unit test. Mocks replace those dependencies with controlled fakes so you test <em>only the logic in OrderService</em>. This is what makes unit tests fast and deterministic.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card green">
+      <h3>Mock vs Stub vs Spy</h3>
+      <ul>
+        <li><strong>Mock:</strong> Fully fake object. All methods return defaults (null/0/false). You verify interactions on it.</li>
+        <li><strong>Stub:</strong> A mock with pre-configured return values via <code class="inline">when(...).thenReturn(...)</code>.</li>
+        <li><strong>Spy:</strong> Wraps a REAL object. Calls real methods unless you override specific ones.</li>
+      </ul>
+    </div>
+    <div class="card purple">
+      <h3>@Mock vs @InjectMocks</h3>
+      <ul>
+        <li><code class="inline">@Mock</code> — Creates a mock of the annotated type</li>
+        <li><code class="inline">@InjectMocks</code> — Creates the real object AND injects all <code class="inline">@Mock</code>s into it</li>
+        <li>Always pair with <code class="inline">@ExtendWith(MockitoExtension.class)</code></li>
+        <li>Injection order: Constructor → Setter → Field</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-header"><span class="code-lang">Java — Complete Mockito Patterns</span><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+<pre><span class="kw">import</span> org.junit.jupiter.api.extension.ExtendWith;
+<span class="kw">import</span> org.mockito.*;
+<span class="kw">import</span> org.mockito.junit.jupiter.MockitoExtension;
+<span class="kw">import static</span> org.mockito.Mockito.*;
+<span class="kw">import static</span> org.mockito.ArgumentMatchers.*;
+
+<span class="cm">/**
+ * @ExtendWith(MockitoExtension.class):
+ *  - Activates @Mock, @InjectMocks, @Spy, @Captor annotations
+ *  - Auto-closes mocks after each test (no memory leaks)
+ *  - Enables STRICT_STUBS by default (fails on unused stubs)
+ *  - JUnit 5 replacement for JUnit 4's @RunWith(MockitoJUnitRunner.class)
+ */</span>
+<span class="ann">@ExtendWith</span>(<span class="cls">MockitoExtension</span>.<span class="kw">class</span>)
+<span class="kw">class</span> <span class="cls">OrderServiceTest</span> {
+
+    <span class="ann">@Mock</span> <span class="kw">private</span> <span class="cls">UserRepository</span> userRepository;
+    <span class="ann">@Mock</span> <span class="kw">private</span> <span class="cls">EmailService</span> emailService;
+
+    <span class="cm">// Creates a REAL OrderService and injects the mocks above into it</span>
+    <span class="ann">@InjectMocks</span> <span class="kw">private</span> <span class="cls">OrderService</span> orderService;
+
+    <span class="cm">// Captures the exact argument passed to a mocked method</span>
+    <span class="ann">@Captor</span> <span class="kw">private</span> <span class="cls">ArgumentCaptor</span>&lt;<span class="cls">Order</span>&gt; orderCaptor;
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">placeOrder_HappyPath</span>() {
+        <span class="cm">// STUB — define what the mock returns when called</span>
+        <span class="cls">User</span> user = <span class="kw">new</span> <span class="cls">User</span>(<span class="num">1L</span>, <span class="str">"Yash"</span>, <span class="str">"yash@test.com"</span>);
+        <span class="fn">when</span>(userRepository.<span class="fn">findById</span>(<span class="fn">anyLong</span>()))
+            .<span class="fn">thenReturn</span>(<span class="cls">Optional</span>.<span class="fn">of</span>(user));
+
+        <span class="cm">// doNothing() — for void methods (can't use thenReturn for void)</span>
+        <span class="fn">doNothing</span>().<span class="fn">when</span>(emailService).<span class="fn">send</span>(<span class="fn">anyString</span>(), <span class="fn">anyString</span>());
+
+        <span class="cls">Order</span> placed = orderService.<span class="fn">placeOrder</span>(<span class="num">1L</span>, <span class="str">"Laptop"</span>);
+
+        <span class="fn">assertNotNull</span>(placed);
+        <span class="fn">assertEquals</span>(<span class="str">"Laptop"</span>, placed.<span class="fn">getProductName</span>());
+
+        <span class="cm">// VERIFY — confirm the mock was called with expected arguments</span>
+        <span class="fn">verify</span>(userRepository, <span class="fn">times</span>(<span class="num">1</span>)).<span class="fn">findById</span>(<span class="num">1L</span>);
+        <span class="fn">verify</span>(emailService).<span class="fn">send</span>(<span class="fn">eq</span>(<span class="str">"yash@test.com"</span>), <span class="fn">contains</span>(<span class="str">"Confirmed"</span>));
+
+        <span class="cm">// Ensure no unexpected interactions happened</span>
+        <span class="fn">verifyNoMoreInteractions</span>(userRepository, emailService);
+    }
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">placeOrder_ShouldCaptureObjectPassedToSave</span>() {
+        <span class="fn">when</span>(userRepository.<span class="fn">findById</span>(<span class="fn">anyLong</span>()))
+            .<span class="fn">thenReturn</span>(<span class="cls">Optional</span>.<span class="fn">of</span>(<span class="kw">new</span> <span class="cls">User</span>(<span class="num">1L</span>, <span class="str">"Yash"</span>, <span class="str">"y@t.com"</span>)));
+
+        orderService.<span class="fn">placeOrder</span>(<span class="num">1L</span>, <span class="str">"Phone"</span>);
+
+        <span class="cm">// Capture the Order object passed to save() and inspect its fields</span>
+        <span class="fn">verify</span>(userRepository).<span class="fn">save</span>(orderCaptor.<span class="fn">capture</span>());
+        <span class="cls">Order</span> captured = orderCaptor.<span class="fn">getValue</span>();
+        <span class="fn">assertEquals</span>(<span class="str">"Phone"</span>, captured.<span class="fn">getProductName</span>());
+        <span class="fn">assertEquals</span>(<span class="cls">OrderStatus</span>.PENDING, captured.<span class="fn">getStatus</span>());
+    }
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">placeOrder_ShouldThrow_WhenUserNotFound</span>() {
+        <span class="cm">// thenThrow — simulate exceptions from dependencies</span>
+        <span class="fn">when</span>(userRepository.<span class="fn">findById</span>(<span class="fn">anyLong</span>()))
+            .<span class="fn">thenThrow</span>(<span class="kw">new</span> <span class="cls">UserNotFoundException</span>(<span class="str">"Not found"</span>));
+
+        <span class="fn">assertThrows</span>(<span class="cls">UserNotFoundException</span>.<span class="kw">class</span>,
+            () -> orderService.<span class="fn">placeOrder</span>(<span class="num">99L</span>, <span class="str">"Laptop"</span>));
+
+        <span class="cm">// Email must NEVER be called when user lookup fails</span>
+        <span class="fn">verify</span>(emailService, <span class="fn">never</span>()).<span class="fn">send</span>(<span class="fn">any</span>(), <span class="fn">any</span>());
+    }
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">spy_ShouldCallRealMethod_UnlessStubbed</span>() {
+        <span class="cls">List</span>&lt;<span class="cls">String</span>&gt; realList = <span class="kw">new</span> <span class="cls">ArrayList</span>&lt;&gt;();
+        <span class="cls">List</span>&lt;<span class="cls">String</span>&gt; spyList = <span class="fn">spy</span>(realList);
+
+        spyList.<span class="fn">add</span>(<span class="str">"Yash"</span>); <span class="cm">// real add() is called</span>
+
+        <span class="cm">// doReturn() syntax required for spies to avoid calling real method during setup</span>
+        <span class="fn">doReturn</span>(<span class="num">100</span>).<span class="fn">when</span>(spyList).<span class="fn">size</span>();
+
+        <span class="fn">assertEquals</span>(<span class="num">1</span>, realList.<span class="fn">size</span>()); <span class="cm">// real list unchanged</span>
+        <span class="fn">assertEquals</span>(<span class="num">100</span>, spyList.<span class="fn">size</span>()); <span class="cm">// stubbed on spy</span>
+    }
+
+    <span class="cm">// thenAnswer — return different values based on input arguments dynamically</span>
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">thenAnswer_DynamicReturnValue</span>() {
+        <span class="fn">when</span>(userRepository.<span class="fn">findById</span>(<span class="fn">anyLong</span>())).<span class="fn">thenAnswer</span>(invocation -> {
+            <span class="cls">Long</span> id = invocation.<span class="fn">getArgument</span>(<span class="num">0</span>);
+            <span class="kw">return</span> id == <span class="num">1L</span>
+                ? <span class="cls">Optional</span>.<span class="fn">of</span>(<span class="kw">new</span> <span class="cls">User</span>(<span class="num">1L</span>, <span class="str">"Yash"</span>))
+                : <span class="cls">Optional</span>.<span class="fn">empty</span>();
+        });
+        <span class="fn">assertTrue</span>(userRepository.<span class="fn">findById</span>(<span class="num">1L</span>).<span class="fn">isPresent</span>());
+        <span class="fn">assertFalse</span>(userRepository.<span class="fn">findById</span>(<span class="num">99L</span>).<span class="fn">isPresent</span>());
+    }
+}</pre>
+  </div>
+
+  <div class="tip"><strong>💡 Key Distinction:</strong> Use <code class="inline">when(mock.method()).thenReturn()</code> for normal stubs. Use <code class="inline">doReturn().when(mock).method()</code> for void methods and spies. The latter form does NOT call the real method during setup — critical for spies.</div>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Verification Method</th><th>Meaning</th></tr>
+      <tr><td><code class="inline">verify(mock).method()</code></td><td>Was called exactly once</td></tr>
+      <tr><td><code class="inline">verify(mock, times(2)).method()</code></td><td>Was called exactly 2 times</td></tr>
+      <tr><td><code class="inline">verify(mock, never()).method()</code></td><td>Was never called</td></tr>
+      <tr><td><code class="inline">verify(mock, atLeast(1)).method()</code></td><td>Was called at least once</td></tr>
+      <tr><td><code class="inline">verify(mock, atMost(3)).method()</code></td><td>Was called at most 3 times</td></tr>
+      <tr><td><code class="inline">verifyNoInteractions(mock)</code></td><td>Mock was never called at all</td></tr>
+      <tr><td><code class="inline">verifyNoMoreInteractions(mock)</code></td><td>No calls beyond what was already verified</td></tr>
+      <tr><td><code class="inline">inOrder(m1,m2).verify(m1)...</code></td><td>Verify call order between mocks</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- SERVICE TESTS -->
+<div id="service" class="section">
+  <div class="section-title">⚙️ Service Layer Tests <span>SPRING BOOT</span></div>
+
+  <div class="card">
+    <h3>🎯 Strategy for Service Tests</h3>
+    <p>Service tests should be <strong>pure unit tests</strong> — no Spring context, no real DB. Use <code class="inline">@ExtendWith(MockitoExtension.class)</code> and mock all repositories and downstream services. This keeps them blazing fast (milliseconds) and makes failures crystal-clear because there's only one real class in play.</p>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-header"><span class="code-lang">Java — Service Under Test</span><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+<pre><span class="ann">@Service</span>
+<span class="kw">public class</span> <span class="cls">UserService</span> {
+
+    <span class="kw">private final</span> <span class="cls">UserRepository</span> userRepository;
+    <span class="kw">private final</span> <span class="cls">PasswordEncoder</span> passwordEncoder;
+    <span class="kw">private final</span> <span class="cls">EmailService</span> emailService;
+
+    <span class="cm">// Constructor injection — BEST practice. Makes dependencies explicit
+    // and allows testing without Spring or reflection.</span>
+    <span class="kw">public</span> <span class="cls">UserService</span>(<span class="cls">UserRepository</span> userRepository,
+                       <span class="cls">PasswordEncoder</span> passwordEncoder,
+                       <span class="cls">EmailService</span> emailService) {
+        <span class="kw">this</span>.userRepository = userRepository;
+        <span class="kw">this</span>.passwordEncoder = passwordEncoder;
+        <span class="kw">this</span>.emailService = emailService;
+    }
+
+    <span class="kw">public</span> <span class="cls">UserDTO</span> <span class="fn">createUser</span>(<span class="cls">CreateUserRequest</span> request) {
+        <span class="kw">if</span> (userRepository.<span class="fn">existsByEmail</span>(request.<span class="fn">getEmail</span>())) {
+            <span class="kw">throw new</span> <span class="cls">DuplicateEmailException</span>(<span class="str">"Email already registered"</span>);
+        }
+        <span class="cls">User</span> user = <span class="cls">User</span>.<span class="fn">builder</span>()
+            .<span class="fn">name</span>(request.<span class="fn">getName</span>())
+            .<span class="fn">email</span>(request.<span class="fn">getEmail</span>())
+            .<span class="fn">password</span>(passwordEncoder.<span class="fn">encode</span>(request.<span class="fn">getPassword</span>()))
+            .<span class="fn">role</span>(<span class="cls">Role</span>.USER)
+            .<span class="fn">build</span>();
+        <span class="cls">User</span> saved = userRepository.<span class="fn">save</span>(user);
+        emailService.<span class="fn">sendWelcome</span>(saved.<span class="fn">getEmail</span>());
+        <span class="kw">return</span> <span class="cls">UserMapper</span>.<span class="fn">toDTO</span>(saved);
+    }
+
+    <span class="kw">public</span> <span class="cls">UserDTO</span> <span class="fn">getUserById</span>(<span class="cls">Long</span> id) {
+        <span class="kw">return</span> userRepository.<span class="fn">findById</span>(id)
+            .<span class="fn">map</span>(<span class="cls">UserMapper</span>::<span class="fn">toDTO</span>)
+            .<span class="fn">orElseThrow</span>(() -> <span class="kw">new</span> <span class="cls">UserNotFoundException</span>(<span class="str">"User not found: "</span> + id));
+    }
+}</pre>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-header"><span class="code-lang">Java — Complete Service Unit Test (All Scenarios)</span><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+<pre><span class="ann">@ExtendWith</span>(<span class="cls">MockitoExtension</span>.<span class="kw">class</span>)
+<span class="kw">class</span> <span class="cls">UserServiceTest</span> {
+
+    <span class="ann">@Mock</span> <span class="kw">private</span> <span class="cls">UserRepository</span> userRepository;
+    <span class="ann">@Mock</span> <span class="kw">private</span> <span class="cls">PasswordEncoder</span> passwordEncoder;
+    <span class="ann">@Mock</span> <span class="kw">private</span> <span class="cls">EmailService</span> emailService;
+    <span class="ann">@InjectMocks</span> <span class="kw">private</span> <span class="cls">UserService</span> userService;
+    <span class="ann">@Captor</span> <span class="kw">private</span> <span class="cls">ArgumentCaptor</span>&lt;<span class="cls">User</span>&gt; userCaptor;
+
+    <span class="cm">// ===== HAPPY PATH =====</span>
+
+    <span class="ann">@Test</span>
+    <span class="ann">@DisplayName</span>(<span class="str">"createUser — should hash password, save user, and send welcome email"</span>)
+    <span class="kw">void</span> <span class="fn">createUser_HappyPath</span>() {
+        <span class="cm">// Arrange</span>
+        <span class="cls">CreateUserRequest</span> req = <span class="kw">new</span> <span class="cls">CreateUserRequest</span>(<span class="str">"Yash"</span>, <span class="str">"yash@test.com"</span>, <span class="str">"pass123"</span>);
+        <span class="fn">when</span>(userRepository.<span class="fn">existsByEmail</span>(<span class="str">"yash@test.com"</span>)).<span class="fn">thenReturn</span>(<span class="kw">false</span>);
+        <span class="fn">when</span>(passwordEncoder.<span class="fn">encode</span>(<span class="str">"pass123"</span>)).<span class="fn">thenReturn</span>(<span class="str">"$2a$hashed"</span>);
+        <span class="cls">User</span> savedUser = <span class="cls">User</span>.<span class="fn">builder</span>().<span class="fn">id</span>(<span class="num">1L</span>).<span class="fn">name</span>(<span class="str">"Yash"</span>)
+                          .<span class="fn">email</span>(<span class="str">"yash@test.com"</span>).<span class="fn">role</span>(<span class="cls">Role</span>.USER).<span class="fn">build</span>();
+        <span class="fn">when</span>(userRepository.<span class="fn">save</span>(<span class="fn">any</span>(<span class="cls">User</span>.<span class="kw">class</span>))).<span class="fn">thenReturn</span>(savedUser);
+
+        <span class="cm">// Act</span>
+        <span class="cls">UserDTO</span> result = userService.<span class="fn">createUser</span>(req);
+
+        <span class="cm">// Assert — use assertAll so ALL assertions are checked even if one fails</span>
+        <span class="fn">assertAll</span>(
+            () -> <span class="fn">assertNotNull</span>(result),
+            () -> <span class="fn">assertEquals</span>(<span class="str">"Yash"</span>, result.<span class="fn">getName</span>()),
+            () -> <span class="fn">assertEquals</span>(<span class="str">"yash@test.com"</span>, result.<span class="fn">getEmail</span>())
+        );
+
+        <span class="cm">// Capture the User passed to save() — verify its internal state</span>
+        <span class="fn">verify</span>(userRepository).<span class="fn">save</span>(userCaptor.<span class="fn">capture</span>());
+        <span class="cls">User</span> captured = userCaptor.<span class="fn">getValue</span>();
+        <span class="fn">assertEquals</span>(<span class="str">"$2a$hashed"</span>, captured.<span class="fn">getPassword</span>()); <span class="cm">// was password hashed?</span>
+        <span class="fn">assertEquals</span>(<span class="cls">Role</span>.USER, captured.<span class="fn">getRole</span>());         <span class="cm">// correct role?</span>
+
+        <span class="fn">verify</span>(emailService, <span class="fn">times</span>(<span class="num">1</span>)).<span class="fn">sendWelcome</span>(<span class="str">"yash@test.com"</span>);
+    }
+
+    <span class="cm">// ===== EDGE CASE — Duplicate email =====</span>
+
+    <span class="ann">@Test</span>
+    <span class="ann">@DisplayName</span>(<span class="str">"createUser — should throw DuplicateEmailException if email exists"</span>)
+    <span class="kw">void</span> <span class="fn">createUser_DuplicateEmail_ThrowsException</span>() {
+        <span class="cls">CreateUserRequest</span> req = <span class="kw">new</span> <span class="cls">CreateUserRequest</span>(<span class="str">"Yash"</span>, <span class="str">"dup@test.com"</span>, <span class="str">"pass"</span>);
+        <span class="fn">when</span>(userRepository.<span class="fn">existsByEmail</span>(<span class="str">"dup@test.com"</span>)).<span class="fn">thenReturn</span>(<span class="kw">true</span>);
+
+        <span class="cls">DuplicateEmailException</span> ex = <span class="fn">assertThrows</span>(
+            <span class="cls">DuplicateEmailException</span>.<span class="kw">class</span>,
+            () -> userService.<span class="fn">createUser</span>(req)
+        );
+        <span class="fn">assertTrue</span>(ex.<span class="fn">getMessage</span>().<span class="fn">contains</span>(<span class="str">"already registered"</span>));
+
+        <span class="cm">// CRITICAL: verify side effects did NOT happen on failure</span>
+        <span class="fn">verify</span>(userRepository, <span class="fn">never</span>()).<span class="fn">save</span>(<span class="fn">any</span>());
+        <span class="fn">verify</span>(emailService, <span class="fn">never</span>()).<span class="fn">sendWelcome</span>(<span class="fn">any</span>());
+    }
+
+    <span class="cm">// ===== USER NOT FOUND =====</span>
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">getUserById_ShouldThrow_WhenNotFound</span>() {
+        <span class="fn">when</span>(userRepository.<span class="fn">findById</span>(<span class="num">99L</span>)).<span class="fn">thenReturn</span>(<span class="cls">Optional</span>.<span class="fn">empty</span>());
+
+        <span class="fn">assertThrows</span>(<span class="cls">UserNotFoundException</span>.<span class="kw">class</span>,
+            () -> userService.<span class="fn">getUserById</span>(<span class="num">99L</span>));
+    }
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">getUserById_ShouldReturnDTO_WhenFound</span>() {
+        <span class="cls">User</span> user = <span class="kw">new</span> <span class="cls">User</span>(<span class="num">1L</span>, <span class="str">"Yash"</span>, <span class="str">"yash@test.com"</span>);
+        <span class="fn">when</span>(userRepository.<span class="fn">findById</span>(<span class="num">1L</span>)).<span class="fn">thenReturn</span>(<span class="cls">Optional</span>.<span class="fn">of</span>(user));
+
+        <span class="cls">UserDTO</span> dto = userService.<span class="fn">getUserById</span>(<span class="num">1L</span>);
+
+        <span class="fn">assertEquals</span>(<span class="str">"Yash"</span>, dto.<span class="fn">getName</span>());
+        <span class="fn">assertEquals</span>(<span class="str">"yash@test.com"</span>, dto.<span class="fn">getEmail</span>());
+    }
+}</pre>
+  </div>
+</div>
+
+<!-- CONTROLLER TESTS -->
+<div id="controller" class="section">
+  <div class="section-title">🌐 Controller / REST API Tests <span>SPRING BOOT</span></div>
+
+  <div class="card">
+    <h3>@WebMvcTest — The Right Tool for Controller Tests</h3>
+    <p><code class="inline">@WebMvcTest</code> is a <strong>slice test</strong> that loads only the web layer: controllers, filters, <code class="inline">@ControllerAdvice</code>, <code class="inline">WebMvcConfigurer</code>. It does NOT load service or repository beans. You must provide the service as a <code class="inline">@MockBean</code>. It uses an in-memory mock servlet — no real HTTP server starts, making it fast and focused.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card green">
+      <h3>@MockBean vs @Mock</h3>
+      <p><code class="inline">@Mock</code> is a pure Mockito annotation — no Spring involvement. <code class="inline">@MockBean</code> creates a Mockito mock AND registers it as a Spring bean, replacing any existing bean of that type in the context. In <code class="inline">@WebMvcTest</code> you MUST use <code class="inline">@MockBean</code> for the service, because the controller is wired by Spring and needs a Spring-managed bean.</p>
+    </div>
+    <div class="card purple">
+      <h3>MockMvc vs TestRestTemplate</h3>
+      <p><code class="inline">MockMvc</code> tests without a real HTTP server. It's fast and used with <code class="inline">@WebMvcTest</code>. <code class="inline">TestRestTemplate</code> sends real HTTP over a socket. Used with <code class="inline">@SpringBootTest(webEnvironment = RANDOM_PORT)</code> for full-stack integration tests. For controller unit tests, always prefer MockMvc.</p>
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-header"><span class="code-lang">Java — Controller Under Test</span><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+<pre><span class="ann">@RestController</span>
+<span class="ann">@RequestMapping</span>(<span class="str">"/api/v1/users"</span>)
+<span class="kw">public class</span> <span class="cls">UserController</span> {
+
+    <span class="kw">private final</span> <span class="cls">UserService</span> userService;
+
+    <span class="kw">public</span> <span class="cls">UserController</span>(<span class="cls">UserService</span> userService) {
+        <span class="kw">this</span>.userService = userService;
+    }
+
+    <span class="ann">@PostMapping</span>
+    <span class="kw">public</span> <span class="cls">ResponseEntity</span>&lt;<span class="cls">UserDTO</span>&gt; <span class="fn">createUser</span>(<span class="ann">@RequestBody</span> <span class="ann">@Valid</span> <span class="cls">CreateUserRequest</span> req) {
+        <span class="kw">return</span> <span class="cls">ResponseEntity</span>.<span class="fn">status</span>(<span class="cls">HttpStatus</span>.CREATED).<span class="fn">body</span>(userService.<span class="fn">createUser</span>(req));
+    }
+
+    <span class="ann">@GetMapping</span>(<span class="str">"/{id}"</span>)
+    <span class="kw">public</span> <span class="cls">ResponseEntity</span>&lt;<span class="cls">UserDTO</span>&gt; <span class="fn">getUserById</span>(<span class="ann">@PathVariable</span> <span class="cls">Long</span> id) {
+        <span class="kw">return</span> <span class="cls">ResponseEntity</span>.<span class="fn">ok</span>(userService.<span class="fn">getUserById</span>(id));
+    }
+
+    <span class="ann">@DeleteMapping</span>(<span class="str">"/{id}"</span>)
+    <span class="kw">public</span> <span class="cls">ResponseEntity</span>&lt;<span class="cls">Void</span>&gt; <span class="fn">deleteUser</span>(<span class="ann">@PathVariable</span> <span class="cls">Long</span> id) {
+        userService.<span class="fn">deleteUser</span>(id);
+        <span class="kw">return</span> <span class="cls">ResponseEntity</span>.<span class="fn">noContent</span>().<span class="fn">build</span>();
+    }
+}</pre>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-header"><span class="code-lang">Java — @WebMvcTest Controller Test (Full)</span><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+<pre><span class="kw">import</span> org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+<span class="kw">import</span> org.springframework.boot.test.mock.mockito.MockBean;
+<span class="kw">import</span> org.springframework.test.web.servlet.MockMvc;
+<span class="kw">import</span> org.springframework.http.MediaType;
+<span class="kw">import static</span> org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+<span class="kw">import static</span> org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+<span class="kw">import static</span> org.mockito.Mockito.*;
+
+<span class="cm">/**
+ * @WebMvcTest(UserController.class) — loads ONLY the web layer.
+ * No service beans, no DB beans. Extremely fast slice test.
+ */</span>
+<span class="ann">@WebMvcTest</span>(<span class="cls">UserController</span>.<span class="kw">class</span>)
+<span class="kw">class</span> <span class="cls">UserControllerTest</span> {
+
+    <span class="cm">// MockMvc is auto-configured and injected by @WebMvcTest</span>
+    <span class="ann">@Autowired</span> <span class="kw">private</span> <span class="cls">MockMvc</span> mockMvc;
+
+    <span class="cm">// @MockBean — creates Mockito mock AND registers it in Spring context</span>
+    <span class="ann">@MockBean</span> <span class="kw">private</span> <span class="cls">UserService</span> userService;
+
+    <span class="cm">// ObjectMapper for serializing request bodies to JSON</span>
+    <span class="ann">@Autowired</span> <span class="kw">private</span> <span class="cls">ObjectMapper</span> objectMapper;
+
+    <span class="cm">// ===== POST — Create User =====</span>
+
+    <span class="ann">@Test</span>
+    <span class="ann">@DisplayName</span>(<span class="str">"POST /users — should return 201 with created user"</span>)
+    <span class="kw">void</span> <span class="fn">createUser_ShouldReturn201</span>() <span class="kw">throws</span> <span class="cls">Exception</span> {
+        <span class="cls">CreateUserRequest</span> req = <span class="kw">new</span> <span class="cls">CreateUserRequest</span>(<span class="str">"Yash"</span>, <span class="str">"yash@test.com"</span>, <span class="str">"pass123"</span>);
+        <span class="cls">UserDTO</span> mockResponse = <span class="kw">new</span> <span class="cls">UserDTO</span>(<span class="num">1L</span>, <span class="str">"Yash"</span>, <span class="str">"yash@test.com"</span>);
+
+        <span class="fn">when</span>(userService.<span class="fn">createUser</span>(<span class="fn">any</span>())).<span class="fn">thenReturn</span>(mockResponse);
+
+        mockMvc.<span class="fn">perform</span>(
+            <span class="fn">post</span>(<span class="str">"/api/v1/users"</span>)
+                .<span class="fn">contentType</span>(<span class="cls">MediaType</span>.APPLICATION_JSON)
+                .<span class="fn">content</span>(objectMapper.<span class="fn">writeValueAsString</span>(req))
+        )
+        .<span class="fn">andExpect</span>(<span class="fn">status</span>().<span class="fn">isCreated</span>())                       <span class="cm">// 201</span>
+        .<span class="fn">andExpect</span>(<span class="fn">content</span>().<span class="fn">contentType</span>(<span class="cls">MediaType</span>.APPLICATION_JSON))
+        .<span class="fn">andExpect</span>(<span class="fn">jsonPath</span>(<span class="str">"$.id"</span>).<span class="fn">value</span>(<span class="num">1</span>))
+        .<span class="fn">andExpect</span>(<span class="fn">jsonPath</span>(<span class="str">"$.name"</span>).<span class="fn">value</span>(<span class="str">"Yash"</span>))
+        .<span class="fn">andExpect</span>(<span class="fn">jsonPath</span>(<span class="str">"$.email"</span>).<span class="fn">value</span>(<span class="str">"yash@test.com"</span>));
+
+        <span class="fn">verify</span>(userService, <span class="fn">times</span>(<span class="num">1</span>)).<span class="fn">createUser</span>(<span class="fn">any</span>());
+    }
+
+    <span class="cm">// ===== GET — Found =====</span>
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">getUserById_ShouldReturn200_WhenFound</span>() <span class="kw">throws</span> <span class="cls">Exception</span> {
+        <span class="fn">when</span>(userService.<span class="fn">getUserById</span>(<span class="num">1L</span>))
+            .<span class="fn">thenReturn</span>(<span class="kw">new</span> <span class="cls">UserDTO</span>(<span class="num">1L</span>, <span class="str">"Yash"</span>, <span class="str">"yash@test.com"</span>));
+
+        mockMvc.<span class="fn">perform</span>(<span class="fn">get</span>(<span class="str">"/api/v1/users/1"</span>))
+            .<span class="fn">andExpect</span>(<span class="fn">status</span>().<span class="fn">isOk</span>())
+            .<span class="fn">andExpect</span>(<span class="fn">jsonPath</span>(<span class="str">"$.name"</span>).<span class="fn">value</span>(<span class="str">"Yash"</span>));
+    }
+
+    <span class="cm">// ===== GET — Not Found (tests @ControllerAdvice handling) =====</span>
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">getUserById_ShouldReturn404_WhenNotFound</span>() <span class="kw">throws</span> <span class="cls">Exception</span> {
+        <span class="fn">when</span>(userService.<span class="fn">getUserById</span>(<span class="num">99L</span>))
+            .<span class="fn">thenThrow</span>(<span class="kw">new</span> <span class="cls">UserNotFoundException</span>(<span class="str">"User not found"</span>));
+
+        mockMvc.<span class="fn">perform</span>(<span class="fn">get</span>(<span class="str">"/api/v1/users/99"</span>))
+            .<span class="fn">andExpect</span>(<span class="fn">status</span>().<span class="fn">isNotFound</span>()); <span class="cm">// @ControllerAdvice maps this</span>
+    }
+
+    <span class="cm">// ===== Validation — Bad Request =====</span>
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">createUser_ShouldReturn400_WhenBodyInvalid</span>() <span class="kw">throws</span> <span class="cls">Exception</span> {
+        <span class="cm">// Empty JSON body — @Valid on @RequestBody will fail</span>
+        mockMvc.<span class="fn">perform</span>(
+            <span class="fn">post</span>(<span class="str">"/api/v1/users"</span>)
+                .<span class="fn">contentType</span>(<span class="cls">MediaType</span>.APPLICATION_JSON)
+                .<span class="fn">content</span>(<span class="str">"{}"</span>)
+        )
+        .<span class="fn">andExpect</span>(<span class="fn">status</span>().<span class="fn">isBadRequest</span>());
+
+        <span class="cm">// Service should NEVER be called if Bean Validation fails</span>
+        <span class="fn">verify</span>(userService, <span class="fn">never</span>()).<span class="fn">createUser</span>(<span class="fn">any</span>());
+    }
+
+    <span class="cm">// ===== DELETE =====</span>
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">deleteUser_ShouldReturn204</span>() <span class="kw">throws</span> <span class="cls">Exception</span> {
+        <span class="fn">doNothing</span>().<span class="fn">when</span>(userService).<span class="fn">deleteUser</span>(<span class="num">1L</span>);
+
+        mockMvc.<span class="fn">perform</span>(<span class="fn">delete</span>(<span class="str">"/api/v1/users/1"</span>))
+            .<span class="fn">andExpect</span>(<span class="fn">status</span>().<span class="fn">isNoContent</span>()); <span class="cm">// 204 No Content</span>
+    }
+
+    <span class="cm">// ===== Testing with Request Headers / Params =====</span>
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">getUsersWithQueryParam</span>() <span class="kw">throws</span> <span class="cls">Exception</span> {
+        mockMvc.<span class="fn">perform</span>(
+            <span class="fn">get</span>(<span class="str">"/api/v1/users"</span>)
+                .<span class="fn">param</span>(<span class="str">"page"</span>, <span class="str">"0"</span>)
+                .<span class="fn">param</span>(<span class="str">"size"</span>, <span class="str">"10"</span>)
+                .<span class="fn">header</span>(<span class="str">"Authorization"</span>, <span class="str">"Bearer test-token"</span>)
+        )
+        .<span class="fn">andExpect</span>(<span class="fn">status</span>().<span class="fn">isOk</span>());
+    }
+}</pre>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-header"><span class="code-lang">Java — @ControllerAdvice + Testing It</span><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+<pre><span class="cm">// Global Exception Handler — auto-picked up by @WebMvcTest</span>
+<span class="ann">@RestControllerAdvice</span>
+<span class="kw">public class</span> <span class="cls">GlobalExceptionHandler</span> {
+
+    <span class="ann">@ExceptionHandler</span>(<span class="cls">UserNotFoundException</span>.<span class="kw">class</span>)
+    <span class="kw">public</span> <span class="cls">ResponseEntity</span>&lt;<span class="cls">ErrorResponse</span>&gt; <span class="fn">handleUserNotFound</span>(<span class="cls">UserNotFoundException</span> ex) {
+        <span class="kw">return</span> <span class="cls">ResponseEntity</span>.<span class="fn">status</span>(<span class="cls">HttpStatus</span>.NOT_FOUND)
+            .<span class="fn">body</span>(<span class="kw">new</span> <span class="cls">ErrorResponse</span>(<span class="str">"NOT_FOUND"</span>, ex.<span class="fn">getMessage</span>()));
+    }
+
+    <span class="ann">@ExceptionHandler</span>(<span class="cls">DuplicateEmailException</span>.<span class="kw">class</span>)
+    <span class="kw">public</span> <span class="cls">ResponseEntity</span>&lt;<span class="cls">ErrorResponse</span>&gt; <span class="fn">handleDuplicate</span>(<span class="cls">DuplicateEmailException</span> ex) {
+        <span class="kw">return</span> <span class="cls">ResponseEntity</span>.<span class="fn">status</span>(<span class="cls">HttpStatus</span>.CONFLICT)
+            .<span class="fn">body</span>(<span class="kw">new</span> <span class="cls">ErrorResponse</span>(<span class="str">"CONFLICT"</span>, ex.<span class="fn">getMessage</span>()));
+    }
+}
+
+<span class="cm">// Test file — @WebMvcTest picks up @RestControllerAdvice automatically</span>
+<span class="ann">@WebMvcTest</span>(<span class="cls">UserController</span>.<span class="kw">class</span>)
+<span class="kw">class</span> <span class="cls">GlobalExceptionHandlerTest</span> {
+
+    <span class="ann">@Autowired</span> <span class="kw">private</span> <span class="cls">MockMvc</span> mockMvc;
+    <span class="ann">@MockBean</span> <span class="kw">private</span> <span class="cls">UserService</span> userService;
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">shouldReturn409_WhenDuplicateEmail</span>() <span class="kw">throws</span> <span class="cls">Exception</span> {
+        <span class="fn">when</span>(userService.<span class="fn">createUser</span>(<span class="fn">any</span>()))
+            .<span class="fn">thenThrow</span>(<span class="kw">new</span> <span class="cls">DuplicateEmailException</span>(<span class="str">"Email already registered"</span>));
+
+        mockMvc.<span class="fn">perform</span>(
+            <span class="fn">post</span>(<span class="str">"/api/v1/users"</span>)
+                .<span class="fn">contentType</span>(<span class="cls">MediaType</span>.APPLICATION_JSON)
+                .<span class="fn">content</span>(<span class="str">"""{"name":"Yash","email":"dup@t.com","password":"p"}"""</span>)
+        )
+        .<span class="fn">andExpect</span>(<span class="fn">status</span>().<span class="fn">isConflict</span>())              <span class="cm">// 409</span>
+        .<span class="fn">andExpect</span>(<span class="fn">jsonPath</span>(<span class="str">"$.code"</span>).<span class="fn">value</span>(<span class="str">"CONFLICT"</span>))
+        .<span class="fn">andExpect</span>(<span class="fn">jsonPath</span>(<span class="str">"$.message"</span>).<span class="fn">value</span>(<span class="str">"Email already registered"</span>));
+    }
+}</pre>
+  </div>
+</div>
+
+<!-- CORE JAVA -->
+<div id="corejava" class="section">
+  <div class="section-title">☕ Core Java Unit Tests <span>FUNDAMENTALS</span></div>
+
+  <div class="code-wrap">
+    <div class="code-header"><span class="code-lang">Java — Collections, Streams, Optional, Concurrency</span><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+<pre><span class="kw">class</span> <span class="cls">CoreJavaTests</span> {
+
+    <span class="cm">// ===== Collections =====</span>
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">testListContents</span>() {
+        <span class="cls">List</span>&lt;<span class="cls">String</span>&gt; names = <span class="cls">List</span>.<span class="fn">of</span>(<span class="str">"Yash"</span>, <span class="str">"Rahul"</span>, <span class="str">"Priya"</span>);
+        <span class="fn">assertEquals</span>(<span class="num">3</span>, names.<span class="fn">size</span>());
+        <span class="fn">assertTrue</span>(names.<span class="fn">contains</span>(<span class="str">"Yash"</span>));
+        <span class="cm">// assertIterableEquals checks contents AND order</span>
+        <span class="fn">assertIterableEquals</span>(<span class="cls">List</span>.<span class="fn">of</span>(<span class="str">"Yash"</span>, <span class="str">"Rahul"</span>, <span class="str">"Priya"</span>), names);
+    }
+
+    <span class="cm">// ===== Streams =====</span>
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">testStreamFiltering</span>() {
+        <span class="cls">List</span>&lt;<span class="cls">Integer</span>&gt; numbers = <span class="cls">List</span>.<span class="fn">of</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>);
+        <span class="cls">List</span>&lt;<span class="cls">Integer</span>&gt; evens = numbers.<span class="fn">stream</span>()
+            .<span class="fn">filter</span>(n -> n % <span class="num">2</span> == <span class="num">0</span>)
+            .<span class="fn">collect</span>(<span class="cls">Collectors</span>.<span class="fn">toList</span>());
+        <span class="fn">assertEquals</span>(<span class="cls">List</span>.<span class="fn">of</span>(<span class="num">2</span>, <span class="num">4</span>, <span class="num">6</span>), evens);
+    }
+
+    <span class="cm">// ===== Optional =====</span>
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">testOptional_Empty_ThrowsOnGet</span>() {
+        <span class="cls">Optional</span>&lt;<span class="cls">String</span>&gt; empty = <span class="cls">Optional</span>.<span class="fn">empty</span>();
+        <span class="fn">assertFalse</span>(empty.<span class="fn">isPresent</span>());
+        <span class="cm">// Verify orElse, orElseThrow work correctly</span>
+        <span class="fn">assertEquals</span>(<span class="str">"default"</span>, empty.<span class="fn">orElse</span>(<span class="str">"default"</span>));
+        <span class="fn">assertThrows</span>(<span class="cls">NoSuchElementException</span>.<span class="kw">class</span>, empty::<span class="fn">get</span>);
+    }
+
+    <span class="cm">// ===== Custom equals/hashCode — critical for asserting domain objects =====</span>
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">testEquality</span>() {
+        <span class="cls">User</span> u1 = <span class="kw">new</span> <span class="cls">User</span>(<span class="num">1L</span>, <span class="str">"Yash"</span>);
+        <span class="cls">User</span> u2 = <span class="kw">new</span> <span class="cls">User</span>(<span class="num">1L</span>, <span class="str">"Yash"</span>);
+        <span class="cm">// assertEquals uses .equals() — you MUST override equals() in User</span>
+        <span class="fn">assertEquals</span>(u1, u2);
+        <span class="cm">// Contract: equal objects must have equal hashCodes</span>
+        <span class="fn">assertEquals</span>(u1.<span class="fn">hashCode</span>(), u2.<span class="fn">hashCode</span>());
+    }
+
+    <span class="cm">// ===== Exception chaining =====</span>
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">testExceptionCause</span>() {
+        <span class="cls">RuntimeException</span> ex = <span class="fn">assertThrows</span>(<span class="cls">RuntimeException</span>.<span class="kw">class</span>, () -> {
+            <span class="kw">try</span> {
+                <span class="cls">Integer</span>.<span class="fn">parseInt</span>(<span class="str">"not-a-number"</span>);
+            } <span class="kw">catch</span> (<span class="cls">NumberFormatException</span> e) {
+                <span class="kw">throw new</span> <span class="cls">RuntimeException</span>(<span class="str">"Parse failed"</span>, e);
+            }
+        });
+        <span class="cm">// Verify the wrapped cause type</span>
+        <span class="fn">assertInstanceOf</span>(<span class="cls">NumberFormatException</span>.<span class="kw">class</span>, ex.<span class="fn">getCause</span>());
+    }
+
+    <span class="cm">// ===== Thread Safety Test — AtomicInteger =====</span>
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">testAtomicCounter_ThreadSafety</span>() <span class="kw">throws</span> <span class="cls">InterruptedException</span> {
+        <span class="cls">AtomicInteger</span> counter = <span class="kw">new</span> <span class="cls">AtomicInteger</span>(<span class="num">0</span>);
+        <span class="kw">int</span> threadCount = <span class="num">100</span>;
+        <span class="cls">CountDownLatch</span> latch = <span class="kw">new</span> <span class="cls">CountDownLatch</span>(threadCount);
+
+        <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; threadCount; i++) {
+            <span class="kw">new</span> <span class="cls">Thread</span>(() -> {
+                counter.<span class="fn">incrementAndGet</span>(); <span class="cm">// atomic — no race condition</span>
+                latch.<span class="fn">countDown</span>();
+            }).<span class="fn">start</span>();
+        }
+
+        latch.<span class="fn">await</span>(); <span class="cm">// wait for all threads to complete</span>
+        <span class="fn">assertEquals</span>(threadCount, counter.<span class="fn">get</span>());
+    }
+
+    <span class="cm">// ===== Testing ConcurrentHashMap =====</span>
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">testConcurrentHashMap_NoLostUpdates</span>() <span class="kw">throws</span> <span class="cls">Exception</span> {
+        <span class="cls">ConcurrentHashMap</span>&lt;<span class="cls">String</span>, <span class="cls">AtomicInteger</span>&gt; map = <span class="kw">new</span> <span class="cls">ConcurrentHashMap</span>&lt;&gt;();
+        map.<span class="fn">put</span>(<span class="str">"key"</span>, <span class="kw">new</span> <span class="cls">AtomicInteger</span>(<span class="num">0</span>));
+
+        <span class="cls">ExecutorService</span> executor = <span class="cls">Executors</span>.<span class="fn">newFixedThreadPool</span>(<span class="num">10</span>);
+        <span class="cls">CountDownLatch</span> latch = <span class="kw">new</span> <span class="cls">CountDownLatch</span>(<span class="num">100</span>);
+
+        <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">100</span>; i++) {
+            executor.<span class="fn">submit</span>(() -> {
+                map.<span class="fn">get</span>(<span class="str">"key"</span>).<span class="fn">incrementAndGet</span>();
+                latch.<span class="fn">countDown</span>();
+            });
+        }
+        latch.<span class="fn">await</span>();
+        executor.<span class="fn">shutdown</span>();
+        <span class="fn">assertEquals</span>(<span class="num">100</span>, map.<span class="fn">get</span>(<span class="str">"key"</span>).<span class="fn">get</span>());
+    }
+}</pre>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-header"><span class="code-lang">Java — @DataJpaTest (Repository Layer Slice)</span><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+<pre><span class="kw">import</span> org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+<span class="kw">import</span> org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+
+<span class="cm">/**
+ * @DataJpaTest:
+ *  - Loads JPA repositories, entities, and H2 in-memory DB
+ *  - Does NOT load @Service, @Controller, or @Component beans
+ *  - Rolls back each test in a transaction by default (test isolation!)
+ *  - Use TestEntityManager to set up DB state directly, bypassing services
+ */</span>
+<span class="ann">@DataJpaTest</span>
+<span class="kw">class</span> <span class="cls">UserRepositoryTest</span> {
+
+    <span class="ann">@Autowired</span> <span class="kw">private</span> <span class="cls">TestEntityManager</span> entityManager;
+    <span class="ann">@Autowired</span> <span class="kw">private</span> <span class="cls">UserRepository</span> userRepository;
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">findByEmail_ShouldReturnUser_WhenExists</span>() {
+        <span class="cm">// persistAndFlush writes to DB and flushes the session</span>
+        <span class="cls">User</span> user = <span class="kw">new</span> <span class="cls">User</span>(<span class="kw">null</span>, <span class="str">"Yash"</span>, <span class="str">"yash@test.com"</span>);
+        entityManager.<span class="fn">persistAndFlush</span>(user);
+
+        <span class="cls">Optional</span>&lt;<span class="cls">User</span>&gt; found = userRepository.<span class="fn">findByEmail</span>(<span class="str">"yash@test.com"</span>);
+
+        <span class="fn">assertTrue</span>(found.<span class="fn">isPresent</span>());
+        <span class="fn">assertEquals</span>(<span class="str">"Yash"</span>, found.<span class="fn">get</span>().<span class="fn">getName</span>());
+    }
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">existsByEmail_ShouldReturnFalse_WhenNotPresent</span>() {
+        <span class="fn">assertFalse</span>(userRepository.<span class="fn">existsByEmail</span>(<span class="str">"nobody@test.com"</span>));
+    }
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">save_ShouldGenerateId</span>() {
+        <span class="cls">User</span> user = userRepository.<span class="fn">save</span>(<span class="kw">new</span> <span class="cls">User</span>(<span class="kw">null</span>, <span class="str">"Test"</span>, <span class="str">"t@t.com"</span>));
+        <span class="fn">assertNotNull</span>(user.<span class="fn">getId</span>());
+    }
+}</pre>
+  </div>
+</div>
+
+<!-- ADVANCED -->
+<div id="advanced" class="section">
+  <div class="section-title">🚀 Advanced Topics <span>SENIOR LEVEL</span></div>
+
+  <div class="code-wrap">
+    <div class="code-header"><span class="code-lang">Java — @SpringBootTest Full Integration Test</span><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+<pre><span class="kw">import</span> org.springframework.boot.test.context.SpringBootTest;
+<span class="kw">import</span> org.springframework.boot.test.web.client.TestRestTemplate;
+<span class="kw">import</span> org.springframework.boot.test.web.server.LocalServerPort;
+
+<span class="cm">/**
+ * @SpringBootTest(RANDOM_PORT) — starts the full app on a random free port.
+ * All beans are real. Use TestRestTemplate for actual HTTP calls.
+ * Slow but validates the full stack — controller → service → repo → DB.
+ * @ActiveProfiles("test") loads application-test.properties.
+ */</span>
+<span class="ann">@SpringBootTest</span>(webEnvironment = <span class="cls">SpringBootTest</span>.<span class="cls">WebEnvironment</span>.RANDOM_PORT)
+<span class="ann">@ActiveProfiles</span>(<span class="str">"test"</span>)
+<span class="kw">class</span> <span class="cls">UserIntegrationTest</span> {
+
+    <span class="ann">@LocalServerPort</span> <span class="kw">private int</span> port;
+
+    <span class="ann">@Autowired</span> <span class="kw">private</span> <span class="cls">TestRestTemplate</span> restTemplate;
+    <span class="ann">@Autowired</span> <span class="kw">private</span> <span class="cls">UserRepository</span> userRepository;
+
+    <span class="ann">@BeforeEach</span>
+    <span class="kw">void</span> <span class="fn">cleanup</span>() { userRepository.<span class="fn">deleteAll</span>(); }
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">createUser_ShouldPersistToRealDB</span>() {
+        <span class="cls">CreateUserRequest</span> req = <span class="kw">new</span> <span class="cls">CreateUserRequest</span>(<span class="str">"Yash"</span>, <span class="str">"y@t.com"</span>, <span class="str">"pass"</span>);
+        <span class="cls">String</span> url = <span class="str">"http://localhost:"</span> + port + <span class="str">"/api/v1/users"</span>;
+
+        <span class="cls">ResponseEntity</span>&lt;<span class="cls">UserDTO</span>&gt; response =
+            restTemplate.<span class="fn">postForEntity</span>(url, req, <span class="cls">UserDTO</span>.<span class="kw">class</span>);
+
+        <span class="fn">assertEquals</span>(<span class="cls">HttpStatus</span>.CREATED, response.<span class="fn">getStatusCode</span>());
+        <span class="fn">assertNotNull</span>(response.<span class="fn">getBody</span>().<span class="fn">getId</span>());
+        <span class="fn">assertTrue</span>(userRepository.<span class="fn">existsByEmail</span>(<span class="str">"y@t.com"</span>)); <span class="cm">// verify real DB</span>
+    }
+}</pre>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-header"><span class="code-lang">Java — Advanced Mockito: InOrder, MockedStatic, StrictStubs</span><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+<pre><span class="ann">@ExtendWith</span>(<span class="cls">MockitoExtension</span>.<span class="kw">class</span>)
+<span class="ann">@MockitoSettings</span>(strictness = <span class="cls">Strictness</span>.STRICT_STUBS) <span class="cm">// fails on unused stubs</span>
+<span class="kw">class</span> <span class="cls">AdvancedMockitoTest</span> {
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">inOrder_VerifyCallSequence</span>() {
+        <span class="cls">EmailService</span> email = <span class="fn">mock</span>(<span class="cls">EmailService</span>.<span class="kw">class</span>);
+        <span class="cls">AuditService</span> audit = <span class="fn">mock</span>(<span class="cls">AuditService</span>.<span class="kw">class</span>);
+
+        email.<span class="fn">send</span>(<span class="str">"user@test.com"</span>, <span class="str">"Welcome"</span>);
+        audit.<span class="fn">log</span>(<span class="str">"USER_CREATED"</span>);
+
+        <span class="cm">// Verify email was called BEFORE audit log</span>
+        <span class="cls">InOrder</span> inOrder = <span class="fn">inOrder</span>(email, audit);
+        inOrder.<span class="fn">verify</span>(email).<span class="fn">send</span>(<span class="fn">any</span>(), <span class="fn">any</span>());
+        inOrder.<span class="fn">verify</span>(audit).<span class="fn">log</span>(<span class="fn">any</span>());
+    }
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">mockStatic_ControlLocalDateTimeNow</span>() {
+        <span class="cm">// Mockito 3.4+ — mock static methods. Auto-closed after try block.</span>
+        <span class="kw">try</span> (<span class="cls">MockedStatic</span>&lt;<span class="cls">LocalDateTime</span>&gt; timeMock = <span class="fn">mockStatic</span>(<span class="cls">LocalDateTime</span>.<span class="kw">class</span>)) {
+            <span class="cls">LocalDateTime</span> fixed = <span class="cls">LocalDateTime</span>.<span class="fn">of</span>(<span class="num">2024</span>, <span class="num">1</span>, <span class="num">1</span>, <span class="num">12</span>, <span class="num">0</span>);
+            timeMock.<span class="fn">when</span>(<span class="cls">LocalDateTime</span>::<span class="fn">now</span>).<span class="fn">thenReturn</span>(fixed);
+
+            <span class="fn">assertEquals</span>(fixed, <span class="cls">LocalDateTime</span>.<span class="fn">now</span>());
+        }
+        <span class="cm">// Outside try — static mock is fully restored</span>
+    }
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">testMultipleReturnValues</span>() {
+        <span class="cls">UserRepository</span> repo = <span class="fn">mock</span>(<span class="cls">UserRepository</span>.<span class="kw">class</span>);
+
+        <span class="cm">// First call returns 1, second returns 2, subsequent calls return 3</span>
+        <span class="fn">when</span>(repo.<span class="fn">count</span>()).<span class="fn">thenReturn</span>(<span class="num">1L</span>, <span class="num">2L</span>, <span class="num">3L</span>);
+
+        <span class="fn">assertEquals</span>(<span class="num">1L</span>, repo.<span class="fn">count</span>());
+        <span class="fn">assertEquals</span>(<span class="num">2L</span>, repo.<span class="fn">count</span>());
+        <span class="fn">assertEquals</span>(<span class="num">3L</span>, repo.<span class="fn">count</span>()); <span class="cm">// repeats last value</span>
+    }
+}
+
+<span class="cm">// PREFERRED alternative to MockedStatic — inject Clock for time control</span>
+<span class="ann">@Service</span>
+<span class="kw">public class</span> <span class="cls">AuditService</span> {
+    <span class="kw">private final</span> <span class="cls">Clock</span> clock;
+
+    <span class="kw">public</span> <span class="cls">AuditService</span>(<span class="cls">Clock</span> clock) { <span class="kw">this</span>.clock = clock; }
+
+    <span class="kw">public</span> <span class="cls">LocalDateTime</span> <span class="fn">getAuditTime</span>() {
+        <span class="kw">return</span> <span class="cls">LocalDateTime</span>.<span class="fn">now</span>(clock); <span class="cm">// inject time — no static call</span>
+    }
+}
+
+<span class="cm">// In test — inject a fixed Clock, no Mockito static needed</span>
+<span class="ann">@Test</span>
+<span class="kw">void</span> <span class="fn">testWithFixedClock</span>() {
+    <span class="cls">Clock</span> fixed = <span class="cls">Clock</span>.<span class="fn">fixed</span>(<span class="cls">Instant</span>.<span class="fn">parse</span>(<span class="str">"2024-01-01T12:00:00Z"</span>), <span class="cls">ZoneId</span>.<span class="fn">of</span>(<span class="str">"UTC"</span>));
+    <span class="cls">AuditService</span> service = <span class="kw">new</span> <span class="cls">AuditService</span>(fixed);
+    <span class="fn">assertEquals</span>(<span class="cls">LocalDateTime</span>.<span class="fn">of</span>(<span class="num">2024</span>, <span class="num">1</span>, <span class="num">1</span>, <span class="num">12</span>, <span class="num">0</span>), service.<span class="fn">getAuditTime</span>());
+}</pre>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-header"><span class="code-lang">Java — @TestConfiguration, @TestPropertySource, Security Tests</span><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+<pre><span class="cm">// @TestConfiguration — define beans that override production beans in tests</span>
+<span class="ann">@TestConfiguration</span>
+<span class="kw">class</span> <span class="cls">TestConfig</span> {
+
+    <span class="ann">@Bean</span>
+    <span class="ann">@Primary</span> <span class="cm">// overrides real PasswordEncoder in test context</span>
+    <span class="kw">public</span> <span class="cls">PasswordEncoder</span> <span class="fn">testPasswordEncoder</span>() {
+        <span class="kw">return</span> <span class="kw">new</span> <span class="cls">BCryptPasswordEncoder</span>(<span class="num">1</span>); <span class="cm">// strength=1, super fast in tests</span>
+    }
+}
+
+<span class="cm">// Import test config into a specific test</span>
+<span class="ann">@SpringBootTest</span>
+<span class="ann">@Import</span>(<span class="cls">TestConfig</span>.<span class="kw">class</span>)
+<span class="kw">class</span> <span class="cls">UserIntegrationTest</span> { <span class="cm">/* ... */</span> }
+
+<span class="cm">// @TestPropertySource — override application.properties values for testing</span>
+<span class="ann">@SpringBootTest</span>
+<span class="ann">@TestPropertySource</span>(properties = {
+    <span class="str">"spring.datasource.url=jdbc:h2:mem:testdb"</span>,
+    <span class="str">"jwt.secret=test-secret-key-at-least-256-bits"</span>,
+    <span class="str">"email.enabled=false"</span> <span class="cm">// disable real email in tests</span>
+})
+<span class="kw">class</span> <span class="cls">ConfigOverrideTest</span> { <span class="cm">/* ... */</span> }
+
+<span class="cm">// Spring Security in @WebMvcTest — testing secured endpoints</span>
+<span class="ann">@WebMvcTest</span>(<span class="cls">UserController</span>.<span class="kw">class</span>)
+<span class="kw">class</span> <span class="cls">SecuredControllerTest</span> {
+
+    <span class="ann">@Autowired</span> <span class="kw">private</span> <span class="cls">MockMvc</span> mockMvc;
+    <span class="ann">@MockBean</span> <span class="kw">private</span> <span class="cls">UserService</span> userService;
+
+    <span class="ann">@Test</span>
+    <span class="ann">@WithMockUser</span>(username = <span class="str">"yash"</span>, roles = <span class="str">"USER"</span>)
+    <span class="cm">// @WithMockUser injects a mock SecurityContext — no real JWT needed</span>
+    <span class="kw">void</span> <span class="fn">authenticatedUser_ShouldAccessEndpoint</span>() <span class="kw">throws</span> <span class="cls">Exception</span> {
+        <span class="fn">when</span>(userService.<span class="fn">getUserById</span>(<span class="num">1L</span>))
+            .<span class="fn">thenReturn</span>(<span class="kw">new</span> <span class="cls">UserDTO</span>(<span class="num">1L</span>, <span class="str">"Yash"</span>, <span class="str">"y@t.com"</span>));
+
+        mockMvc.<span class="fn">perform</span>(<span class="fn">get</span>(<span class="str">"/api/v1/users/1"</span>))
+            .<span class="fn">andExpect</span>(<span class="fn">status</span>().<span class="fn">isOk</span>());
+    }
+
+    <span class="ann">@Test</span>
+    <span class="kw">void</span> <span class="fn">unauthenticatedRequest_ShouldReturn401</span>() <span class="kw">throws</span> <span class="cls">Exception</span> {
+        <span class="cm">// No @WithMockUser — Spring Security denies access</span>
+        mockMvc.<span class="fn">perform</span>(<span class="fn">get</span>(<span class="str">"/api/v1/users/1"</span>))
+            .<span class="fn">andExpect</span>(<span class="fn">status</span>().<span class="fn">isUnauthorized</span>());
+    }
+}</pre>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Test Type</th><th>Annotation</th><th>What Loads</th><th>Speed</th></tr>
+      <tr><td>Unit Test</td><td><code class="inline">@ExtendWith(MockitoExtension)</code></td><td>Nothing — pure Java</td><td>⚡ Fastest</td></tr>
+      <tr><td>Controller Slice</td><td><code class="inline">@WebMvcTest</code></td><td>Web layer only</td><td>🚀 Fast</td></tr>
+      <tr><td>Repo Slice</td><td><code class="inline">@DataJpaTest</code></td><td>JPA + H2 only</td><td>🚀 Fast</td></tr>
+      <tr><td>Full Integration</td><td><code class="inline">@SpringBootTest</code></td><td>Entire context</td><td>🐢 Slow</td></tr>
+      <tr><td>Full + Real HTTP</td><td><code class="inline">@SpringBootTest(RANDOM_PORT)</code></td><td>Entire context + server</td><td>🐢 Slowest</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- Q&A -->
+<div id="qa" class="section">
+  <div class="section-title">🎯 Interview Q&amp;A <span>ALL LEVELS</span></div>
+
+  <div class="qa-item">
+    <div class="qa-q" onclick="toggle(this)">
+      <span class="qa-badge easy">EASY</span>
+      <span class="qa-text">What is the difference between @Mock and @Spy in Mockito?</span>
+      <span class="qa-arrow">▶</span>
+    </div>
+    <div class="qa-ans">
+      <p><strong>@Mock</strong> creates a completely fake object. None of the real class's code ever runs. All methods return default values (null, 0, false) unless stubbed. You use it to isolate the class under test from its dependencies.</p>
+      <p><strong>@Spy</strong> wraps a real object. By default, real methods execute when you call them on a spy. You selectively override specific methods using <code class="inline">doReturn().when(spy).method()</code>. Critical: always use <code class="inline">doReturn()</code> syntax with spies, not <code class="inline">when().thenReturn()</code>, because the latter actually invokes the real method during setup which can cause unintended side effects.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q" onclick="toggle(this)">
+      <span class="qa-badge easy">EASY</span>
+      <span class="qa-text">What is @InjectMocks and how does Mockito decide how to inject?</span>
+      <span class="qa-arrow">▶</span>
+    </div>
+    <div class="qa-ans">
+      <p>Mockito creates an instance of the annotated class and injects all available <code class="inline">@Mock</code> and <code class="inline">@Spy</code> fields into it. The injection order is: (1) <strong>Constructor injection</strong> — tries the largest constructor whose parameter types match available mocks; (2) <strong>Setter injection</strong> — looks for setters matching mock types; (3) <strong>Field injection</strong> — directly sets private fields via reflection.</p>
+      <p>Constructor injection is preferred in production code because it makes dependencies explicit and enables testing without any framework magic at all — you can just call <code class="inline">new UserService(mockRepo, mockEmail)</code>.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q" onclick="toggle(this)">
+      <span class="qa-badge med">MEDIUM</span>
+      <span class="qa-text">What is the difference between @WebMvcTest and @SpringBootTest?</span>
+      <span class="qa-arrow">▶</span>
+    </div>
+    <div class="qa-ans">
+      <p><code class="inline">@WebMvcTest</code> is a <em>slice test</em> that loads only the web layer — controllers, filters, <code class="inline">@ControllerAdvice</code>, <code class="inline">WebMvcConfigurer</code>. It does NOT load service or repository beans. It uses MockMvc with an in-memory servlet engine (no real HTTP server). It's fast and purpose-built for testing controller logic, request mapping, and HTTP response codes.</p>
+      <p><code class="inline">@SpringBootTest</code> loads the entire application context — every bean, all auto-configurations. With <code class="inline">webEnvironment = RANDOM_PORT</code>, it starts a real embedded HTTP server and you test via <code class="inline">TestRestTemplate</code>. It's slow but validates the full stack. Use it for integration tests, not controller unit tests.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q" onclick="toggle(this)">
+      <span class="qa-badge med">MEDIUM</span>
+      <span class="qa-text">Why should you prefer constructor injection from a testability standpoint?</span>
+      <span class="qa-arrow">▶</span>
+    </div>
+    <div class="qa-ans">
+      <p>With field injection (<code class="inline">@Autowired private UserRepo repo</code>), you cannot create the class in a unit test without Spring or reflection because the field is set by Spring. You're forced to use <code class="inline">@ExtendWith(SpringExtension.class)</code> or resort to <code class="inline">ReflectionTestUtils.setField()</code>, both of which are heavier.</p>
+      <p>With constructor injection, you simply call <code class="inline">new UserService(mockRepo, mockEmail)</code>. No Spring, no reflection, pure Java. Your test is a plain JUnit + Mockito test that runs in milliseconds. Constructor injection also makes it impossible to instantiate the class without providing all dependencies, which catches wiring errors at compile time rather than at runtime.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q" onclick="toggle(this)">
+      <span class="qa-badge med">MEDIUM</span>
+      <span class="qa-text">What is ArgumentCaptor and when would you use it?</span>
+      <span class="qa-arrow">▶</span>
+    </div>
+    <div class="qa-ans">
+      <p><code class="inline">ArgumentCaptor</code> captures the exact argument that was passed to a mocked method during the test execution so you can assert on that argument afterward. You use it when the object was created internally inside the method under test and you can't get a reference to it from the outside.</p>
+      <p>Classic example: verifying that <code class="inline">userRepository.save()</code> was called with a User whose password was hashed and whose role was set to USER. Without <code class="inline">ArgumentCaptor</code>, you'd have to use <code class="inline">any(User.class)</code> which tells you nothing about the object's internal state. With it, you can call <code class="inline">captor.getValue()</code> after <code class="inline">verify()</code> and run full assertions on the captured object.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q" onclick="toggle(this)">
+      <span class="qa-badge hard">HARD</span>
+      <span class="qa-text">What is strict stubbing in Mockito and why is it the default?</span>
+      <span class="qa-arrow">▶</span>
+    </div>
+    <div class="qa-ans">
+      <p>Strict stubbing (<code class="inline">Strictness.STRICT_STUBS</code>, default in <code class="inline">MockitoExtension</code>) enforces two rules. First, every stub you define must be actually used by the test — if you define <code class="inline">when(repo.findById(1L)).thenReturn(...)</code> but the code never calls <code class="inline">findById</code>, the test fails with "unnecessary stubbing". Second, argument matching is stricter — a stub for <code class="inline">findById(1L)</code> will NOT satisfy a call to <code class="inline">findById(2L)</code>.</p>
+      <p>This catches two important bugs: tests that have stubs for code paths that are never actually exercised (suggesting the test or the stub is wrong), and argument mismatches where the code calls the method with different arguments than you expected (suggesting a logic bug). It forces tests to be precise about what they're testing.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q" onclick="toggle(this)">
+      <span class="qa-badge hard">HARD</span>
+      <span class="qa-text">How do you test a method that calls LocalDateTime.now() or a static utility?</span>
+      <span class="qa-arrow">▶</span>
+    </div>
+    <div class="qa-ans">
+      <p>The cleanest, most testable approach is to <strong>inject a Clock</strong>. Instead of calling <code class="inline">LocalDateTime.now()</code> directly, inject <code class="inline">java.time.Clock</code> as a dependency and call <code class="inline">LocalDateTime.now(clock)</code>. In production, Spring provides <code class="inline">@Bean Clock clock() { return Clock.systemDefaultZone(); }</code>. In tests, you inject <code class="inline">Clock.fixed(someInstant, UTC)</code>, which gives you full control over "now" without any mocking framework.</p>
+      <p>The alternative is <code class="inline">MockedStatic</code> from Mockito 3.4+: wrap your test in a try-with-resources block using <code class="inline">mockStatic(LocalDateTime.class)</code>, stub the static method inside, and the static mock is automatically restored when the block exits. PowerMock was the old approach but is now legacy and adds significant complexity.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q" onclick="toggle(this)">
+      <span class="qa-badge hard">HARD</span>
+      <span class="qa-text">What is @TestInstance(PER_CLASS) and when would you use it?</span>
+      <span class="qa-arrow">▶</span>
+    </div>
+    <div class="qa-ans">
+      <p>By default, JUnit 5 creates a <em>new instance of the test class</em> for every single test method (PER_METHOD). This prevents test pollution — instance variables can't leak state between tests. The side effect is that <code class="inline">@BeforeAll</code> and <code class="inline">@AfterAll</code> methods must be static.</p>
+      <p>With <code class="inline">@TestInstance(PER_CLASS)</code>, one shared instance is used for all test methods in the class. This allows <code class="inline">@BeforeAll/@AfterAll</code> to be instance methods (useful if they reference non-static fields). Common use cases: Testcontainers integration tests where you want to start one DB container for all tests in the class rather than one per test; <code class="inline">@Nested</code> test classes that need to share outer class state.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q" onclick="toggle(this)">
+      <span class="qa-badge hard">HARD</span>
+      <span class="qa-text">How do you test Spring Security-secured endpoints in @WebMvcTest?</span>
+      <span class="qa-arrow">▶</span>
+    </div>
+    <div class="qa-ans">
+      <p>By default, <code class="inline">@WebMvcTest</code> loads Spring Security. Requests without credentials return 401 or 403. You have several options. The simplest is <code class="inline">@WithMockUser(username="yash", roles="USER")</code> on the test method — this injects a mock authenticated principal into the security context without needing a real JWT or session.</p>
+      <p>For JWT-based auth, you can either: (1) mock your token validation filter/bean so it always passes, (2) use <code class="inline">@WithMockUser</code> alongside a mocked <code class="inline">JwtService</code> bean, or (3) if you're not testing security at all, exclude it with <code class="inline">@WebMvcTest(excludeAutoConfiguration = SecurityAutoConfiguration.class)</code>. Security-specific behavior (role-based access, method security) is typically tested in a separate dedicated security test class.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q" onclick="toggle(this)">
+      <span class="qa-badge med">MEDIUM</span>
+      <span class="qa-text">What test coverage percentage should you target and why?</span>
+      <span class="qa-arrow">▶</span>
+    </div>
+    <div class="qa-ans">
+      <p>Coverage percentage is a proxy metric — high coverage with zero meaningful assertions is worthless, while 70% coverage of the right code can be excellent. Most mature teams target 80% line or branch coverage for the service layer, with lower targets for infrastructure code.</p>
+      <p>What actually matters: test every business rule, every exception path, every boundary condition (null, empty, max value). Skip generated code (Lombok, MapStruct), simple DTOs, <code class="inline">main()</code> methods, and configuration classes. Use Jacoco with <code class="inline">exclude</code> rules in your Maven/Gradle config to filter these out of reporting. The interview answer that stands out: "I focus coverage on the logic that could fail in production and hurt users, not on hitting a number."</p>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+function toggle(qEl) {
+  qEl.closest('.qa-item').classList.toggle('open');
+}
+function copyCode(btn) {
+  const pre = btn.closest('.code-wrap').querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText);
+  btn.textContent = 'COPIED!';
+  setTimeout(() => btn.textContent = 'COPY', 2000);
+}
+</script>
+</body>
+</html>

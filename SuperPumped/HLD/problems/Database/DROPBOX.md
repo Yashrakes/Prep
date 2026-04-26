@@ -922,6 +922,7 @@ Returns:
 chunk_ids: ["hash1", "hash2", ..., "hash125"]  (125 chunks)
 
 
+
 STEP 2: Fetch chunk locations
 ────────────────────────────────────────────────
 SELECT chunk_hash, storage_url

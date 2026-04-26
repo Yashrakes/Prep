@@ -3579,3 +3579,470 @@ These implementations cover all the remaining LLD problems with multithreading s
   
 
 [Claude is AI and can make mistakes. Please double-check responses.](https://support.anthropic.com/en/articles/8525154-claude-is-providing-incorrect-or-misleading-responses-what-s-going-on)
+
+
+
+## Q1 — Token Bucket Rate Limiter
+
+The core idea is simple: a bucket holds tokens, you refill it at a fixed rate, and each request consumes one token. The tricky part is making it thread-safe. The naive approach uses `synchronized` everywhere, which works but creates a bottleneck. The better approach uses `AtomicLong` + CAS (compare-and-swap) for the token count, and a separate lock only for the periodic refill.
+
+java
+
+```java
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+public class TokenBucketRateLimiter {
+
+    private final long capacity;         // max tokens (burst limit)
+    private final AtomicLong tokens;     // current tokens — atomic for CAS
+    private final long refillRate;       // tokens per second
+    private final ScheduledExecutorService scheduler;
+
+    public TokenBucketRateLimiter(long capacity, long refillRate) {
+        this.capacity = capacity;
+        this.refillRate = refillRate;
+        this.tokens = new AtomicLong(capacity); // start full
+        this.scheduler = Executors.newSingleThreadScheduledExecutor();
+
+        // Refill every second — this runs in a single background thread
+        // so the refill itself is already single-threaded (no race here)
+        scheduler.scheduleAtFixedRate(() -> {
+            long current = tokens.get();
+            long refilled = Math.min(capacity, current + refillRate);
+            tokens.set(refilled); // safe: only one thread writes here
+        }, 1, 1, TimeUnit.SECONDS);
+    }
+
+    // Called by many threads simultaneously — this is the hot path
+    public boolean tryAcquire() {
+        while (true) {
+            long current = tokens.get();
+            if (current <= 0) return false; // no tokens, reject
+            // CAS: only decrement if no other thread changed the value
+            // If another thread snuck in, we retry the loop (spin)
+            if (tokens.compareAndSet(current, current - 1)) {
+                return true; // we won the race
+            }
+            // else: another thread modified tokens — loop and retry
+        }
+    }
+
+    public void shutdown() {
+        scheduler.shutdown();
+    }
+}
+```
+
+**Follow-up: Per-user vs global rate limiter.** Wrap the above in a `ConcurrentHashMap<String, TokenBucketRateLimiter>`. The key insight is using `computeIfAbsent` which is atomic — it guarantees only one limiter is created per user even under concurrent requests.
+
+java
+
+```java
+public class PerUserRateLimiter {
+    // ConcurrentHashMap is safe for concurrent reads+writes
+    private final ConcurrentHashMap<String, TokenBucketRateLimiter> limiters 
+        = new ConcurrentHashMap<>();
+
+    public boolean tryAcquire(String userId) {
+        // computeIfAbsent is atomic — only creates limiter once per user
+        TokenBucketRateLimiter limiter = limiters.computeIfAbsent(
+            userId, 
+            id -> new TokenBucketRateLimiter(100, 10)
+        );
+        return limiter.tryAcquire();
+    }
+}
+```
+
+**Follow-up: Distributed rate limiter.** Replace the in-memory `AtomicLong` with a Redis `INCR` + `EXPIRE` command. Use Lua scripts in Redis to make the check-and-decrement atomic across JVM instances, since two JVMs can't share an `AtomicLong`.
+
+---
+
+## Q2 — Thread-Safe LRU Cache with TTL
+
+An LRU (Least Recently Used) cache evicts the oldest-accessed entry when full. In Java, `LinkedHashMap` gives you LRU ordering for free — the trick is the `accessOrder=true` constructor flag. Making it thread-safe and adding TTL (time-to-live) is where the real interview content lies.
+
+java
+
+```java
+import java.util.*;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+public class LRUCacheWithTTL<K, V> {
+
+    private final int capacity;
+    private final long ttlMillis;
+    // Read-Write lock: multiple readers can proceed simultaneously,
+    // but writers get exclusive access — much better than plain synchronized
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+
+    // Wrapper to track expiry per entry
+    private static class Entry<V> {
+        final V value;
+        final long expiresAt;
+        Entry(V value, long ttlMillis) {
+            this.value = value;
+            this.expiresAt = System.currentTimeMillis() + ttlMillis;
+        }
+        boolean isExpired() {
+            return System.currentTimeMillis() > expiresAt;
+        }
+    }
+
+    // accessOrder=true: on every get(), the entry moves to the tail
+    // removeEldestEntry: called after every put() — auto-evict LRU
+    private final LinkedHashMap<K, Entry<V>> map = new LinkedHashMap<>(16, 0.75f, true) {
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<K, Entry<V>> eldest) {
+            return size() > capacity; // evict when over capacity
+        }
+    };
+
+    public LRUCacheWithTTL(int capacity, long ttlMillis) {
+        this.capacity = capacity;
+        this.ttlMillis = ttlMillis;
+    }
+
+    public Optional<V> get(K key) {
+        lock.writeLock().lock(); // write lock because get() mutates LRU order!
+        try {
+            Entry<V> entry = map.get(key);
+            if (entry == null) return Optional.empty();
+            if (entry.isExpired()) {
+                map.remove(key); // lazy eviction on access
+                return Optional.empty();
+            }
+            return Optional.of(entry.value);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    public void put(K key, V value) {
+        lock.writeLock().lock();
+        try {
+            map.put(key, new Entry<>(value, ttlMillis));
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+}
+```
+
+**The subtlety interviewers love:** You might think `get()` only needs a read lock since it's "just reading." But because `LinkedHashMap` with `accessOrder=true` moves the entry to the tail on every access, it mutates internal state — so `get()` actually needs a write lock too. Missing this causes `ConcurrentModificationException` or corrupt LRU ordering.
+
+**Follow-up: Why not just use `Collections.synchronizedMap()`?** That wraps every method in `synchronized`, which means readers block each other unnecessarily. `ReentrantReadWriteLock` allows concurrent reads for read-heavy workloads, which is typical for caches.
+
+---
+
+## Q3 — Concurrent Range Merging System
+
+This is the hardest of the five in terms of data structure knowledge. The key insight is using `ConcurrentSkipListMap` — a thread-safe sorted map — which lets you efficiently find overlapping/adjacent ranges without locking the whole structure.
+
+java
+
+```java
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public class ConcurrentRangeMerger {
+
+    // Key = range start, Value = range end
+    // ConcurrentSkipListMap keeps keys sorted — critical for efficient merging
+    private final ConcurrentSkipListMap<Integer, Integer> ranges 
+        = new ConcurrentSkipListMap<>();
+
+    // Adds a new range and merges with any overlapping/adjacent ranges
+    public void addRange(int start, int end) {
+        // Synchronized block ensures atomicity of the merge operation
+        // We can't use ConcurrentSkipListMap's atomicity alone here
+        // because merge is a multi-step read-modify-write
+        synchronized (this) {
+            int mergedStart = start;
+            int mergedEnd = end;
+
+            // Check if there's a range that starts before us and overlaps
+            // floorKey returns the largest key <= mergedStart
+            Map.Entry<Integer, Integer> floor = ranges.floorEntry(mergedStart);
+            if (floor != null && floor.getValue() >= mergedStart - 1) {
+                // This existing range overlaps or is adjacent — absorb it
+                mergedStart = Math.min(mergedStart, floor.getKey());
+                mergedEnd = Math.max(mergedEnd, floor.getValue());
+                ranges.remove(floor.getKey());
+            }
+
+            // Now absorb all ranges that start within our new merged range
+            // subMap returns a view of keys in [mergedStart, mergedEnd+1)
+            while (true) {
+                Map.Entry<Integer, Integer> overlap = 
+                    ranges.ceilingEntry(mergedStart);
+                if (overlap == null || overlap.getKey() > mergedEnd + 1) break;
+                mergedEnd = Math.max(mergedEnd, overlap.getValue());
+                ranges.remove(overlap.getKey());
+            }
+
+            ranges.put(mergedStart, mergedEnd);
+        }
+    }
+
+    // Efficient point query: is value X covered by any range?
+    public boolean contains(int value) {
+        // No lock needed for individual reads in ConcurrentSkipListMap
+        Map.Entry<Integer, Integer> floor = ranges.floorEntry(value);
+        return floor != null && floor.getValue() >= value;
+    }
+
+    public List<int[]> getRanges() {
+        synchronized (this) {
+            List<int[]> result = new ArrayList<>();
+            ranges.forEach((start, end) -> result.add(new int[]{start, end}));
+            return result;
+        }
+    }
+}
+```
+
+**Follow-up: Why `synchronized` here instead of `ReentrantReadWriteLock`?** Because `addRange` is a compound operation — it reads, computes, then writes multiple entries. Even though each individual operation on `ConcurrentSkipListMap` is atomic, the whole merge sequence is not. The gap between reads and writes is a window for race conditions, so we must hold a lock across the entire sequence.
+
+**Follow-up: Why `ConcurrentSkipListMap` at all then?** The `contains()` method benefits from it — point queries run lock-free and don't contend with writers, which is great for high-read workloads.
+
+---
+
+## Q4 — Producer-Consumer (Debugging a Race Condition)
+
+This is the classic debugging question. The interviewer gives you broken code using `wait/notify` and asks you to fix it. Here's the broken version followed by the correct fix:
+
+java
+
+```java
+// ❌ BROKEN: Classic race condition with wait/notify
+class BrokenBuffer {
+    private final Queue<Integer> queue = new LinkedList<>();
+    private final int MAX = 10;
+
+    public synchronized void produce(int item) throws InterruptedException {
+        if (queue.size() == MAX) wait(); // BUG 1: if() not while() — spurious wakeups!
+        queue.add(item);
+        notify(); // BUG 2: notify() only wakes ONE thread — use notifyAll() with multiple producers
+    }
+
+    public synchronized int consume() throws InterruptedException {
+        if (queue.isEmpty()) wait(); // BUG 1 again
+        notify();
+        return queue.poll();
+    }
+}
+```
+
+java
+
+```java
+// ✅ FIXED: The professional solution uses BlockingQueue — no manual sync needed
+import java.util.concurrent.*;
+
+public class ProducerConsumerFixed {
+
+    // BlockingQueue handles all the wait/notify logic internally
+    // ArrayBlockingQueue is bounded — producers block when full, consumers block when empty
+    private final BlockingQueue<Integer> queue = new ArrayBlockingQueue<>(10);
+    private volatile boolean running = true; // volatile ensures visibility across threads
+
+    public void produce(int item) throws InterruptedException {
+        // put() blocks if queue is full — wakes up when space becomes available
+        queue.put(item);
+    }
+
+    public Integer consume() throws InterruptedException {
+        // poll with timeout avoids permanent blocking when shutting down
+        return queue.poll(1, TimeUnit.SECONDS);
+    }
+
+    public void shutdown() {
+        running = false; // visible to all threads due to volatile
+    }
+
+    // Full example with thread pool
+    public static void main(String[] args) throws InterruptedException {
+        ProducerConsumerFixed system = new ProducerConsumerFixed();
+        ExecutorService pool = Executors.newFixedThreadPool(4);
+
+        // 2 producers
+        for (int i = 0; i < 2; i++) {
+            final int id = i;
+            pool.submit(() -> {
+                for (int j = 0; j < 100 && system.running; j++) {
+                    try { system.produce(id * 100 + j); }
+                    catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+                }
+            });
+        }
+
+        // 2 consumers
+        for (int i = 0; i < 2; i++) {
+            pool.submit(() -> {
+                while (system.running) {
+                    try {
+                        Integer item = system.consume();
+                        if (item != null) System.out.println("Consumed: " + item);
+                    } catch (InterruptedException e) { Thread.currentThread().interrupt(); break; }
+                }
+            });
+        }
+
+        Thread.sleep(3000);
+        system.shutdown();
+        pool.shutdown();
+    }
+}
+```
+
+**The three bugs interviewers always test:** First, using `if` instead of `while` with `wait()` — threads can have spurious wakeups (Java spec allows it), so you must re-check the condition in a loop. Second, using `notify()` instead of `notifyAll()` — `notify()` only wakes one thread, which can leave producers waiting even when consumers are available. Third, forgetting `volatile` on shared flags like `running`.
+
+---
+
+## Q5 — Implement ScheduledExecutorService (Hardcore)
+
+This is the one that separates L2 from L3 candidates. You need to implement a scheduler that runs tasks at a specified future time, handles recurring tasks, and is fully thread-safe. The data structure is a `PriorityQueue` sorted by scheduled time, with a dedicated dispatcher thread.
+
+java
+
+```java
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.*;
+
+public class CustomScheduledExecutor {
+
+    // A task with a scheduled time and optional recurrence
+    private static class ScheduledTask implements Comparable<ScheduledTask> {
+        final Runnable task;
+        long scheduledTimeNanos;       // when to run (absolute nanoTime)
+        final long periodNanos;        // 0 if one-shot, >0 if recurring
+        final AtomicBoolean cancelled = new AtomicBoolean(false);
+
+        ScheduledTask(Runnable task, long delayNanos, long periodNanos) {
+            this.task = task;
+            this.scheduledTimeNanos = System.nanoTime() + delayNanos;
+            this.periodNanos = periodNanos;
+        }
+
+        @Override
+        public int compareTo(ScheduledTask other) {
+            // PriorityQueue is a min-heap: smallest scheduledTime = next to run
+            return Long.compare(this.scheduledTimeNanos, other.scheduledTimeNanos);
+        }
+    }
+
+    private final PriorityQueue<ScheduledTask> taskQueue = new PriorityQueue<>();
+    private final ExecutorService workerPool;
+    private final ReentrantLock lock = new ReentrantLock();
+    // Condition lets the dispatcher sleep until either a task is due or a new task arrives
+    private final Condition taskAvailable = lock.newCondition();
+    private volatile boolean shutdown = false;
+
+    public CustomScheduledExecutor(int workerThreads) {
+        workerPool = Executors.newFixedThreadPool(workerThreads);
+        // The dispatcher thread loops forever, dispatching tasks when due
+        Thread dispatcher = new Thread(this::dispatchLoop, "scheduler-dispatcher");
+        dispatcher.setDaemon(true); // dies when JVM exits
+        dispatcher.start();
+    }
+
+    private void dispatchLoop() {
+        while (!shutdown) {
+            lock.lock();
+            try {
+                // Wait if queue is empty
+                while (taskQueue.isEmpty() && !shutdown) {
+                    taskAvailable.await(); // releases lock and sleeps
+                }
+                if (shutdown) break;
+
+                ScheduledTask next = taskQueue.peek();
+                long waitNanos = next.scheduledTimeNanos - System.nanoTime();
+
+                if (waitNanos > 0) {
+                    // Task isn't due yet — sleep until it is (or a new task arrives)
+                    // awaitNanos releases the lock while sleeping
+                    taskAvailable.awaitNanos(waitNanos);
+                } else {
+                    // Task is due — remove and dispatch
+                    taskQueue.poll();
+                    if (!next.cancelled.get()) {
+                        // Run in worker pool so dispatcher thread never blocks on task logic
+                        workerPool.submit(next.task);
+
+                        // Reschedule recurring tasks
+                        if (next.periodNanos > 0) {
+                            next.scheduledTimeNanos = System.nanoTime() + next.periodNanos;
+                            taskQueue.offer(next);
+                        }
+                    }
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            } finally {
+                lock.unlock(); // ALWAYS release in finally
+            }
+        }
+    }
+
+    // Schedule a one-shot task
+    public ScheduledTask schedule(Runnable task, long delay, TimeUnit unit) {
+        ScheduledTask st = new ScheduledTask(task, unit.toNanos(delay), 0);
+        lock.lock();
+        try {
+            taskQueue.offer(st);
+            taskAvailable.signal(); // wake dispatcher — new task arrived
+        } finally {
+            lock.unlock();
+        }
+        return st;
+    }
+
+    // Schedule a fixed-rate recurring task
+    public ScheduledTask scheduleAtFixedRate(Runnable task, long delay, long period, TimeUnit unit) {
+        ScheduledTask st = new ScheduledTask(task, unit.toNanos(delay), unit.toNanos(period));
+        lock.lock();
+        try {
+            taskQueue.offer(st);
+            taskAvailable.signal();
+        } finally {
+            lock.unlock();
+        }
+        return st;
+    }
+
+    // Cancel a task before it runs
+    public boolean cancel(ScheduledTask task) {
+        return task.cancelled.compareAndSet(false, true); // atomic cancel
+    }
+
+    public void shutdown() {
+        shutdown = true;
+        lock.lock();
+        try {
+            taskAvailable.signalAll(); // wake dispatcher so it can exit
+        } finally {
+            lock.unlock();
+        }
+        workerPool.shutdown();
+    }
+}
+```
+
+**Why `Condition.awaitNanos()` instead of `Thread.sleep()`?** Because `sleep()` holds the lock while sleeping — no new tasks could be added. `awaitNanos()` _releases the lock_ while waiting, so producers can insert tasks and signal the dispatcher to wake early. This is the key insight for this problem.
+
+**Follow-up: What's the difference between `scheduleAtFixedRate` and `scheduleWithFixedDelay`?** Fixed-rate schedules relative to the _start_ of the previous execution — if a task takes longer than the period, the next run starts immediately. Fixed-delay schedules relative to the _end_ of the previous execution — it always waits the full delay after the task completes. For your implementation above, `scheduleWithFixedDelay` would set `scheduledTimeNanos` inside the worker after the task finishes, not in the dispatcher.
+
+**Follow-up: What happens if two tasks are due at the same time?** The `PriorityQueue` still gives you one at a time (the dispatcher loop picks them off one by one), but since dispatch submits to a thread pool, both tasks run in parallel on worker threads almost simultaneously. The `compareTo` in `ScheduledTask` just breaks ties deterministically.
+
+---
+
+

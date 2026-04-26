@@ -12,9 +12,9 @@ public class main {
     public static void main(String args[]) {
         StockObservable iphoneObservable = new IphoneObservable();
 
-        NotAlertObserver user1 = new MobileAlertObserver("a", iphoneObservable);
-        NotAlertObserver user2 = new EmailAlertObserver("b", iphoneObservable);
-        NotAlertObserver user3 = new MobileAlertObserver("c", iphoneObservable);
+        NotAlertObserver user1 = new MobileAlertObserver("a");
+        NotAlertObserver user2 = new EmailAlertObserver("b");
+        NotAlertObserver user3 = new MobileAlertObserver("c");
 
         iphoneObservable.addd(user1);
         iphoneObservable.addd(user2);

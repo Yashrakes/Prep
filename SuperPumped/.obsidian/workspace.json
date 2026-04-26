@@ -11,15 +11,30 @@
             "id": "83b90de9b00ed928",
             "type": "leaf",
             "state": {
-              "type": "image",
+              "type": "markdown",
               "state": {
-                "file": "HLD/Attachments/Pasted image 20250412165018.png"
+                "file": "HLD/Cursor vs Offset Pagination.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-image",
-              "title": "Pasted image 20250412165018"
+              "icon": "lucide-file",
+              "title": "Cursor vs Offset Pagination"
+            }
+          },
+          {
+            "id": "9a0239634e069a59",
+            "type": "leaf",
+            "state": {
+              "type": "release-notes",
+              "state": {
+                "currentVersion": "1.12.7"
+              },
+              "icon": "lucide-book-up",
+              "title": "Release Notes 1.12.7"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -136,8 +151,37 @@
       "markdown-importer:Open format converter": false
     }
   },
-  "active": "83b90de9b00ed928",
+  "active": "9a0239634e069a59",
   "lastOpenFiles": [
+    "LLD DOCS/junit_interview_guide.html",
+    "LLD DOCS/java_lld_20_problems.html",
+    "LLD DOCS/lld_interview_prep_java.html",
+    "LLD/java_lld_20_problems.html",
+    "LLD/lld_interview_prep_java.html",
+    "HLD/problems/key insights on every hld.md",
+    "revise_dsa/Algo Master 300.md",
+    "LLD/Strategy Pattern.md",
+    "LLD/20 java based lld questions.md",
+    "HLD/problems/job.md",
+    "LLD/SPRING BOOT.md",
+    "LLD/CONCURRENCY.md",
+    "LLD/Untitled 1",
+    "HLD/problems/Database/DELIVERY SYSTEM.md",
+    "LLD/Untitled",
+    "HLD/problems/Database/DROPBOX.md",
+    "HLD/CDN.md",
+    "HLD/problems/Database/BITLY.md",
+    "HLD/problems/Database/ADD CLICK AGGREGATOR.md",
+    "HLD/problems/Database/METRIX MONITORING.md",
+    "HLD/Distributed Caching Strategies.md",
+    "HLD/problems/url shortner.md",
+    "HLD/problems/Database/TYPEAHEAD SYSTEM.md",
+    "HLD/problems/Database/RATE LIMITER.md",
+    "HLD/problems/Database/TINDER.md",
+    "HLD/problems/Database/KEY VALUE STORE.md",
+    "HLD/problems/Database/TICKET MASTER.md",
+    "LLD DOCS/PubSub_LLD_Interview_Guide.docx",
+    "HLD/Attachments/Pasted image 20250412165018.png",
     "HLD/Attachments/Pasted image 20250412164812.png",
     "HLD/Attachments/notification system.png",
     "HLD/Attachments/leetcode.png",
@@ -149,40 +193,11 @@
     "HLD/Attachments/Pasted image 20260320125042.png",
     "HLD/Attachments/Pasted image 20260320125037.png",
     "HLD/problems/ALL HLDS DIAGRAM.md",
-    "HLD/problems/Pasted image 20260320125018.png",
     "HLD/problems/Database/JOB SCHEDULER.md",
-    "revise_dsa/Algo Master 300.md",
     "LLD DOCS/Distributed_Job_Scheduler_LLD_Guide.docx",
-    "HLD/problems/Database/TICKET MASTER.md",
-    "HLD/problems/job.md",
     "HLD/OPTIMISTIC VS PESSIMIST.md",
     "HLD/long polling vs web socket.md",
-    "HLD/GEO Hashing.md",
-    "HLD/geohashing vs quad trees.md",
-    "HLD/Dual Write Problem.md",
-    "HLD/API Gateway.md",
-    "HLD/RAFT VS PAXOS.md",
-    "HLD/Write ahead log.md",
-    "HLD/RBA NOTES.md",
-    "HLD/problems/Database/TYPEAHEAD SYSTEM.md",
-    "HLD/problems/Database/TOP K Video.md",
-    "HLD/problems/Database/TINDER.md",
-    "HLD/problems/Database/NOTIFICATION SYSTEM.md",
-    "HLD/problems/Database/GOOGLE CALENDAR.md",
-    "HLD/Cursor vs Offset Pagination.md",
-    "revise_dsa/hard.md",
-    "revise_dsa/todo.md",
-    "revise_dsa/revise.md",
-    "DSA/Standard Problems.md",
     "HLD/Oauth 2.0/Kafka_LLD_Interview_Guide.docx",
-    "HLD/Oauth 2.0",
-    "LLD DOCS/Kafka_LLD_Interview_Guide.docx",
-    "LLD DOCS/HLD_Tradeoffs_Interview_Guide.docx",
-    "LLD DOCS/distributed_id_generator_lld.docx",
-    "LLD DOCS/amazon_locker_lld.docx",
-    "LLD DOCS/logging_system_lld.docx",
-    "LLD DOCS/splitwise_lld.docx",
-    "LLD DOCS/parking_lot_lld.docx",
-    "HLD/Attachments/key value store 1.png"
+    "HLD/Oauth 2.0"
   ]
 }

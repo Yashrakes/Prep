@@ -5,11 +5,9 @@ import com.HLDLLD.behavioural.Observer.Observable.StockObservable;
 
 public class EmailAlertObserver implements NotAlertObserver{
     String emailId;
-    StockObservable observable;
 
-    public EmailAlertObserver(String emailId, StockObservable stockObservable){
+    public EmailAlertObserver(String emailId){
         this.emailId = emailId;
-        this.observable = stockObservable;
     }
     @Override
     public void update() {

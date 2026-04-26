@@ -1,0 +1,2920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java LLD Interview — 20 Problems</title>
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --bg2: #141414;
+    --bg3: #1a1a1a;
+    --bg4: #222;
+    --border: #2a2a2a;
+    --border2: #333;
+    --text: #e8e8e8;
+    --text2: #999;
+    --text3: #666;
+    --accent: #00d4aa;
+    --accent2: #0099ff;
+    --warn: #f59e0b;
+    --red: #ef4444;
+    --green: #22c55e;
+    --purple: #a78bfa;
+    --mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.7; }
+
+  /* Layout */
+  .shell { display: flex; min-height: 100vh; }
+  .sidebar { width: 280px; min-width: 280px; background: var(--bg2); border-right: 1px solid var(--border); position: sticky; top: 0; height: 100vh; overflow-y: auto; padding: 1.5rem 0; }
+  .main { flex: 1; padding: 2rem; max-width: 900px; }
+
+  /* Sidebar */
+  .sidebar-title { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--text3); padding: 0 1.25rem 1rem; }
+  .sidebar-item { display: flex; align-items: center; gap: 10px; padding: .5rem 1.25rem; cursor: pointer; border-left: 2px solid transparent; transition: all .15s; font-size: 13px; color: var(--text2); }
+  .sidebar-item:hover { background: var(--bg3); color: var(--text); }
+  .sidebar-item.active { border-left-color: var(--accent); color: var(--accent); background: rgba(0,212,170,.06); }
+  .sidebar-num { font-size: 11px; font-weight: 700; font-family: var(--mono); color: var(--text3); min-width: 22px; }
+  .sidebar-item.active .sidebar-num { color: var(--accent); }
+  .sidebar-tag { font-size: 10px; padding: 1px 6px; border-radius: 3px; background: var(--bg4); color: var(--text3); margin-left: auto; }
+
+  /* Problem header */
+  .problem { display: none; }
+  .problem.active { display: block; }
+  .prob-header { margin-bottom: 2rem; }
+  .prob-num { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); font-family: var(--mono); margin-bottom: .5rem; }
+  .prob-title { font-size: 26px; font-weight: 700; line-height: 1.3; margin-bottom: 1rem; }
+  .prob-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag { font-size: 11px; padding: 3px 10px; border-radius: 4px; border: 1px solid var(--border2); color: var(--text2); }
+  .tag.lld { border-color: #a78bfa44; color: var(--purple); }
+  .tag.conc { border-color: #22c55e44; color: var(--green); }
+  .tag.ds { border-color: #0099ff44; color: var(--accent2); }
+  .tag.design { border-color: #f59e0b44; color: var(--warn); }
+
+  /* Cards */
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 1.25rem; overflow: hidden; }
+  .card-head { padding: .75rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .card-label { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 10px; border-radius: 4px; }
+  .label-stmt { background: rgba(167,139,250,.15); color: var(--purple); }
+  .label-brute { background: rgba(239,68,68,.15); color: var(--red); }
+  .label-opt { background: rgba(0,212,170,.15); color: var(--accent); }
+  .label-alt { background: rgba(245,158,11,.15); color: var(--warn); }
+  .label-cmp { background: rgba(0,153,255,.15); color: var(--accent2); }
+  .card-body { padding: 1.25rem; }
+
+  /* Problem statement */
+  .stmt { font-size: 14.5px; line-height: 1.85; color: var(--text); }
+  .stmt strong { color: #fff; font-weight: 600; }
+  .io { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: .85rem 1rem; font-family: var(--mono); font-size: 12.5px; line-height: 1.8; color: #aaa; margin-top: .85rem; }
+  .followup { margin-top: .85rem; padding: .75rem 1rem; background: rgba(245,158,11,.07); border-left: 3px solid var(--warn); border-radius: 0 6px 6px 0; font-size: 13px; color: #c4a05a; line-height: 1.7; }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 6px; margin-bottom: 1rem; flex-wrap: wrap; }
+  .tab-btn { font-size: 12px; padding: 5px 14px; border-radius: 5px; border: 1px solid var(--border2); background: transparent; cursor: pointer; color: var(--text2); font-family: var(--sans); transition: all .15s; }
+  .tab-btn:hover { background: var(--bg3); color: var(--text); }
+  .tab-btn.active { background: rgba(0,212,170,.12); color: var(--accent); border-color: rgba(0,212,170,.3); }
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+
+  /* Code blocks */
+  pre { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 1rem; font-family: var(--mono); font-size: 12px; line-height: 1.75; overflow-x: auto; color: #cdd6f4; white-space: pre; }
+  /* Minimal syntax-ish coloring via span inside pre */
+
+  /* Compare grid */
+  .cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media(max-width:600px){ .cmp-grid { grid-template-columns: 1fr; } }
+  .cmp-col-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text3); margin-bottom: .75rem; }
+  .cmp-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .cmp-row:last-child { border: none; }
+  .cmp-key { color: var(--text2); }
+  .cmp-bad { color: var(--red); font-weight: 600; text-align: right; }
+  .cmp-good { color: var(--green); font-weight: 600; text-align: right; }
+  .verdict { margin-top: 1rem; padding: .75rem 1rem; background: rgba(34,197,94,.07); border-left: 3px solid var(--green); border-radius: 0 6px 6px 0; font-size: 13px; color: #7ec99a; line-height: 1.7; }
+
+  /* Nav */
+  .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+  .nav-btn { padding: 8px 20px; border-radius: 6px; border: 1px solid var(--border2); background: transparent; cursor: pointer; font-size: 13px; color: var(--text); font-family: var(--sans); transition: all .15s; }
+  .nav-btn:hover { background: var(--bg3); }
+  .nav-btn:disabled { opacity: .3; cursor: default; }
+  .nav-pos { font-size: 13px; color: var(--text3); font-family: var(--mono); }
+
+  /* Progress */
+  .progress-bar { height: 2px; background: var(--border); margin: 0 1.25rem 1.5rem; border-radius: 2px; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width .3s; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg2); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-title">20 LLD Problems</div>
+  <div class="progress-bar"><div class="progress-fill" id="prog" style="width:5%"></div></div>
+  <div id="nav-list"></div>
+</nav>
+
+<!-- MAIN -->
+<main class="main" id="main-content"></main>
+
+</div>
+
+<script>
+const problems = [
+{
+  title: "Thread-Safe Event Bus",
+  tags: ["LLD","Concurrency","Pub-Sub"],
+  tagClass: ["lld","conc","conc"],
+  stmt: `Design an in-memory <strong>Event Bus (Pub-Sub system)</strong> where:
+<br><br>— Multiple publishers can publish events of different types <strong>concurrently</strong>
+<br>— Subscribers can subscribe/unsubscribe to specific event types at <strong>runtime</strong>
+<br>— Subscribers notified <strong>asynchronously</strong> via a thread pool
+<br>— <strong>Thread-safe</strong> without blocking publishers
+<br>— Support <strong>wildcard subscribers</strong> (receive all event types)
+<br>— Subscriber exceptions must not affect other subscribers`,
+  io: `eventBus.subscribe("ORDER_PLACED", e -> processOrder(e));
+eventBus.subscribe("*", e -> auditLog(e));  // wildcard
+eventBus.publish(new Event("ORDER_PLACED", payload));
+// Both subscribers notified async, independently`,
+  followup: "Follow-ups: How to guarantee event ordering? What if a subscriber is slow — drop or queue? How to add dead-letter queue?",
+  bruteTitle: "synchronized on whole publish() method",
+  brute: `public class NaiveEventBus {
+    private final Map<String, List<Consumer<Event>>> listeners = new HashMap<>();
+
+    // PROBLEM 1: Publisher blocks until ALL subscribers finish
+    // PROBLEM 2: ConcurrentModificationException if subscribe() called mid-publish
+    // PROBLEM 3: One subscriber exception kills the rest
+    // PROBLEM 4: No wildcard support
+    public synchronized void publish(Event event) {
+        List<Consumer<Event>> handlers = listeners.getOrDefault(
+            event.type(), Collections.emptyList());
+        for (Consumer<Event> h : handlers) {
+            h.accept(event);  // BLOCKING — kills publisher throughput
+        }
+    }
+}`,
+  tabs: ["Event record","EventBus core","Demo"],
+  optimal: [
+`// Java 16+ record — immutable, thread-safe by design
+public record Event(String type, Object payload, Instant occurredAt) {
+    public Event(String type, Object payload) {
+        this(type, payload, Instant.now());
+    }
+}`,
+`public final class EventBus {
+    // CopyOnWriteArrayList: reads are lock-free snapshots
+    // writes (subscribe/unsubscribe) are infrequent — COW cost acceptable
+    private final Map<String, CopyOnWriteArrayList<Consumer<Event>>>
+        subscribers = new ConcurrentHashMap<>();
+
+    private static final String WILDCARD = "*";
+
+    // Virtual threads (Java 21) — no pool sizing, millions can exist
+    private final ExecutorService executor =
+        Executors.newVirtualThreadPerTaskExecutor();
+
+    public void subscribe(String eventType, Consumer<Event> handler) {
+        subscribers.computeIfAbsent(eventType,
+            k -> new CopyOnWriteArrayList<>()).add(handler);
+    }
+
+    public void unsubscribe(String eventType, Consumer<Event> handler) {
+        subscribers.getOrDefault(eventType, new CopyOnWriteArrayList<>())
+                   .remove(handler);
+    }
+
+    // Publisher NEVER blocks — fire and forget
+    public void publish(Event event) {
+        // Merge specific + wildcard subscribers using Stream
+        Stream.concat(
+            Optional.ofNullable(subscribers.get(event.type()))
+                    .stream().flatMap(Collection::stream),
+            Optional.ofNullable(subscribers.get(WILDCARD))
+                    .stream().flatMap(Collection::stream)
+        ).forEach(handler ->
+            executor.submit(() -> safeInvoke(handler, event))
+        );
+    }
+
+    private void safeInvoke(Consumer<Event> handler, Event event) {
+        try { handler.accept(event); }
+        catch (Exception ex) {
+            // Isolated — other subscribers unaffected
+            System.err.printf("[EventBus] handler failed: %s%n", ex.getMessage());
+        }
+    }
+}`,
+`var bus = new EventBus();
+bus.subscribe("*", e -> System.out.println("[AUDIT] " + e.type()));
+bus.subscribe("ORDER_PLACED", e -> System.out.println("[ORDER] " + e.payload()));
+bus.subscribe("ORDER_PLACED", e -> { throw new RuntimeException("downstream down"); });
+
+bus.publish(new Event("ORDER_PLACED", Map.of("id", 101)));
+bus.publish(new Event("USER_SIGNUP", Map.of("email", "y@db.com")));`
+  ],
+  altTitle: "Bounded thread pool (if Virtual Threads unavailable)",
+  alt: `private final ExecutorService executor = new ThreadPoolExecutor(
+    4, 16, 60L, TimeUnit.SECONDS,
+    new LinkedBlockingQueue<>(1000),
+    new ThreadPoolExecutor.CallerRunsPolicy() // backpressure on full queue
+);`,
+  cmpRows: [
+    ["Publisher blocks?","Yes — on every notify","Never — fire & forget"],
+    ["ConcurrentModification?","Yes during iteration","Impossible — COWAL snapshot"],
+    ["Subscriber isolation?","None — one fails = all fail","Full — try/catch per handler"],
+    ["Wildcard support?","No","Yes — Stream.concat merge"],
+    ["Throughput","O(n subscribers) latency","O(1) publish, parallel notify"],
+  ],
+  verdict: "Key APIs: CopyOnWriteArrayList (lock-free iteration snapshot), ConcurrentHashMap, VirtualThreadExecutor, Stream.concat, Optional.ofNullable — each solves one specific concurrency or correctness problem."
+},
+
+{
+  title: "Generic LRU Cache with TTL",
+  tags: ["LLD","Collections","Generics"],
+  tagClass: ["lld","ds","ds"],
+  stmt: `Design a <strong>generic, thread-safe LRU Cache</strong> with these properties:
+<br><br>— Fixed capacity; when full, evict the <strong>least recently used</strong> entry
+<br>— Each entry has a configurable <strong>TTL (time-to-live)</strong>; expired entries return empty
+<br>— <strong>get() counts as a use</strong> — refreshes recency
+<br>— Support <strong>generic &lt;K,V&gt; types</strong>
+<br>— <strong>Thread-safe</strong> with concurrent read/write support
+<br>— <strong>O(1) get and put</strong> — interviewer will specifically probe this`,
+  io: `var cache = new LRUCache<String, User>(3, Duration.ofMinutes(5));
+cache.put("u1", new User("Yash"));
+cache.get("u1");   // Optional[User] — u1 becomes MRU
+cache.put("u4", u4); // evicts LRU entry
+// after 5 min: cache.get("u1") -> Optional.empty()`,
+  followup: "Follow-ups: Lazy vs eager TTL cleanup? How to add eviction listener? Memory overhead of your approach? How does LinkedHashMap achieve O(1) LRU?",
+  bruteTitle: "synchronized + separate TTL Map scanned on every get()",
+  brute: `// PROBLEM 1: O(n) TTL scan on every get()
+// PROBLEM 2: move-to-front not tracked = LRU broken
+// PROBLEM 3: synchronized = readers block readers
+// PROBLEM 4: race condition creating duplicate entries
+public synchronized String get(String key) {
+    // Scanning ALL entries to find expired ones — O(n)!
+    expiryMap.entrySet().removeIf(e -> e.getValue() < System.currentTimeMillis());
+    return cache.get(key); // may return stale data
+}
+
+// Also wrong: LinkedHashMap without thread-safety
+private final Map<String, String> cache = new LinkedHashMap<>(16, 0.75f, true) {
+    protected boolean removeEldestEntry(Map.Entry e) { return size() > capacity; }
+};
+// accessOrder=true does LRU but: not thread-safe, no TTL, hardcoded types`,
+  tabs: ["Node","LRUCache","get/put","Demo"],
+  optimal: [
+`// Each node: key (for reverse eviction lookup), value, expiry, list pointers
+private static final class Node<K, V> {
+    K key; V value; Instant expiresAt;
+    Node<K, V> prev, next;
+
+    Node(K key, V value, Duration ttl) {
+        this.key = key; this.value = value;
+        this.expiresAt = Instant.now().plus(ttl);
+    }
+    boolean isExpired() { return Instant.now().isAfter(expiresAt); }
+}`,
+`public final class LRUCache<K, V> {
+    private final int capacity;
+    private final Duration ttl;
+    private final Map<K, Node<K, V>> map;
+
+    // Sentinel head/tail — eliminates null checks everywhere
+    // head.next = MRU | tail.prev = LRU (eviction target)
+    private final Node<K,V> head = new Node<>(null, null, Duration.ZERO);
+    private final Node<K,V> tail = new Node<>(null, null, Duration.ZERO);
+
+    // ReadWriteLock: concurrent readers OR exclusive writer
+    private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
+
+    public LRUCache(int capacity, Duration ttl) {
+        this.capacity = capacity; this.ttl = ttl;
+        this.map = new HashMap<>(capacity);
+        head.next = tail; tail.prev = head;
+    }
+
+    private void removeNode(Node<K,V> n) {
+        n.prev.next = n.next; n.next.prev = n.prev;
+    }
+    private void insertAfterHead(Node<K,V> n) {
+        n.next = head.next; n.prev = head;
+        head.next.prev = n; head.next = n;
+    }
+    private void evictLRU() {
+        Node<K,V> lru = tail.prev;
+        if (lru == head) return;
+        removeNode(lru); map.remove(lru.key);
+    }`,
+`    public Optional<V> get(K key) {
+        // Java doesn't support lock upgrading (read->write).
+        // Must release read lock, acquire write lock, then DOUBLE-CHECK.
+        rwLock.writeLock().lock();
+        try {
+            Node<K,V> node = map.get(key);
+            if (node == null) return Optional.empty();
+            if (node.isExpired()) {
+                removeNode(node); map.remove(key);
+                return Optional.empty();
+            }
+            removeNode(node); insertAfterHead(node); // O(1) promote to MRU
+            return Optional.of(node.value);
+        } finally { rwLock.writeLock().unlock(); }
+    }
+
+    public void put(K key, V value) {
+        rwLock.writeLock().lock();
+        try {
+            Node<K,V> existing = map.get(key);
+            if (existing != null) {
+                existing.value = value;
+                existing.expiresAt = Instant.now().plus(ttl);
+                removeNode(existing); insertAfterHead(existing);
+                return;
+            }
+            if (map.size() >= capacity) evictLRU();
+            Node<K,V> n = new Node<>(key, value, ttl);
+            map.put(key, n); insertAfterHead(n);
+        } finally { rwLock.writeLock().unlock(); }
+    }`,
+`var cache = new LRUCache<String, String>(3, Duration.ofSeconds(2));
+cache.put("u1","Yash"); cache.put("u2","Priya"); cache.put("u3","Raj");
+cache.get("u1"); // u1 = MRU, order: u1 > u3 > u2
+
+cache.put("u4","Amit"); // evicts u2 (LRU)
+System.out.println(cache.get("u2")); // Optional.empty
+
+Thread.sleep(2500); // TTL expires
+System.out.println(cache.get("u1")); // Optional.empty`
+  ],
+  altTitle: "Quick answer with LinkedHashMap (mention limitations)",
+  alt: `public class QuickLRU<K,V> extends LinkedHashMap<K,V> {
+    private final int max;
+    public QuickLRU(int max) { super(max, 0.75f, true); this.max = max; }
+    protected boolean removeEldestEntry(Map.Entry<K,V> e) { return size() > max; }
+}
+// Wrap: Collections.synchronizedMap(new QuickLRU<>(100))
+// Limitations: coarse lock, no TTL, no eviction listener`,
+  cmpRows: [
+    ["get() complexity","O(n) with TTL scan","O(1) always"],
+    ["put() complexity","O(n) eviction search","O(1) always"],
+    ["TTL support","None or O(n) scan","O(1) lazy per-entry"],
+    ["Thread safety","synchronized (coarse)","ReentrantReadWriteLock"],
+    ["Generic?","Hardcoded types","Full <K,V> generics"],
+  ],
+  verdict: "Sentinel nodes (dummy head/tail) are the key trick — they eliminate null checks in removeNode/insertAfterHead making every pointer operation branchless. The key stored in each Node enables O(1) map.remove(lru.key) during eviction."
+},
+
+{
+  title: "Multi-User Token Bucket Rate Limiter",
+  tags: ["LLD","Concurrency","System Design"],
+  tagClass: ["lld","conc","design"],
+  stmt: `Design a <strong>thread-safe per-user Rate Limiter</strong> using the Token Bucket algorithm:
+<br><br>— Each user gets a bucket with <strong>max capacity N tokens</strong>
+<br>— Tokens <strong>refill at a steady rate</strong> (not all at once)
+<br>— Requests consume 1 token; if bucket empty → <strong>reject immediately</strong>
+<br>— Multiple threads for the <strong>same or different users</strong> concurrently
+<br>— Buckets for <strong>inactive users must not leak memory</strong>
+<br>— Expose <strong>tryAcquire(userId)</strong> returning true/false`,
+  io: `var limiter = new RateLimiter(10, 5, Duration.ofSeconds(1));
+limiter.tryAcquire("user_yash"); // true
+// after 10 rapid calls...
+limiter.tryAcquire("user_yash"); // false — bucket empty`,
+  followup: "Follow-ups: Token Bucket vs Fixed Window vs Sliding Window? Burst risk at refill boundary? How to distribute across multiple servers using Redis + Lua?",
+  bruteTitle: "Background thread per user for refill",
+  brute: `// WRONG: 1 scheduled thread PER USER — at 1M users = 1M threads
+class NaiveBucket {
+    private int tokens;
+    NaiveBucket(int cap, int rate) {
+        tokens = cap;
+        // Spawns a thread even for idle users — massive overhead
+        Executors.newSingleThreadScheduledExecutor()
+            .scheduleAtFixedRate(() -> tokens = Math.min(cap, tokens + rate),
+                1, 1, TimeUnit.SECONDS);
+    }
+    // Not atomic — data race between refill thread and request thread
+    public synchronized boolean tryAcquire() {
+        if (tokens > 0) { tokens--; return true; }
+        return false;
+    }
+}
+// Also: Map<String, NaiveBucket> with plain HashMap — not thread-safe
+// Two threads see get() return null and both create a new bucket for same user`,
+  tabs: ["TokenBucket","RateLimiter","Cleanup","Demo"],
+  optimal: [
+`// Virtual refill: no background thread per user.
+// On each tryAcquire(), calculate elapsed time and derive earned tokens.
+// This is how Redis implements it internally.
+final class TokenBucket {
+    private final long capacity;
+    private final double tokensPerNano;
+    private final AtomicLong tokensScaled; // fixed-point: actual = raw / 1e9
+    private volatile long lastNanos;
+    volatile long lastAccessMs = System.currentTimeMillis();
+    private static final long SCALE = 1_000_000_000L;
+
+    TokenBucket(long capacity, double tokensPerSecond) {
+        this.capacity = capacity;
+        this.tokensPerNano = tokensPerSecond / 1_000_000_000.0;
+        this.tokensScaled = new AtomicLong(capacity * SCALE);
+        this.lastNanos = System.nanoTime();
+    }
+
+    boolean tryAcquire() {
+        lastAccessMs = System.currentTimeMillis();
+        long now = System.nanoTime(); // monotonic — never goes backwards
+        long elapsed = now - lastNanos;
+        long earned = (long)(elapsed * tokensPerNano * SCALE);
+        if (earned > 0) {
+            tokensScaled.updateAndGet(c -> Math.min(capacity * SCALE, c + earned));
+            lastNanos = now;
+        }
+        // Atomic CAS: consume 1 token or leave unchanged
+        long after = tokensScaled.updateAndGet(c -> c >= SCALE ? c - SCALE : c);
+        return after < tokensScaled.get() + SCALE; // did it decrease?
+    }
+}`,
+`public final class RateLimiter {
+    private final long capacity;
+    private final double tokensPerSecond;
+    // ConcurrentHashMap: per-user bucket isolation
+    // Different users NEVER contend on each other
+    private final ConcurrentHashMap<String, TokenBucket> buckets =
+        new ConcurrentHashMap<>();
+
+    public RateLimiter(long capacity, long refill, Duration per) {
+        this.capacity = capacity;
+        this.tokensPerSecond = (double) refill / per.toSeconds();
+    }
+
+    public boolean tryAcquire(String userId) {
+        // computeIfAbsent is atomic — no duplicate bucket race
+        return buckets.computeIfAbsent(userId,
+            k -> new TokenBucket(capacity, tokensPerSecond)).tryAcquire();
+    }
+}`,
+`// One daemon thread for ALL users — cleanup inactive buckets
+private final ScheduledExecutorService cleaner =
+    Executors.newSingleThreadScheduledExecutor(r -> {
+        Thread t = new Thread(r, "rl-cleaner");
+        t.setDaemon(true); // dies with JVM
+        return t;
+    });
+
+// In constructor:
+cleaner.scheduleAtFixedRate(() -> {
+    long cutoff = System.currentTimeMillis() - idleEvictMs;
+    // removeIf on ConcurrentHashMap entrySet is thread-safe
+    buckets.entrySet().removeIf(e -> e.getValue().lastAccessMs < cutoff);
+}, 1, 1, TimeUnit.MINUTES);`,
+`var limiter = new RateLimiter(5, 2, Duration.ofSeconds(1));
+// Burst: consume all 5 tokens
+for (int i = 0; i < 5; i++) limiter.tryAcquire("yash"); // all true
+limiter.tryAcquire("yash"); // false — empty
+
+Thread.sleep(1000); // earn ~2 tokens
+limiter.tryAcquire("yash"); // true
+limiter.tryAcquire("yash"); // true
+limiter.tryAcquire("yash"); // false — only 2 refilled`
+  ],
+  altTitle: "Sliding Window Counter (simpler, less burst-friendly)",
+  alt: `// Count requests per sliding window using a ConcurrentHashMap<String, Deque<Long>>
+// Store timestamps of recent requests; remove those older than window duration.
+// Accurate but O(n) memory per user — fine for low-traffic, bad at scale.`,
+  cmpRows: [
+    ["Refill mechanism","1 thread per user","Lazy math on each call"],
+    ["Memory per idle user","~512KB (thread stack)","~64 bytes (object)"],
+    ["Race on bucket creation","Yes — HashMap.put race","None — computeIfAbsent"],
+    ["tryAcquire() speed","Synchronized monitor","Lock-free CAS (AtomicLong)"],
+    ["1M users cost","~512GB thread stacks","~64MB objects"],
+  ],
+  verdict: "System.nanoTime() (not currentTimeMillis) is mandatory for elapsed time — wall clock can jump backwards on NTP sync, making elapsed time negative and corrupting refill math. AtomicLong.updateAndGet() provides lock-free CAS without any mutex."
+},
+
+{
+  title: "Blocking Bounded Queue from Scratch",
+  tags: ["LLD","Concurrency","Data Structures"],
+  tagClass: ["lld","conc","ds"],
+  stmt: `Implement a <strong>thread-safe bounded blocking queue</strong> from scratch (without using Java's BlockingQueue implementations):
+<br><br>— Fixed capacity; <strong>put() blocks</strong> when queue is full until space available
+<br>— <strong>take() blocks</strong> when queue is empty until an element is added
+<br>— Support <strong>offer(e, timeout)</strong> and <strong>poll(timeout)</strong> with timeout
+<br>— Must work correctly with <strong>multiple producers and multiple consumers</strong>
+<br>— Implement using <strong>ReentrantLock + Condition</strong> (not synchronized)`,
+  io: `var queue = new BoundedBlockingQueue<String>(3);
+// Producer thread:
+queue.put("task-1");  // blocks if full
+// Consumer thread:
+String t = queue.take(); // blocks if empty
+queue.offer("task", 100, TimeUnit.MILLISECONDS); // returns false on timeout`,
+  followup: "Follow-ups: Why use ReentrantLock over synchronized? Why two Conditions (notFull, notEmpty) instead of one? How does this compare to ArrayBlockingQueue internals?",
+  bruteTitle: "synchronized + Thread.sleep() polling",
+  brute: `// WRONG: busy-waiting with sleep() — wastes CPU, adds latency
+public synchronized void put(T item) throws InterruptedException {
+    // Polling loop — burns CPU checking repeatedly
+    while (queue.size() == capacity) {
+        Thread.sleep(10); // arbitrary wait — latency + CPU waste
+        // Also: releases lock during sleep? NO — synchronized holds it!
+        // So other threads CAN'T add to queue while this sleeps — deadlock!
+    }
+    queue.add(item);
+}
+
+// ALSO WRONG: using wait/notifyAll on the whole object
+// notifyAll() wakes ALL threads — even producers waiting on full queue
+// A producer wakes, checks if full (still is), goes back to wait
+// This causes thundering herd — wasted context switches`,
+  tabs: ["Implementation","Demo"],
+  optimal: [
+`import java.util.concurrent.locks.*;
+
+public final class BoundedBlockingQueue<T> {
+    private final Object[] data;
+    private int head, tail, count;
+    private final int capacity;
+
+    private final ReentrantLock lock = new ReentrantLock();
+    // Two separate Conditions: producers wait on notFull, consumers on notEmpty
+    // This avoids waking producers when a producer should wake, and vice versa
+    private final Condition notFull  = lock.newCondition();
+    private final Condition notEmpty = lock.newCondition();
+
+    public BoundedBlockingQueue(int capacity) {
+        this.capacity = capacity;
+        this.data = new Object[capacity];
+    }
+
+    public void put(T item) throws InterruptedException {
+        lock.lock();
+        try {
+            while (count == capacity) notFull.await(); // block producer
+            data[tail] = item;
+            tail = (tail + 1) % capacity; // circular buffer
+            count++;
+            notEmpty.signal(); // wake ONE consumer — not all
+        } finally { lock.unlock(); }
+    }
+
+    @SuppressWarnings("unchecked")
+    public T take() throws InterruptedException {
+        lock.lock();
+        try {
+            while (count == 0) notEmpty.await(); // block consumer
+            T item = (T) data[head];
+            data[head] = null; // help GC
+            head = (head + 1) % capacity;
+            count--;
+            notFull.signal(); // wake ONE producer
+            return item;
+        } finally { lock.unlock(); }
+    }
+
+    public boolean offer(T item, long timeout, TimeUnit unit)
+            throws InterruptedException {
+        lock.lock();
+        try {
+            long nanos = unit.toNanos(timeout);
+            while (count == capacity) {
+                if (nanos <= 0) return false; // timed out
+                nanos = notFull.awaitNanos(nanos); // returns remaining nanos
+            }
+            data[tail] = item;
+            tail = (tail + 1) % capacity;
+            count++;
+            notEmpty.signal();
+            return true;
+        } finally { lock.unlock(); }
+    }
+
+    public T poll(long timeout, TimeUnit unit) throws InterruptedException {
+        lock.lock();
+        try {
+            long nanos = unit.toNanos(timeout);
+            while (count == 0) {
+                if (nanos <= 0) return null;
+                nanos = notEmpty.awaitNanos(nanos);
+            }
+            @SuppressWarnings("unchecked") T item = (T) data[head];
+            data[head] = null;
+            head = (head + 1) % capacity;
+            count--;
+            notFull.signal();
+            return item;
+        } finally { lock.unlock(); }
+    }
+
+    public int size() {
+        lock.lock(); try { return count; } finally { lock.unlock(); }
+    }
+}`,
+`var q = new BoundedBlockingQueue<Integer>(3);
+
+// Producer thread
+Thread producer = Thread.ofVirtual().start(() -> {
+    for (int i = 0; i < 10; i++) {
+        try { q.put(i); System.out.println("put: " + i); }
+        catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+    }
+});
+
+// Consumer threads
+for (int i = 0; i < 2; i++) {
+    Thread.ofVirtual().start(() -> {
+        for (int j = 0; j < 5; j++) {
+            try { System.out.println("took: " + q.take()); }
+            catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+        }
+    });
+}
+producer.join();`
+  ],
+  altTitle: "If using standard library is OK",
+  alt: `// ArrayBlockingQueue uses the exact same pattern internally:
+// ReentrantLock + notFull Condition + notEmpty Condition + circular array
+// Mention this to show you know the JDK internals match your implementation.
+BlockingQueue<String> q = new ArrayBlockingQueue<>(100);
+q.put("item");
+q.poll(100, TimeUnit.MILLISECONDS);`,
+  cmpRows: [
+    ["Blocking mechanism","Thread.sleep() polling","Condition.await() — OS signal"],
+    ["CPU while waiting","Wastes CPU in loop","Zero — thread parked"],
+    ["Wake precision","Wakes after sleep ms","Wakes immediately on signal"],
+    ["Spurious wakeup safe?","No","Yes — while loop re-checks"],
+    ["Producer/consumer mix?","notifyAll wakes everyone","signal() wakes exactly one"],
+  ],
+  verdict: "Two Conditions (notFull, notEmpty) is the critical insight. With one Condition or notifyAll(), a producer waking up another producer (instead of a consumer) causes unnecessary context switches — called the thundering herd problem. signal() on the correct Condition fixes it."
+},
+
+{
+  title: "Thread Pool Executor from Scratch",
+  tags: ["LLD","Concurrency","Core Java"],
+  tagClass: ["lld","conc","conc"],
+  stmt: `Implement a <strong>fixed-size Thread Pool Executor</strong> from scratch:
+<br><br>— Fixed number of <strong>worker threads</strong> created at startup
+<br>— <strong>submit(Runnable)</strong> adds task to internal queue; worker picks it up
+<br>— Workers <strong>block when queue is empty</strong> — no busy waiting
+<br>— <strong>shutdown()</strong> stops accepting new tasks, drains queue, terminates workers
+<br>— <strong>shutdownNow()</strong> interrupts workers immediately
+<br>— Track pool state: RUNNING → SHUTDOWN → TERMINATED`,
+  io: `var pool = new MyThreadPool(4); // 4 worker threads
+pool.submit(() -> processOrder(id));
+pool.submit(() -> sendEmail(user));
+pool.shutdown(); // waits for submitted tasks to finish
+pool.awaitTermination(10, TimeUnit.SECONDS);`,
+  followup: "Follow-ups: What's the difference between shutdown() and shutdownNow()? How does Java's ThreadPoolExecutor handle task rejection? What is a ForkJoinPool and when would you use it instead?",
+  bruteTitle: "New thread per task — no pooling",
+  brute: `// WRONG: spawning a new thread for every task
+// Thread creation cost: ~1ms + ~512KB stack — expensive at scale
+public class NaivePool {
+    public void submit(Runnable task) {
+        new Thread(task).start(); // new OS thread every time
+        // At 10k tasks/sec: 10k thread creations, context-switch chaos
+        // No bounding: unlimited threads = OOM or scheduler thrashing
+        // No shutdown semantics: no way to drain in-flight tasks
+    }
+}`,
+  tabs: ["WorkerThread","ThreadPool","Demo"],
+  optimal: [
+`// Worker thread: loops forever pulling tasks from the queue
+// Terminates when it receives a special POISON_PILL sentinel
+private static final Runnable POISON_PILL = () -> {};
+
+private class Worker implements Runnable {
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                Runnable task = taskQueue.take(); // blocks until work available
+                if (task == POISON_PILL) {
+                    taskQueue.put(POISON_PILL); // re-enqueue for other workers
+                    break; // this worker exits
+                }
+                try { task.run(); }
+                catch (Exception e) {
+                    // Log but don't kill worker — worker survives task exceptions
+                    System.err.println("Task failed: " + e.getMessage());
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break; // shutdownNow() interrupted us
+            }
+        }
+    }
+}`,
+`public final class MyThreadPool {
+    enum State { RUNNING, SHUTDOWN, TERMINATED }
+
+    private final BlockingQueue<Runnable> taskQueue;
+    private final List<Thread> workers;
+    private volatile State state = State.RUNNING;
+    private final int poolSize;
+
+    public MyThreadPool(int poolSize) {
+        this.poolSize = poolSize;
+        this.taskQueue = new LinkedBlockingQueue<>();
+        this.workers = new ArrayList<>(poolSize);
+        for (int i = 0; i < poolSize; i++) {
+            Thread t = new Thread(new Worker(), "pool-worker-" + i);
+            t.start();
+            workers.add(t);
+        }
+    }
+
+    public void submit(Runnable task) {
+        if (state != State.RUNNING)
+            throw new RejectedExecutionException("Pool is shutting down");
+        taskQueue.offer(task); // non-blocking put; queue is unbounded here
+    }
+
+    public void shutdown() {
+        state = State.SHUTDOWN;
+        taskQueue.offer(POISON_PILL); // one pill starts the cascade
+    }
+
+    public void shutdownNow() {
+        state = State.SHUTDOWN;
+        taskQueue.clear(); // discard pending tasks
+        workers.forEach(Thread::interrupt); // wake and kill all workers
+    }
+
+    public void awaitTermination(long timeout, TimeUnit unit)
+            throws InterruptedException {
+        long deadline = System.currentTimeMillis() + unit.toMillis(timeout);
+        for (Thread w : workers) {
+            long remaining = deadline - System.currentTimeMillis();
+            if (remaining <= 0) break;
+            w.join(remaining);
+        }
+        state = State.TERMINATED;
+    }
+}`,
+`var pool = new MyThreadPool(3);
+var latch = new CountDownLatch(10);
+
+for (int i = 0; i < 10; i++) {
+    final int id = i;
+    pool.submit(() -> {
+        System.out.println("Task " + id + " on " + Thread.currentThread().getName());
+        latch.countDown();
+    });
+}
+latch.await(); // wait for all tasks
+pool.shutdown();
+pool.awaitTermination(5, TimeUnit.SECONDS);
+System.out.println("Pool terminated");`
+  ],
+  altTitle: "Using Java's ThreadPoolExecutor directly (know its parameters)",
+  alt: `// Know all 7 constructor parameters — interviewers ask about each
+new ThreadPoolExecutor(
+    4,                           // corePoolSize
+    8,                           // maximumPoolSize
+    60L, TimeUnit.SECONDS,       // keepAlive for surplus threads
+    new LinkedBlockingQueue<>(100), // work queue (bounded!)
+    Executors.defaultThreadFactory(),
+    new ThreadPoolExecutor.CallerRunsPolicy() // rejection handler
+);`,
+  cmpRows: [
+    ["Thread creation","Per task — O(1) but expensive","Once at startup — amortized"],
+    ["Task queuing","No queue — immediate thread","BlockingQueue — bounded burst"],
+    ["Exception handling","Kills thread on exception","Worker survives, logs & continues"],
+    ["Shutdown semantics","None","RUNNING→SHUTDOWN→TERMINATED"],
+    ["Peak throughput","Degrades — too many threads","Stable — fixed concurrency"],
+  ],
+  verdict: "The POISON_PILL pattern is elegant: one poison pill triggers cascade shutdown without any AtomicBoolean polling. The key insight is that workers re-enqueue the pill for their siblings before exiting, so N workers need only 1 pill injected."
+},
+
+{
+  title: "Lazy Singleton with Double-Checked Locking",
+  tags: ["LLD","Core Java","Patterns"],
+  tagClass: ["lld","ds","design"],
+  stmt: `Implement a <strong>thread-safe Singleton</strong> in Java that:
+<br><br>— Is <strong>lazily initialized</strong> — not created until first use
+<br>— Only creates the instance <strong>once across all threads</strong>, even under high concurrency
+<br>— Does not acquire a lock on every subsequent <strong>getInstance()</strong> call
+<br>— Works correctly on <strong>modern multi-core CPUs</strong> (memory visibility)
+<br>— Is <strong>serialization-safe</strong> and <strong>reflection-safe</strong>
+<br><br>Then explain <strong>why the enum approach is preferred</strong> and when to use each.`,
+  io: `DatabaseConnection conn1 = DatabaseConnection.getInstance();
+DatabaseConnection conn2 = DatabaseConnection.getInstance();
+assert conn1 == conn2; // same instance guaranteed`,
+  followup: "Follow-ups: What is the memory model problem with DCL before Java 5? Why does volatile fix it? Why does enum Singleton beat DCL? How do you break a Singleton with reflection?",
+  bruteTitle: "synchronized getInstance() — works but locks every call",
+  brute: `// WRONG: synchronized on every getInstance() call
+// Even after initialization, every thread pays the lock cost
+// Under high contention (e.g. 10k requests/sec): lock bottleneck
+public class NaiveSingleton {
+    private static NaiveSingleton instance;
+
+    public static synchronized NaiveSingleton getInstance() {
+        if (instance == null) instance = new NaiveSingleton();
+        return instance; // lock acquired even after instance exists — wasteful
+    }
+}
+
+// ALSO WRONG: DCL without volatile (pre-Java 5 classic bug)
+public static NaiveSingleton getInstance() {
+    if (instance == null) {           // Check 1 — no lock
+        synchronized(NaiveSingleton.class) {
+            if (instance == null)     // Check 2 — with lock
+                instance = new NaiveSingleton(); // BUG: JVM may reorder:
+                // 1. allocate memory, 2. assign reference (instance != null),
+                // 3. run constructor — another thread sees non-null but unconstructed!
+        }
+    }
+    return instance;
+}`,
+  tabs: ["DCL (volatile)","Holder idiom","Enum (best)"],
+  optimal: [
+`// APPROACH 1: Double-Checked Locking with volatile
+// volatile guarantees: write to instance HAPPENS-BEFORE any read
+// This prevents the CPU/JVM from reordering constructor + assignment
+public final class DatabaseConnection {
+    // volatile: prevents instruction reordering around construction
+    private static volatile DatabaseConnection instance;
+    private final String url;
+
+    private DatabaseConnection() {
+        this.url = System.getenv("DB_URL"); // expensive init
+    }
+
+    public static DatabaseConnection getInstance() {
+        if (instance == null) {                    // fast path — no lock
+            synchronized (DatabaseConnection.class) {
+                if (instance == null) {            // double check under lock
+                    instance = new DatabaseConnection(); // volatile write
+                }
+            }
+        }
+        return instance; // volatile read — sees latest write
+    }
+}
+// volatile cost: slightly more expensive read than non-volatile
+// But: no lock after initialization — O(1) amortized`,
+`// APPROACH 2: Initialization-on-Demand Holder idiom (cleanest DCL alternative)
+// The JVM guarantees class loading is thread-safe.
+// Inner class Holder is only loaded when getInstance() is first called.
+// Zero synchronization, zero volatile — JVM class loader does it for free.
+public final class DatabaseConnection {
+    private DatabaseConnection() {}
+
+    private static final class Holder {
+        // This field is written ONCE when Holder class loads — JVM guarantees safety
+        static final DatabaseConnection INSTANCE = new DatabaseConnection();
+    }
+
+    public static DatabaseConnection getInstance() {
+        return Holder.INSTANCE; // triggers Holder class loading if first time
+    }
+}
+// No synchronized. No volatile. Thread-safe. Lazy. Zero overhead after init.
+// This is Joshua Bloch's recommendation from Effective Java.`,
+`// APPROACH 3: Enum Singleton — the gold standard
+// JVM guarantees enum instances are created once, thread-safely, by the classloader.
+// Serialization-safe: JVM prevents duplicate deserialization automatically.
+// Reflection-safe: cannot call newInstance() on an enum — throws exception.
+public enum DatabaseConnection {
+    INSTANCE;
+
+    private final String url = System.getenv("DB_URL");
+
+    public Connection getConnection() {
+        return DriverManager.getConnection(url);
+    }
+}
+
+// Usage:
+DatabaseConnection.INSTANCE.getConnection();
+
+// Why enum beats everything:
+// - Serializable for free (but only ONE instance survives deserialization)
+// - Reflection cannot break it (enum constructors are protected by JVM)
+// - Zero boilerplate
+// Limitation: cannot lazily initialize with parameters passed to constructor`
+  ],
+  altTitle: "When NOT to use Singleton (important for interviews)",
+  alt: `// Singleton = global state = testing nightmare.
+// Prefer dependency injection (Spring @Bean, Guice) — same one-instance guarantee
+// but testable (you can inject mocks).
+// If someone asks "how do you test a Singleton?" — the answer is: refactor to DI.
+@Bean // Spring creates exactly one instance, injected wherever needed
+public DatabaseConnection databaseConnection() {
+    return new DatabaseConnection(url);
+}`,
+  cmpRows: [
+    ["Lock on every get()?","Yes — even after init","No — only during init"],
+    ["Memory visibility fix?","No (missing volatile)","Yes — volatile / classloader"],
+    ["Reflection-proof?","No","Enum: yes. DCL: no."],
+    ["Serialization-proof?","No","Enum: yes. Others: no."],
+    ["Testability?","Poor — global state","Better with DI pattern"],
+  ],
+  verdict: "The Initialization-on-Demand Holder idiom is the pragmatic sweet spot: zero synchronization overhead, true lazy init, correct memory model — leveraging the JVM class loading guarantee that Java developers often overlook."
+},
+
+{
+  title: "Consistent Hash Ring",
+  tags: ["LLD","System Design","Distributed"],
+  tagClass: ["lld","design","design"],
+  stmt: `Implement a <strong>Consistent Hash Ring</strong> used in distributed caching systems:
+<br><br>— Add and remove <strong>server nodes</strong> dynamically
+<br>— For a given <strong>key, route to the correct server</strong> (clockwise nearest node)
+<br>— Support <strong>virtual nodes</strong> to reduce hotspots (each server gets K positions)
+<br>— When a node is added/removed, <strong>only ~1/N keys</strong> should be reassigned
+<br>— Must be <strong>thread-safe</strong> for concurrent reads and rare writes`,
+  io: `var ring = new ConsistentHashRing(150); // 150 virtual nodes per server
+ring.addNode("server-1"); ring.addNode("server-2"); ring.addNode("server-3");
+ring.getNode("user:12345"); // -> "server-2"
+ring.removeNode("server-2");
+ring.getNode("user:12345"); // -> "server-3" (only this key moves)`,
+  followup: "Follow-ups: Without virtual nodes, what causes hotspots? How many virtual nodes does Cassandra use (default: 256)? How does this differ from modulo hashing (key % N)?",
+  bruteTitle: "Modulo hashing — breaks on node add/remove",
+  brute: `// WRONG: modulo hashing — almost all keys reassign when topology changes
+List<String> servers = List.of("s1","s2","s3");
+String route(String key) {
+    int idx = Math.abs(key.hashCode()) % servers.size();
+    return servers.get(idx);
+}
+// Add server-4: servers.size() changes 3->4
+// key "user:12345": hashCode % 3 = 2 (was s3), hashCode % 4 = 1 (now s2)
+// ~75% of keys move — cascading cache misses → DB overwhelm`,
+  tabs: ["HashRing","Demo"],
+  optimal: [
+`import java.util.concurrent.locks.*;
+
+public final class ConsistentHashRing {
+    // TreeMap maintains sorted order — enables O(log n) clockwise lookup
+    private final TreeMap<Integer, String> ring = new TreeMap<>();
+    private final int virtualNodes;
+    // ReadWriteLock: reads (route) are frequent, writes (add/remove) are rare
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
+
+    public ConsistentHashRing(int virtualNodes) {
+        this.virtualNodes = virtualNodes;
+    }
+
+    private int hash(String key) {
+        // FNV-1a: better distribution than String.hashCode()
+        // In production: MurmurHash3 or MD5 first 4 bytes
+        int h = 0x811c9dc5;
+        for (byte b : key.getBytes()) {
+            h ^= b; h *= 0x01000193;
+        }
+        return h & Integer.MAX_VALUE; // keep positive
+    }
+
+    public void addNode(String node) {
+        lock.writeLock().lock();
+        try {
+            for (int i = 0; i < virtualNodes; i++) {
+                int pos = hash(node + "#vnode-" + i);
+                ring.put(pos, node); // multiple positions per server
+            }
+        } finally { lock.writeLock().unlock(); }
+    }
+
+    public void removeNode(String node) {
+        lock.writeLock().lock();
+        try {
+            for (int i = 0; i < virtualNodes; i++) {
+                int pos = hash(node + "#vnode-" + i);
+                ring.remove(pos);
+            }
+        } finally { lock.writeLock().unlock(); }
+    }
+
+    public String getNode(String key) {
+        if (ring.isEmpty()) return null;
+        lock.readLock().lock();
+        try {
+            int pos = hash(key);
+            // ceilingKey: first key >= pos (clockwise next node)
+            // If pos > all keys, wrap around to ring.firstKey()
+            Integer nodePos = ring.ceilingKey(pos);
+            if (nodePos == null) nodePos = ring.firstKey(); // wrap
+            return ring.get(nodePos);
+        } finally { lock.readLock().unlock(); }
+    }
+
+    public Map<String, Long> distribution(List<String> keys) {
+        return keys.stream()
+            .collect(Collectors.groupingBy(this::getNode, Collectors.counting()));
+    }
+}`,
+`var ring = new ConsistentHashRing(150);
+ring.addNode("cache-1"); ring.addNode("cache-2"); ring.addNode("cache-3");
+
+// Simulate routing 10k keys — check distribution
+var keys = IntStream.range(0, 10000)
+    .mapToObj(i -> "user:" + i).toList();
+var dist = ring.distribution(keys);
+dist.forEach((server, count) ->
+    System.out.printf("%s: %d keys (%.1f%%)%n", server, count, count/100.0));
+// With 150 vnodes each server gets roughly 33% ± 5%
+
+ring.removeNode("cache-2");
+// Only ~33% of keys move — the ones that were mapped to cache-2
+long moved = keys.stream()
+    .filter(k -> !ring.getNode(k).equals("cache-2")).count();
+System.out.println("Keys moved: ~" + (10000 - moved));`
+  ],
+  altTitle: "If asked about production systems",
+  alt: `// Cassandra uses 256 virtual nodes per server by default (vnodes).
+// DynamoDB's consistent hashing uses MD5 and a 128-bit ring.
+// In Java production code, use Google Guava's Hashing.consistentHash()
+// or write your own with MurmurHash3 for better collision resistance.`,
+  cmpRows: [
+    ["Algorithm","key % N (modulo)","Clockwise nearest on ring"],
+    ["Keys moved on +1 node","~(N-1)/N (~67% for 3→4 nodes)","~1/N (~25%)"],
+    ["Hotspot risk?","Yes — uneven distribution","Reduced by virtual nodes"],
+    ["Topology change cost","Rebuild entire routing","O(K) insert/delete vnodes"],
+    ["Used in production?","Never for distributed cache","Cassandra, DynamoDB, Redis Cluster"],
+  ],
+  verdict: "TreeMap.ceilingKey() is the single most important API call here — it gives you O(log n) clockwise lookup for free. Without TreeMap you'd scan linearly. Virtual nodes transform worst-case 3x imbalance to roughly 5% variance with 150+ vnodes."
+},
+
+{
+  title: "Read-Write Lock from Scratch",
+  tags: ["Concurrency","Core Java"],
+  tagClass: ["conc","conc"],
+  stmt: `Implement a <strong>ReadWriteLock from scratch</strong>:
+<br><br>— <strong>Multiple readers</strong> can hold the lock simultaneously
+<br>— <strong>Only one writer</strong> at a time; writers get exclusive access
+<br>— <strong>Writers wait</strong> for all current readers to finish
+<br>— <strong>Readers wait</strong> if a writer holds or is waiting for the lock
+<br>— Prevent <strong>writer starvation</strong>: once a writer is waiting, new readers queue behind it`,
+  io: `var lock = new ReadWriteLock();
+// Thread 1, 2, 3: lock.readLock() — all proceed concurrently
+// Thread 4: lock.writeLock() — waits for threads 1,2,3 to finish
+// Thread 5: lock.readLock() — waits behind thread 4 (prevents starvation)`,
+  followup: "Follow-ups: What is writer starvation and how do you prevent it? When would you choose ReadWriteLock over synchronized? What's the upgrade problem (read→write)?",
+  bruteTitle: "Single mutex — readers block each other",
+  brute: `// WRONG: one synchronized block for both reads and writes
+// Readers block each other — massively reduces read throughput
+// In a read-heavy workload (DB caches, config) this is a disaster
+public class NaiveRWLock {
+    public synchronized void readLock() { /* acquires monitor */ }
+    public synchronized void writeLock() { /* acquires same monitor */ }
+    // Reader 1 holding lock? Reader 2 blocks even though it's safe to proceed.
+}`,
+  tabs: ["ReadWriteLock","Demo"],
+  optimal: [
+`public final class ReadWriteLock {
+    private int readers = 0;        // active readers
+    private int writers = 0;        // active writers (0 or 1)
+    private int writeRequests = 0;  // waiting writers — starvation prevention
+
+    // readLock: wait if any writer is active OR waiting (starvation prevention)
+    public synchronized void readLock() throws InterruptedException {
+        while (writers > 0 || writeRequests > 0) {
+            wait(); // release monitor, sleep, re-acquire on notify
+        }
+        readers++;
+    }
+
+    public synchronized void readUnlock() {
+        readers--;
+        notifyAll(); // wake waiting writers
+    }
+
+    // writeLock: exclusive — wait for all readers AND writers to finish
+    public synchronized void writeLock() throws InterruptedException {
+        writeRequests++; // announce intent — blocks new readers
+        while (readers > 0 || writers > 0) {
+            wait();
+        }
+        writeRequests--;
+        writers++;
+    }
+
+    public synchronized void writeUnlock() {
+        writers--;
+        notifyAll(); // wake both readers and writers
+    }
+}
+
+// Usage — always unlock in finally!
+class SafeCache {
+    private final ReadWriteLock lock = new ReadWriteLock();
+    private final Map<String, String> data = new HashMap<>();
+
+    public String get(String key) throws InterruptedException {
+        lock.readLock();
+        try { return data.get(key); }
+        finally { lock.readUnlock(); }
+    }
+
+    public void put(String key, String value) throws InterruptedException {
+        lock.writeLock();
+        try { data.put(key, value); }
+        finally { lock.writeUnlock(); }
+    }
+}`,
+`// Concurrent reads — all 5 should proceed simultaneously
+var lock = new ReadWriteLock();
+var latch = new CountDownLatch(5);
+
+for (int i = 0; i < 5; i++) {
+    Thread.ofVirtual().start(() -> {
+        try {
+            lock.readLock();
+            System.out.println("Reader on: " + Thread.currentThread().getName());
+            Thread.sleep(500); // simulate read
+            lock.readUnlock();
+        } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+        finally { latch.countDown(); }
+    });
+}
+latch.await(); // all 5 readers finished simultaneously`
+  ],
+  altTitle: "Production: use java.util.concurrent.locks.ReentrantReadWriteLock",
+  alt: `// Java's built-in — use this in production, implement from scratch in interviews
+var rwLock = new ReentrantReadWriteLock();
+rwLock.readLock().lock();
+try { /* read */ } finally { rwLock.readLock().unlock(); }
+
+rwLock.writeLock().lock();
+try { /* write */ } finally { rwLock.writeLock().unlock(); }
+// Also supports: tryLock(timeout), isWriteLocked(), getReadLockCount()`,
+  cmpRows: [
+    ["Read concurrency","None — all serialize","Unlimited concurrent readers"],
+    ["Write exclusivity","Yes","Yes"],
+    ["Writer starvation?","N/A","Prevented by writeRequests counter"],
+    ["Read throughput (read-heavy)","O(1) serialized","O(readers) parallel"],
+    ["Implementation","1 synchronized method","wait/notifyAll with counters"],
+  ],
+  verdict: "The writeRequests counter is the anti-starvation mechanism. Without it, a stream of continuous readers can permanently starve waiting writers. By incrementing writeRequests when a writer arrives, new readers see it and queue behind — giving writers their turn."
+},
+
+{
+  title: "Concurrent HashMap from Scratch (Segment-Based)",
+  tags: ["LLD","Concurrency","Data Structures"],
+  tagClass: ["lld","conc","ds"],
+  stmt: `Implement a <strong>concurrent hash map</strong> with segment-based locking:
+<br><br>— Divide the map into <strong>N segments (buckets of buckets)</strong>
+<br>— Operations on <strong>different segments proceed in parallel</strong>
+<br>— Only <strong>one thread per segment</strong> holds a lock at a time
+<br>— Support <strong>get, put, remove, size()</strong>
+<br>— Demonstrate <strong>why this beats a single synchronized HashMap</strong>`,
+  io: `var map = new SegmentedMap<String, Integer>(16); // 16 segments
+map.put("a", 1); map.put("b", 2); // may hit different segments — parallel
+map.get("a"); // 1
+map.size();   // 2 (sum of all segment sizes)`,
+  followup: "Follow-ups: How did Java 7's ConcurrentHashMap implement this? What changed in Java 8 (moved to CAS + synchronized per-bucket)? What is the load factor and when do segments resize?",
+  bruteTitle: "One lock for the whole map",
+  brute: `// WRONG: synchronized on entire map — all threads serialize
+// 16 threads putting into 16 different keys? Still all queue on one lock.
+public class SynchronizedMap<K,V> {
+    private final Map<K,V> map = new HashMap<>();
+    public synchronized V get(K k) { return map.get(k); }
+    public synchronized void put(K k, V v) { map.put(k, v); }
+    // Throughput: O(1) regardless of thread count — no parallelism
+}`,
+  tabs: ["Segment","SegmentedMap","Demo"],
+  optimal: [
+`// Each segment is an independent synchronized HashMap
+private static final class Segment<K, V> {
+    private final Map<K, V> map = new HashMap<>();
+    private final Object lock = new Object();
+
+    V get(K key) {
+        synchronized (lock) { return map.get(key); }
+    }
+    void put(K key, V value) {
+        synchronized (lock) { map.put(key, value); }
+    }
+    V remove(K key) {
+        synchronized (lock) { return map.remove(key); }
+    }
+    int size() {
+        synchronized (lock) { return map.size(); }
+    }
+}`,
+`public final class SegmentedMap<K, V> {
+    private final Segment<K,V>[] segments;
+    private final int segmentCount;
+
+    @SuppressWarnings("unchecked")
+    public SegmentedMap(int segmentCount) {
+        this.segmentCount = segmentCount;
+        this.segments = new Segment[segmentCount];
+        for (int i = 0; i < segmentCount; i++) segments[i] = new Segment<>();
+    }
+
+    // Determine which segment this key belongs to
+    // Using >>> (unsigned shift) ensures positive result even for negative hashCodes
+    private Segment<K,V> segmentFor(K key) {
+        int idx = (key.hashCode() >>> 1) % segmentCount;
+        return segments[idx];
+    }
+
+    public V get(K key)              { return segmentFor(key).get(key); }
+    public void put(K key, V value)  { segmentFor(key).put(key, value); }
+    public V remove(K key)           { return segmentFor(key).remove(key); }
+
+    // size() is inherently approximate in concurrent maps — sum is a snapshot
+    public int size() {
+        return Arrays.stream(segments).mapToInt(Segment::size).sum();
+    }
+}`,
+`var map = new SegmentedMap<String, Integer>(16);
+var latch = new CountDownLatch(1000);
+
+// 1000 concurrent writers — different keys hit different segments in parallel
+for (int i = 0; i < 1000; i++) {
+    final int id = i;
+    Thread.ofVirtual().start(() -> {
+        map.put("key-" + id, id);
+        latch.countDown();
+    });
+}
+latch.await();
+System.out.println("Size: " + map.size()); // ~1000`
+  ],
+  altTitle: "Java 8+ ConcurrentHashMap — CAS per bucket, not per segment",
+  alt: `// Java 8 dropped segment locking entirely — uses:
+// 1. CAS (compareAndSet) for empty-bucket first insert
+// 2. synchronized per bucket HEAD node for collisions
+// Result: contention only when two keys hash to the EXACT same bucket
+// This is why Java 8 ConcurrentHashMap.put() is faster than Java 7's
+ConcurrentHashMap<String,Integer> map = new ConcurrentHashMap<>();
+map.computeIfAbsent("key", k -> expensiveCompute(k)); // atomic`,
+  cmpRows: [
+    ["Max parallel threads","1 (all serialize)","N (one per segment)"],
+    ["Lock granularity","Whole map","1/N of the map"],
+    ["Throughput scaling","Flat — more threads = more waiting","Linear up to N threads"],
+    ["Java 7 style?","No","Yes — Java 8 improved further"],
+    ["size() accuracy","Exact","Approximate (snapshot sum)"],
+  ],
+  verdict: "N=16 segments means up to 16 threads can write concurrently with zero contention. This is the key ConcurrentHashMap Java 7 insight. Java 8 went further — CAS for empty slots means most inserts are completely lock-free."
+},
+
+{
+  title: "Distributed Job Scheduler",
+  tags: ["LLD","System Design","Concurrency"],
+  tagClass: ["lld","design","conc"],
+  stmt: `Design an in-memory <strong>Job Scheduler</strong> that supports:
+<br><br>— Schedule a job to run <strong>after a delay</strong> (one-time)
+<br>— Schedule a job to run <strong>at a fixed rate or fixed delay</strong> (recurring)
+<br>— <strong>Cancel</strong> a scheduled job by handle
+<br>— <strong>Thread-safe</strong> — multiple schedulers/submitters concurrently
+<br>— Track job state: PENDING → RUNNING → DONE / CANCELLED / FAILED`,
+  io: `var scheduler = new JobScheduler(4);
+var handle = scheduler.schedule(() -> sendReminder(userId), 5, TimeUnit.SECONDS);
+var periodic = scheduler.scheduleAtFixedRate(() -> syncDB(), 0, 1, TimeUnit.MINUTES);
+handle.cancel(); // cancel the reminder before it fires`,
+  followup: "Follow-ups: How would you persist scheduled jobs across restarts? How does Quartz Scheduler differ from ScheduledExecutorService? What is a DelayQueue and how does it power schedulers?",
+  bruteTitle: "Thread.sleep() per job",
+  brute: `// WRONG: one thread sleeping per job
+public void schedule(Runnable job, long delayMs) {
+    new Thread(() -> {
+        try {
+            Thread.sleep(delayMs); // this thread just sleeps — wasted
+            job.run();
+        } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+    }).start();
+    // At 10k scheduled jobs: 10k sleeping threads — OOM
+    // No cancellation. No recurrence. No error handling.
+}`,
+  tabs: ["JobHandle","JobScheduler","Demo"],
+  optimal: [
+`// Job handle returned to caller — used for cancellation and state tracking
+public final class JobHandle {
+    public enum State { PENDING, RUNNING, DONE, CANCELLED, FAILED }
+
+    private final String jobId;
+    private final ScheduledFuture<?> future;
+    private volatile State state = State.PENDING;
+
+    JobHandle(String jobId, ScheduledFuture<?> future) {
+        this.jobId = jobId; this.future = future;
+    }
+
+    public boolean cancel() {
+        if (state == State.PENDING) {
+            boolean cancelled = future.cancel(false); // don't interrupt if running
+            if (cancelled) state = State.CANCELLED;
+            return cancelled;
+        }
+        return false;
+    }
+
+    public State getState() { return state; }
+    public String getJobId() { return jobId; }
+
+    void markRunning()   { state = State.RUNNING; }
+    void markDone()      { state = State.DONE; }
+    void markFailed()    { state = State.FAILED; }
+}`,
+`public final class JobScheduler {
+    private final ScheduledExecutorService executor;
+    private final Map<String, JobHandle> handles = new ConcurrentHashMap<>();
+    private final AtomicLong counter = new AtomicLong();
+
+    public JobScheduler(int threads) {
+        this.executor = Executors.newScheduledThreadPool(threads);
+    }
+
+    public JobHandle schedule(Runnable job, long delay, TimeUnit unit) {
+        String id = "job-" + counter.incrementAndGet();
+        // Wrap job with state tracking — decoupled from caller
+        Runnable wrapped = wrapJob(id, job, false);
+        ScheduledFuture<?> future = executor.schedule(wrapped, delay, unit);
+        JobHandle handle = new JobHandle(id, future);
+        handles.put(id, handle);
+        return handle;
+    }
+
+    public JobHandle scheduleAtFixedRate(Runnable job, long initDelay,
+                                          long period, TimeUnit unit) {
+        String id = "job-" + counter.incrementAndGet();
+        Runnable wrapped = wrapJob(id, job, true);
+        ScheduledFuture<?> future = executor.scheduleAtFixedRate(
+            wrapped, initDelay, period, unit);
+        JobHandle handle = new JobHandle(id, future);
+        handles.put(id, handle);
+        return handle;
+    }
+
+    private Runnable wrapJob(String id, Runnable job, boolean recurring) {
+        return () -> {
+            JobHandle handle = handles.get(id);
+            if (handle == null || handle.getState() == JobHandle.State.CANCELLED) return;
+            handle.markRunning();
+            try {
+                job.run();
+                if (!recurring) { handle.markDone(); handles.remove(id); }
+                else handle.markRunning(); // stays RUNNING between executions
+            } catch (Exception e) {
+                handle.markFailed();
+                System.err.println("Job " + id + " failed: " + e.getMessage());
+                // For recurring: exception stops recurrence in ScheduledExecutor
+                // re-throw to let executor log it; handle shows FAILED
+                throw e;
+            }
+        };
+    }
+
+    public void shutdown() { executor.shutdown(); }
+}`,
+`var scheduler = new JobScheduler(2);
+
+// One-time job after 1 second
+var handle = scheduler.schedule(() ->
+    System.out.println("One-time job ran!"), 1, TimeUnit.SECONDS);
+
+System.out.println("State: " + handle.getState()); // PENDING
+
+// Recurring every 500ms
+var periodic = scheduler.scheduleAtFixedRate(() ->
+    System.out.println("Tick: " + System.currentTimeMillis()), 0, 500, TimeUnit.MILLISECONDS);
+
+Thread.sleep(1200);
+periodic.cancel();
+System.out.println("After 1.2s, one-time: " + handle.getState()); // DONE
+scheduler.shutdown();`
+  ],
+  altTitle: "DelayQueue-based (interviewer may ask you to implement without ScheduledExecutor)",
+  alt: `// ScheduledExecutorService internally uses a DelayQueue.
+// DelayQueue<Delayed>: take() blocks until the nearest-deadline element is ready.
+// One dispatch thread calls take() in a loop — no Thread.sleep() per job.
+// This is the core mechanism behind Spring @Scheduled and Quartz.`,
+  cmpRows: [
+    ["Thread per job?","Yes — OOM at scale","No — fixed pool"],
+    ["Cancellation?","None","handle.cancel() — O(1)"],
+    ["Recurrence?","Manual re-scheduling","scheduleAtFixedRate built-in"],
+    ["Exception handling?","Kills thread","Caught — job marked FAILED"],
+    ["State tracking?","None","PENDING/RUNNING/DONE/FAILED"],
+  ],
+  verdict: "The key design choice: wrap every job with a state-tracking Runnable before submitting. This decouples job logic from infrastructure concerns (state, logging, cancellation check) without the caller needing to know anything about threading."
+},
+
+{
+  title: "Object Pool Pattern",
+  tags: ["LLD","Design Patterns","Resource Mgmt"],
+  tagClass: ["lld","design","design"],
+  stmt: `Design a <strong>generic thread-safe Object Pool</strong>:
+<br><br>— Manages a pool of <strong>expensive-to-create objects</strong> (DB connections, HTTP clients)
+<br>— <strong>borrow()</strong> returns an available object; blocks if none available (up to timeout)
+<br>— <strong>release(obj)</strong> returns it to the pool for reuse
+<br>— <strong>Max pool size</strong> is fixed — never create more than N objects
+<br>— Automatically <strong>validate objects</strong> before lending (detect stale connections)
+<br>— Works with <strong>try-with-resources</strong> via AutoCloseable wrapper`,
+  io: `var pool = new ObjectPool<>(() -> createConnection(), conn -> conn.isValid(),
+                              poolSize: 10, timeout: 5s);
+try (var borrowed = pool.borrow()) {
+    borrowed.get().executeQuery(sql); // borrowed is AutoCloseable
+} // auto-released back to pool on close()`,
+  followup: "Follow-ups: What happens to objects leaked (borrowed but never released)? How does HikariCP implement connection validation? What is the difference between a pool and a cache?",
+  bruteTitle: "New object every call, no pooling",
+  brute: `// WRONG: creating expensive objects on every request
+public Connection getConnection() {
+    return DriverManager.getConnection(url, user, pass);
+    // Connection creation: network handshake + auth = ~50-200ms
+    // At 1000 req/sec: 1000 new connections = connection storm on DB
+    // DB has a max_connections limit — this will crash both sides
+}`,
+  tabs: ["ObjectPool","Demo"],
+  optimal: [
+`import java.util.concurrent.*;
+import java.util.function.*;
+
+public final class ObjectPool<T> {
+    private final BlockingQueue<T> available;
+    private final Supplier<T> factory;       // how to create new objects
+    private final Predicate<T> validator;    // how to check if object still usable
+    private final long timeoutMs;
+    private final int maxSize;
+    private final AtomicInteger created = new AtomicInteger();
+
+    public ObjectPool(Supplier<T> factory, Predicate<T> validator,
+                      int maxSize, Duration timeout) {
+        this.factory   = factory;
+        this.validator = validator;
+        this.maxSize   = maxSize;
+        this.timeoutMs = timeout.toMillis();
+        this.available = new LinkedBlockingQueue<>(maxSize);
+        // Pre-warm with minimum objects (optional — here we lazy-create)
+    }
+
+    // AutoCloseable wrapper — enables try-with-resources
+    public final class Borrowed implements AutoCloseable {
+        private final T obj;
+        private boolean released = false;
+
+        Borrowed(T obj) { this.obj = obj; }
+        public T get() { return obj; }
+
+        @Override
+        public void close() {
+            if (!released) { released = true; release(obj); }
+        }
+    }
+
+    public Borrowed borrow() throws InterruptedException {
+        long deadline = System.currentTimeMillis() + timeoutMs;
+        while (true) {
+            // Try to get an available object first
+            T obj = available.poll();
+
+            if (obj != null) {
+                if (validator.test(obj)) return new Borrowed(obj); // valid, use it
+                // Invalid (stale connection) — discard and try to create new
+                created.decrementAndGet();
+            }
+
+            // No available objects — can we create a new one?
+            if (created.get() < maxSize &&
+                created.incrementAndGet() <= maxSize) {
+                return new Borrowed(factory.get()); // create fresh
+            }
+            created.decrementAndGet(); // rolled back — pool full
+
+            // Pool full and all borrowed — wait for a release
+            long remaining = deadline - System.currentTimeMillis();
+            if (remaining <= 0) throw new TimeoutException("Pool exhausted");
+            obj = available.poll(remaining, TimeUnit.MILLISECONDS);
+            if (obj == null) throw new TimeoutException("Pool exhausted after timeout");
+            if (validator.test(obj)) return new Borrowed(obj);
+            created.decrementAndGet(); // stale, discarded
+        }
+    }
+
+    private void release(T obj) {
+        if (!available.offer(obj)) {
+            // Queue full — discard (shouldn't happen in correct usage)
+            created.decrementAndGet();
+        }
+    }
+
+    public int available() { return available.size(); }
+    public int created()   { return created.get(); }
+}`,
+`// Simulating a DB connection pool
+var pool = new ObjectPool<>(
+    () -> { System.out.println("Creating connection"); return new FakeConnection(); },
+    conn -> !conn.isClosed(),   // validator
+    5,                          // max 5 connections
+    Duration.ofSeconds(3)       // 3s borrow timeout
+);
+
+// Multiple concurrent borrows — pool creates at most 5 connections
+var latch = new CountDownLatch(20);
+for (int i = 0; i < 20; i++) {
+    Thread.ofVirtual().start(() -> {
+        try (var borrowed = pool.borrow()) {
+            borrowed.get().query("SELECT 1");
+            Thread.sleep(100); // hold connection briefly
+        } catch (Exception e) { System.err.println(e.getMessage()); }
+        finally { latch.countDown(); }
+    });
+}
+latch.await();
+System.out.println("Connections created: " + pool.created()); // ≤ 5`
+  ],
+  altTitle: "Production: HikariCP (fastest JDBC pool in Java)",
+  alt: `// HikariConfig uses the same pattern: BlockingQueue + CAS for borrowing.
+// It adds: connection leak detection (timeout), metrics, min-idle maintenance.
+HikariConfig cfg = new HikariConfig();
+cfg.setJdbcUrl("jdbc:postgresql://host/db");
+cfg.setMaximumPoolSize(10);
+cfg.setConnectionTimeout(3000); // ms
+DataSource ds = new HikariDataSource(cfg);`,
+  cmpRows: [
+    ["Object creation","Every request (~200ms)","Once, reused (~0ms)"],
+    ["DB connection limit","Unbounded — crash risk","Hard-capped at maxSize"],
+    ["Stale object handling","None — returns broken obj","Validator discards and retries"],
+    ["try-with-resources?","No","Yes — AutoCloseable wrapper"],
+    ["Timeout on exhaustion?","Blocks forever or fails","Configurable timeout"],
+  ],
+  verdict: "The AutoCloseable Borrowed wrapper is the most important design choice — it makes resource leaks impossible to hide. Without it, callers forget to call release() and the pool starves. The pattern mirrors how HikariCP and DBCP2 work internally."
+},
+
+{
+  title: "Immutable vs Defensive Copying",
+  tags: ["Core Java","Design","Memory"],
+  tagClass: ["ds","design","design"],
+  stmt: `You're designing a <strong>ValueObject</strong> for a financial transaction system. Demonstrate:
+<br><br>— Building a <strong>truly immutable class</strong> in Java (all pitfalls avoided)
+<br>— Why <strong>defensive copying</strong> is needed even in "final" fields
+<br>— Using <strong>Java records</strong> for value semantics
+<br>— The <strong>difference between shallow and deep immutability</strong>
+<br>— How to make <strong>collections immutable</strong> correctly`,
+  io: `var tx = new Transaction("T001", new BigDecimal("100.50"),
+           List.of("tag1","tag2"), LocalDateTime.now());
+// Any attempt to mutate tx's internal state must fail or be impossible`,
+  followup: "Follow-ups: Is String immutable? Is Integer immutable? What is the String pool? Why are immutable objects inherently thread-safe? How does record differ from a final class?",
+  bruteTitle: "final fields but mutable references",
+  brute: `// WRONG: final fields don't make the OBJECTS they point to immutable
+public final class BadTransaction {
+    private final String id;
+    private final List<String> tags; // final reference, but list is mutable!
+    private final Date createdAt;    // Date is mutable — huge pitfall
+
+    public BadTransaction(String id, List<String> tags, Date date) {
+        this.id = id;
+        this.tags = tags;       // WRONG: stores caller's list directly
+        this.createdAt = date;  // WRONG: caller still holds reference to date
+    }
+
+    public List<String> getTags() { return tags; }   // WRONG: exposes mutable ref
+    public Date getCreatedAt() { return createdAt; } // WRONG: caller can mutate Date
+}
+
+// Attack:
+var tags = new ArrayList<>(List.of("valid"));
+var tx = new BadTransaction("T1", tags, new Date());
+tags.add("injected");       // mutated! tx.tags changed
+tx.getTags().clear();       // mutated! caller cleared internal state
+tx.getCreatedAt().setTime(0); // mutated! date zeroed`,
+  tabs: ["Immutable class","Record approach","Demo"],
+  optimal: [
+`import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+
+// Rules for true immutability:
+// 1. Class is final (no subclass can add mutable state)
+// 2. All fields private + final
+// 3. Defensive copy on CONSTRUCTION (don't trust caller's input)
+// 4. Defensive copy on RETURN (don't expose internal references)
+// 5. Use immutable types (LocalDateTime not Date, BigDecimal not double)
+public final class Transaction {
+    private final String id;
+    private final BigDecimal amount;        // immutable — no setters
+    private final List<String> tags;        // we store an unmodifiable copy
+    private final LocalDateTime createdAt;  // immutable — use this, not Date
+
+    public Transaction(String id, BigDecimal amount,
+                       List<String> tags, LocalDateTime createdAt) {
+        this.id        = Objects.requireNonNull(id);
+        this.amount    = Objects.requireNonNull(amount);
+        // Defensive copy on construction: store a snapshot, not the caller's list
+        this.tags      = List.copyOf(tags);  // Java 10+ unmodifiable deep copy
+        this.createdAt = Objects.requireNonNull(createdAt); // LocalDateTime is immutable
+    }
+
+    public String getId()             { return id; }          // String is immutable — safe
+    public BigDecimal getAmount()     { return amount; }      // BigDecimal is immutable — safe
+    public LocalDateTime getCreatedAt(){ return createdAt; }  // LocalDateTime is immutable
+    // Return a copy — even though List.copyOf is unmodifiable, the practice is correct
+    public List<String> getTags()     { return tags; }        // already unmodifiable
+
+    // equals/hashCode based on VALUE, not identity
+    @Override public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Transaction t)) return false;
+        return id.equals(t.id) && amount.compareTo(t.amount) == 0;
+    }
+    @Override public int hashCode() { return Objects.hash(id, amount); }
+    @Override public String toString() {
+        return "Transaction[id=%s, amount=%s]".formatted(id, amount);
+    }
+}`,
+`// Java 16+ records: immutable by default, equals/hashCode/toString generated
+// Records enforce: all fields final, all-args constructor, no setters
+public record TransactionRecord(
+    String id,
+    BigDecimal amount,
+    List<String> tags,       // CAUTION: record does NOT defensive copy for you!
+    LocalDateTime createdAt
+) {
+    // Compact canonical constructor — add validation and defensive copying here
+    public TransactionRecord {
+        Objects.requireNonNull(id, "id required");
+        if (amount.compareTo(BigDecimal.ZERO) < 0)
+            throw new IllegalArgumentException("amount must be non-negative");
+        tags = List.copyOf(tags); // must defensive copy even in record
+    }
+}
+// Usage:
+var tx = new TransactionRecord("T001", new BigDecimal("50"), List.of("A","B"), LocalDateTime.now());
+// tx.tags() returns the unmodifiable copy — safe
+// tx.id(), tx.amount(), tx.createdAt() — all immutable types`,
+`// Proving immutability
+var originalTags = new ArrayList<>(List.of("valid"));
+var tx = new Transaction("T001", new BigDecimal("100"), originalTags, LocalDateTime.now());
+
+originalTags.add("injected"); // modifying original list
+System.out.println(tx.getTags()); // [valid] — NOT affected, defensive copy worked
+
+try {
+    tx.getTags().add("attack"); // throws UnsupportedOperationException
+} catch (UnsupportedOperationException e) {
+    System.out.println("Cannot mutate returned list — correct!");
+}
+
+// Thread safety — no synchronization needed:
+// Multiple threads reading tx concurrently = perfectly safe, no shared mutable state`
+  ],
+  altTitle: "Deep immutability for nested mutable objects",
+  alt: `// If your object contains a mutable object (e.g. a custom Address class),
+// defensive copy alone isn't enough — you need a deep copy or make Address immutable too.
+// The rule: every object reachable from your class must itself be immutable
+// or defensively copied (recursively). This is "deep immutability".
+// Lombok @Value generates an immutable class but does NOT deep-copy — beware.`,
+  cmpRows: [
+    ["final field = immutable?","No — reference is final, object is not","Only if the referenced type is also immutable"],
+    ["Date vs LocalDateTime?","Date is mutable — bug magnet","LocalDateTime is immutable — use it"],
+    ["List.of() vs List.copyOf()?","List.of() is already unmodifiable","List.copyOf() copies + makes unmodifiable"],
+    ["Thread-safe?","No — mutable fields need sync","Yes — immutable objects need no sync"],
+    ["record vs final class?","record: auto-generated value semantics","record doesn't deep-copy — still add compact constructor"],
+  ],
+  verdict: "The most common immutability bug in production Java: storing a caller-provided Date or List directly in a final field. The field reference is final but the OBJECT it points to is still mutable. List.copyOf() (Java 10+) is the clean fix — unmodifiable + defensive copy in one call."
+},
+
+{
+  title: "Future & CompletableFuture Pipeline",
+  tags: ["Concurrency","Async","Core Java"],
+  tagClass: ["conc","conc","ds"],
+  stmt: `Design an <strong>async processing pipeline</strong> using CompletableFuture:
+<br><br>— Fetch user data <strong>async</strong>, then fetch their orders async, then enrich with product details
+<br>— Run <strong>independent steps in parallel</strong>, combine when both done
+<br>— Handle <strong>partial failures gracefully</strong> — fallback values, not crashes
+<br>— Apply a <strong>timeout</strong> on the overall pipeline
+<br>— The final step <strong>must always run</strong> (like a finally block) regardless of success/failure`,
+  io: `CompletableFuture<Report> pipeline = fetchUser(id)
+    .thenCompose(user -> fetchOrders(user))         // sequential dep
+    .thenCombine(fetchDiscounts(), this::merge)     // parallel + combine
+    .orTimeout(5, TimeUnit.SECONDS)                  // global timeout
+    .exceptionally(ex -> Report.empty());            // fallback on failure`,
+  followup: "Follow-ups: What is the difference between thenApply and thenCompose? What thread executes thenApply callbacks? What is CompletableFuture.allOf vs anyOf? How do you handle a list of futures?",
+  bruteTitle: "Chained blocking get() calls",
+  brute: `// WRONG: blocking get() defeats async — back to sequential execution
+public Report buildReport(String userId) throws Exception {
+    User user = fetchUserAsync(userId).get();         // blocks thread
+    List<Order> orders = fetchOrdersAsync(user).get(); // blocks thread
+    // fetchDiscounts() and fetchOrders() could run in PARALLEL
+    // but blocking get() forces them to run sequentially
+    // Total time = fetchUser + fetchOrders + fetchDiscounts (sequential sum)
+    // vs optimal = fetchUser + max(fetchOrders, fetchDiscounts) (parallel)
+}`,
+  tabs: ["Pipeline","Error handling","Demo"],
+  optimal: [
+`import java.util.concurrent.*;
+
+// Service stubs — in production these are HTTP/DB calls
+class UserService {
+    CompletableFuture<User> fetchUser(String id) {
+        return CompletableFuture.supplyAsync(() -> {
+            // Simulate latency
+            sleep(100);
+            return new User(id, "Yash");
+        });
+    }
+}
+
+class OrderService {
+    CompletableFuture<List<Order>> fetchOrders(User user) {
+        return CompletableFuture.supplyAsync(() -> {
+            sleep(200);
+            return List.of(new Order("O1", user.id()));
+        });
+    }
+}
+
+// Parallel + combine: both run simultaneously, result merged when both done
+CompletableFuture<Report> buildReport(String userId) {
+    CompletableFuture<User> userFuture = userService.fetchUser(userId);
+
+    // thenCompose: like flatMap — use when next step returns a Future itself
+    CompletableFuture<List<Order>> ordersFuture = userFuture
+        .thenCompose(orderService::fetchOrders);
+
+    // fetchDiscounts() starts immediately — parallel with orders fetch
+    CompletableFuture<List<Discount>> discountsFuture =
+        discountService.fetchDiscounts(userId);
+
+    // thenCombine: waits for BOTH futures, then merges
+    return ordersFuture
+        .thenCombine(discountsFuture, (orders, discounts) ->
+            new Report(orders, discounts))
+        .orTimeout(5, TimeUnit.SECONDS);
+}`,
+`// Graceful failure: never let one broken service crash the whole pipeline
+CompletableFuture<Report> safeReport = buildReport(userId)
+    .exceptionally(ex -> {
+        log.warn("Report pipeline failed: {}", ex.getMessage());
+        return Report.empty(); // fallback — degrade gracefully
+    });
+
+// whenComplete: runs ALWAYS — like finally (for cleanup, metrics, logging)
+safeReport.whenComplete((report, ex) -> {
+    metricsRecorder.record(ex == null ? "success" : "failure");
+    // Note: whenComplete does NOT change the result — use handle() if you want to
+});
+
+// Processing a List of futures — collect all results
+List<String> userIds = List.of("u1", "u2", "u3");
+List<CompletableFuture<Report>> futures = userIds.stream()
+    .map(this::buildReport).toList();
+
+// allOf: completes when ALL are done (use for collecting all results)
+CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
+    .thenApply(v -> futures.stream()
+        .map(CompletableFuture::join) // safe — all done
+        .toList())
+    .thenAccept(reports -> System.out.println("All reports: " + reports.size()));`,
+`// End-to-end pipeline with timing
+long start = System.currentTimeMillis();
+
+var report = userService.fetchUser("u123")             // async
+    .thenCompose(orderService::fetchOrders)             // sequential dep
+    .thenCombine(discountService.fetchDiscounts("u123"),
+        (orders, discounts) -> new Report(orders, discounts))
+    .orTimeout(5, TimeUnit.SECONDS)                     // global timeout
+    .exceptionally(ex -> Report.empty())                // fallback
+    .join(); // block only at the very end — not inside the pipeline
+
+long elapsed = System.currentTimeMillis() - start;
+System.out.printf("Report built in %dms: %s%n", elapsed, report);
+// Parallel steps: 100ms (user) + max(200ms orders, 150ms discounts)
+// Total ≈ 300ms instead of 100+200+150=450ms sequential`
+  ],
+  altTitle: "Java 21 StructuredTaskScope (preview) — cleaner parallel fetch",
+  alt: `// Java 21 preview: StructuredTaskScope gives structured concurrency
+try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+    var userTask     = scope.fork(() -> fetchUser(id));
+    var discountTask = scope.fork(() -> fetchDiscounts(id));
+    scope.join().throwIfFailed();
+    return new Report(userTask.get(), discountTask.get());
+}
+// Cancels sibling tasks on first failure — cleaner than CompletableFuture chains`,
+  cmpRows: [
+    ["Execution model","Sequential blocking","Async non-blocking pipeline"],
+    ["Independent steps?","Run one after another","Run in parallel (thenCombine)"],
+    ["Failure handling?","Exception propagates up","exceptionally() for graceful fallback"],
+    ["Timeout?","None — hangs forever","orTimeout() (Java 9+)"],
+    ["Thread usage?","1 thread blocked waiting","Thread freed between steps"],
+  ],
+  verdict: "thenCompose vs thenApply is the interview trap: thenApply is like map (transforms a value), thenCompose is like flatMap (chains a Future-returning function). Using thenApply with a Future-returning function gives you CompletableFuture<CompletableFuture<T>> — a nested future you can never resolve."
+},
+
+{
+  title: "Circuit Breaker Pattern",
+  tags: ["LLD","Design Patterns","Resilience"],
+  tagClass: ["lld","design","design"],
+  stmt: `Implement the <strong>Circuit Breaker pattern</strong> for an outbound HTTP service call:
+<br><br>— <strong>CLOSED</strong>: calls pass through normally
+<br>— <strong>OPEN</strong>: if failure rate exceeds threshold → reject all calls immediately (fast fail)
+<br>— <strong>HALF_OPEN</strong>: after cooldown, allow one probe request
+<br>— If probe succeeds → back to CLOSED; if fails → back to OPEN
+<br>— Thread-safe state transitions; failure counting must be atomic`,
+  io: `var cb = new CircuitBreaker("payment-service", failureThreshold: 5, cooldown: 30s);
+cb.execute(() -> paymentClient.charge(amount)); // goes through or throws
+// After 5 failures: state = OPEN, all calls throw CircuitOpenException immediately
+// After 30s: state = HALF_OPEN, one probe allowed`,
+  followup: "Follow-ups: How do you count failures — total or rate within a sliding window? What is the difference between Circuit Breaker and Retry? How does Resilience4j implement this? How does Spring Cloud Gateway use circuit breakers?",
+  bruteTitle: "Simple counter without state machine — no HALF_OPEN",
+  brute: `// WRONG: no HALF_OPEN state — circuit never recovers!
+// Also: long failureCount not atomic — data race under concurrency
+public class NaiveCB {
+    private int failures = 0; // NOT atomic!
+    private boolean open = false;
+
+    public <T> T execute(Supplier<T> call) {
+        if (open) throw new RuntimeException("Circuit open"); // never recovers
+        try {
+            T result = call.get();
+            failures = 0; // WRONG: race condition — not atomic reset
+            return result;
+        } catch (Exception e) {
+            failures++; // WRONG: not atomic — two threads can both increment
+            if (failures >= 5) open = true; // stays open forever — broken
+            throw e;
+        }
+    }
+}`,
+  tabs: ["State machine","CircuitBreaker","Demo"],
+  optimal: [
+`// Three-state machine with atomic transitions
+public enum State { CLOSED, OPEN, HALF_OPEN }
+
+// AtomicReference for state ensures visibility across threads without synchronized
+private final AtomicReference<State> state = new AtomicReference<>(State.CLOSED);
+private final AtomicInteger failures = new AtomicInteger(0);
+private volatile long openedAt = 0; // when did we enter OPEN state`,
+`public final class CircuitBreaker {
+    private final String name;
+    private final int failureThreshold;
+    private final Duration cooldown;
+
+    private final AtomicReference<State> state = new AtomicReference<>(State.CLOSED);
+    private final AtomicInteger failures  = new AtomicInteger(0);
+    private volatile long openedAt = 0;
+
+    public CircuitBreaker(String name, int failureThreshold, Duration cooldown) {
+        this.name = name;
+        this.failureThreshold = failureThreshold;
+        this.cooldown = cooldown;
+    }
+
+    public <T> T execute(Supplier<T> call) {
+        State current = state.get();
+
+        if (current == State.OPEN) {
+            if (cooldownExpired()) {
+                // CAS: only ONE thread transitions OPEN->HALF_OPEN (probe thread)
+                if (state.compareAndSet(State.OPEN, State.HALF_OPEN)) {
+                    return probe(call); // let this thread be the probe
+                }
+            }
+            throw new CircuitOpenException("Circuit " + name + " is OPEN");
+        }
+
+        if (current == State.HALF_OPEN) {
+            return probe(call); // only one thread reaches here at a time via CAS
+        }
+
+        // CLOSED state — normal path
+        return executeAndTrack(call);
+    }
+
+    private <T> T probe(Supplier<T> call) {
+        try {
+            T result = call.get();
+            // Probe succeeded — reset and close
+            failures.set(0);
+            state.set(State.CLOSED);
+            System.out.println("[CB:" + name + "] Probe success → CLOSED");
+            return result;
+        } catch (Exception e) {
+            // Probe failed — reopen with fresh cooldown
+            openedAt = System.currentTimeMillis();
+            state.set(State.OPEN);
+            System.out.println("[CB:" + name + "] Probe failed → OPEN again");
+            throw e;
+        }
+    }
+
+    private <T> T executeAndTrack(Supplier<T> call) {
+        try {
+            T result = call.get();
+            failures.set(0); // reset on success
+            return result;
+        } catch (Exception e) {
+            int count = failures.incrementAndGet();
+            if (count >= failureThreshold) {
+                openedAt = System.currentTimeMillis();
+                state.set(State.OPEN); // trip the circuit
+                System.out.printf("[CB:%s] Tripped after %d failures → OPEN%n", name, count);
+            }
+            throw e;
+        }
+    }
+
+    private boolean cooldownExpired() {
+        return System.currentTimeMillis() - openedAt >= cooldown.toMillis();
+    }
+
+    public State getState() { return state.get(); }
+}
+
+class CircuitOpenException extends RuntimeException {
+    public CircuitOpenException(String msg) { super(msg); }
+}`,
+`var cb = new CircuitBreaker("payments", 3, Duration.ofSeconds(5));
+var failingService = new AtomicInteger(); // fail first 3 calls
+
+Supplier<String> call = () -> {
+    if (failingService.getAndIncrement() < 3) throw new RuntimeException("Timeout");
+    return "OK";
+};
+
+// First 3 calls fail — circuit trips
+for (int i = 0; i < 5; i++) {
+    try {
+        System.out.println(cb.execute(call));
+    } catch (Exception e) {
+        System.out.println("[" + cb.getState() + "] " + e.getMessage());
+    }
+}
+
+Thread.sleep(5500); // wait for cooldown
+// Next call is the probe — service recovered
+System.out.println("Probe: " + cb.execute(call)); // OK → CLOSED`
+  ],
+  altTitle: "Production: Resilience4j (Spring Boot integration)",
+  alt: `// Resilience4j: annotation-driven circuit breaker
+@CircuitBreaker(name = "payments", fallbackMethod = "fallback")
+public String charge(BigDecimal amount) { return paymentClient.post(amount); }
+
+public String fallback(BigDecimal amount, Exception ex) {
+    return "queued-for-retry"; // graceful degradation
+}
+// Resilience4j adds: sliding window (count vs time), slow call threshold, metrics`,
+  cmpRows: [
+    ["Recovery mechanism?","None — stays OPEN forever","HALF_OPEN probe after cooldown"],
+    ["Failure counting?","Plain int — data race","AtomicInteger — lock-free"],
+    ["State transition?","boolean flag","3-state machine via AtomicReference"],
+    ["Probe thread race?","Multiple threads probe at once","CAS ensures exactly one probe"],
+    ["Fast fail cost?","Full call overhead","O(1) — immediate throw"],
+  ],
+  verdict: "compareAndSet(OPEN, HALF_OPEN) is the critical line — it ensures exactly ONE thread gets to be the probe, even if dozens of threads all see cooldownExpired() = true simultaneously. Without CAS, you'd send a thundering herd of probe requests to the already-struggling service."
+},
+
+{
+  title: "Observer Pattern — Type-Safe with Generics",
+  tags: ["LLD","Design Patterns","Core Java"],
+  tagClass: ["lld","design","ds"],
+  stmt: `Implement a <strong>type-safe Observer pattern</strong> in Java:
+<br><br>— <strong>Observable&lt;T&gt;</strong>: generic observable that emits events of type T
+<br>— <strong>Observer&lt;T&gt;</strong>: receives notifications with the correct type
+<br>— Support <strong>addObserver, removeObserver, notifyObservers</strong>
+<br>— Observers can <strong>unsubscribe from within their callback</strong> (no ConcurrentModificationException)
+<br>— Compare with the <strong>deprecated java.util.Observable</strong> and why generics fix it`,
+  io: `var orderSubject = new Subject<OrderEvent>();
+orderSubject.addObserver(e -> System.out.println("Order: " + e.orderId()));
+orderSubject.addObserver(e -> sendEmail(e)); // both get OrderEvent, not Object
+orderSubject.notifyObservers(new OrderEvent("ORD-101"));`,
+  followup: "Follow-ups: Why is java.util.Observable deprecated in Java 9? What's the difference between Observer pattern and Reactive Streams (RxJava/Project Reactor)? How does Spring ApplicationEventPublisher use this pattern?",
+  bruteTitle: "java.util.Observable — raw type, no generics",
+  brute: `// java.util.Observable is DEPRECATED (Java 9+) — know why:
+class OrderSubject extends Observable { // forces subclassing — bad design
+    void orderPlaced(Object event) {
+        setChanged();
+        notifyObservers(event); // passes Object — no type safety
+    }
+}
+class OrderObserver implements Observer {
+    public void update(Observable o, Object arg) {
+        OrderEvent event = (OrderEvent) arg; // unchecked cast — ClassCastException risk
+        // Also: Observer receives Observable reference — unnecessary coupling
+    }
+}
+// Problems: raw types, mandatory subclassing, no thread safety, deprecated`,
+  tabs: ["Generic Observer","Subject","Demo"],
+  optimal: [
+`// Type-safe functional observer — just a lambda target
+@FunctionalInterface
+public interface Observer<T> {
+    void onEvent(T event);
+}`,
+`public final class Subject<T> {
+    // CopyOnWriteArrayList: observers can unsubscribe from within onEvent()
+    // without ConcurrentModificationException — COWAL iterates a snapshot
+    private final CopyOnWriteArrayList<Observer<T>> observers =
+        new CopyOnWriteArrayList<>();
+
+    public void addObserver(Observer<T> observer) {
+        observers.addIfAbsent(observer); // dedup — same observer not added twice
+    }
+
+    public void removeObserver(Observer<T> observer) {
+        observers.remove(observer);
+    }
+
+    // Notify all observers — iterate a snapshot (COWAL guarantee)
+    public void notifyObservers(T event) {
+        for (Observer<T> observer : observers) {  // iterates snapshot
+            try {
+                observer.onEvent(event);
+            } catch (Exception e) {
+                // Isolate per observer — one crash doesn't skip the rest
+                System.err.println("Observer failed: " + e.getMessage());
+            }
+        }
+    }
+
+    public int observerCount() { return observers.size(); }
+}
+
+// Domain event
+public record OrderEvent(String orderId, BigDecimal amount, Instant timestamp) {
+    public OrderEvent(String orderId, BigDecimal amount) {
+        this(orderId, amount, Instant.now());
+    }
+}`,
+`var subject = new Subject<OrderEvent>();
+
+Observer<OrderEvent> emailObs   = e -> System.out.println("Email: " + e.orderId());
+Observer<OrderEvent> auditObs   = e -> System.out.println("Audit: " + e.orderId());
+Observer<OrderEvent> unsubObs   = new Observer<>() {
+    public void onEvent(OrderEvent e) {
+        System.out.println("One-time: " + e.orderId());
+        subject.removeObserver(this); // unsubscribe from within callback — safe!
+    }
+};
+
+subject.addObserver(emailObs);
+subject.addObserver(auditObs);
+subject.addObserver(unsubObs);
+
+System.out.println("Observers: " + subject.observerCount()); // 3
+
+subject.notifyObservers(new OrderEvent("ORD-101", new BigDecimal("250")));
+// All 3 notified. unsubObs removes itself.
+
+System.out.println("Observers after: " + subject.observerCount()); // 2
+subject.notifyObservers(new OrderEvent("ORD-102", new BigDecimal("75")));
+// Only emailObs + auditObs notified.`
+  ],
+  altTitle: "Spring ApplicationEventPublisher (production version of this pattern)",
+  alt: `// Spring's event system: same Observer pattern, framework-managed
+@Component
+public class OrderPlacedListener {
+    @EventListener
+    public void handle(OrderPlacedEvent event) { /* ... */ }
+}
+
+// Publisher:
+applicationEventPublisher.publishEvent(new OrderPlacedEvent("ORD-101"));
+// Spring dispatches to all @EventListener methods for this event type`,
+  cmpRows: [
+    ["Type safety?","Cast from Object — runtime crash risk","Compile-time <T> — no cast needed"],
+    ["Unsubscribe in callback?","ConcurrentModificationException","Safe — COWAL iterates snapshot"],
+    ["Observer isolation?","One exception skips rest","try/catch per observer"],
+    ["Design coupling?","Observer gets Observable ref","No coupling — just receives T"],
+    ["Deprecated?","Yes — java.util.Observable (Java 9)","Custom generic — no deprecation"],
+  ],
+  verdict: "CopyOnWriteArrayList is the subtle but critical choice here. If you use ArrayList, an observer trying to call removeObserver() from within onEvent() causes ConcurrentModificationException because you're modifying the list during iteration. COWAL iterates a frozen snapshot — mutation during iteration is safe."
+},
+
+{
+  title: "Semaphore-Based Resource Throttler",
+  tags: ["Concurrency","Core Java"],
+  tagClass: ["conc","conc"],
+  stmt: `Design a <strong>resource throttler</strong> using Semaphore that:
+<br><br>— Limits <strong>concurrent access</strong> to an external resource (API, DB) to N threads
+<br>— Supports <strong>timeout-based acquisition</strong> — don't wait forever
+<br>— Implements a <strong>Bulkhead pattern</strong>: separate semaphores per resource type
+<br>— Exposes <strong>metrics</strong>: available permits, queue size, rejection rate
+<br>— Integrates with <strong>try-with-resources</strong> for automatic permit release`,
+  io: `var throttler = new ResourceThrottler("stripe-api", permits: 10);
+try (var permit = throttler.acquire(Duration.ofSeconds(2))) {
+    stripeClient.charge(amount); // at most 10 concurrent calls
+} // permit auto-released
+// If all 10 in use and timeout expires: AcquireTimeoutException thrown`,
+  followup: "Follow-ups: Difference between Semaphore and ReentrantLock? What is fair vs unfair Semaphore? What is the Bulkhead pattern in microservices? How does this differ from a rate limiter?",
+  bruteTitle: "synchronized with hardcoded counter — no timeout",
+  brute: `// WRONG: blocks forever, no timeout, not composable
+private int active = 0;
+private final int max = 10;
+
+public synchronized void acquire() throws InterruptedException {
+    while (active >= max) wait(); // blocks FOREVER if never released
+    active++;
+}
+public synchronized void release() { active--; notifyAll(); }
+// No timeout. No try-with-resources. No metrics. Reinventing Semaphore badly.`,
+  tabs: ["ResourceThrottler","Demo"],
+  optimal: [
+`import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
+
+public final class ResourceThrottler {
+    private final String resourceName;
+    private final Semaphore semaphore; // fair=true: FIFO ordering — no starvation
+    private final AtomicLong rejections = new AtomicLong();
+    private final AtomicLong acquisitions = new AtomicLong();
+
+    public ResourceThrottler(String resourceName, int maxConcurrent) {
+        this.resourceName = resourceName;
+        // fair=true: threads acquire permits in FIFO order — prevents starvation
+        this.semaphore = new Semaphore(maxConcurrent, true);
+    }
+
+    // AutoCloseable permit — enables try-with-resources
+    public final class Permit implements AutoCloseable {
+        private boolean released = false;
+        @Override
+        public void close() {
+            if (!released) { released = true; semaphore.release(); }
+        }
+    }
+
+    public Permit acquire(Duration timeout) throws InterruptedException {
+        boolean acquired = semaphore.tryAcquire(
+            timeout.toMillis(), TimeUnit.MILLISECONDS);
+
+        if (!acquired) {
+            rejections.incrementAndGet();
+            throw new AcquireTimeoutException(
+                "Could not acquire permit for " + resourceName +
+                " within " + timeout);
+        }
+        acquisitions.incrementAndGet();
+        return new Permit();
+    }
+
+    // Bulkhead: create separate throttlers per downstream service
+    // so one slow service doesn't exhaust permits for unrelated calls
+    public static Map<String, ResourceThrottler> bulkhead(
+            Map<String, Integer> config) {
+        return config.entrySet().stream()
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                e -> new ResourceThrottler(e.getKey(), e.getValue())
+            ));
+    }
+
+    // Metrics
+    public int availablePermits()  { return semaphore.availablePermits(); }
+    public int queueLength()       { return semaphore.getQueueLength(); }
+    public long rejectionCount()   { return rejections.get(); }
+    public long acquisitionCount() { return acquisitions.get(); }
+
+    public String stats() {
+        return "%s | available=%d | queued=%d | rejected=%d".formatted(
+            resourceName, availablePermits(), queueLength(), rejectionCount());
+    }
+}
+
+class AcquireTimeoutException extends RuntimeException {
+    public AcquireTimeoutException(String msg) { super(msg); }
+}`,
+`// Bulkhead: separate permit pools per service
+var throttlers = ResourceThrottler.bulkhead(Map.of(
+    "stripe-api",  10,   // at most 10 concurrent Stripe calls
+    "sendgrid",     5,   // at most 5 concurrent email sends
+    "s3-upload",   20    // at most 20 concurrent S3 uploads
+));
+
+var stripeThrottler = throttlers.get("stripe-api");
+var latch = new CountDownLatch(20);
+
+for (int i = 0; i < 20; i++) {
+    final int id = i;
+    Thread.ofVirtual().start(() -> {
+        try (var permit = stripeThrottler.acquire(Duration.ofSeconds(2))) {
+            System.out.println("Charging: " + id);
+            Thread.sleep(300); // simulate Stripe API call
+        } catch (AcquireTimeoutException e) {
+            System.out.println("Rejected: " + id);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } finally { latch.countDown(); }
+    });
+}
+latch.await();
+System.out.println(stripeThrottler.stats());`
+  ],
+  altTitle: "Rate limiter vs throttler — know the difference",
+  alt: `// Throttler (Semaphore): limits CONCURRENT requests — how many AT THE SAME TIME
+// Rate limiter (Token Bucket): limits REQUEST RATE — how many PER SECOND
+// You need BOTH in production:
+//   Semaphore: don't overwhelm Stripe with 500 concurrent calls
+//   Rate limiter: don't exceed Stripe's 100 req/sec API limit
+// These solve different problems and are often used together.`,
+  cmpRows: [
+    ["Blocks on contention?","Yes — wait() forever","tryAcquire(timeout) — bounded wait"],
+    ["Fair ordering?","notifyAll — random wake","Semaphore(fair=true) — FIFO"],
+    ["Timeout support?","None — hangs","tryAcquire(timeout, unit)"],
+    ["Auto-release?","Manual release required","try-with-resources Permit"],
+    ["Metrics?","None","availablePermits, queueLength, rejections"],
+  ],
+  verdict: "The Bulkhead pattern is why you need separate Semaphores per resource. If all outbound calls share one semaphore, a slow Stripe API exhausts permits for SendGrid and S3 too — unrelated services start failing. Bulkhead isolates failure domains exactly like watertight compartments on a ship."
+},
+
+{
+  title: "Strategy Pattern with Runtime Switching",
+  tags: ["LLD","Design Patterns"],
+  tagClass: ["lld","design"],
+  stmt: `Design a <strong>payment processing system</strong> using the Strategy pattern:
+<br><br>— Support multiple <strong>payment strategies</strong>: UPI, Card, NetBanking, Wallet
+<br>— Strategy selected at <strong>runtime</strong> based on user preference or feature flags
+<br>— Adding a new payment method must require <strong>zero changes to PaymentProcessor</strong>
+<br>— Support <strong>strategy chaining</strong>: try primary, fall back to secondary on failure
+<br>— Use <strong>Java enums + functional interface</strong> for a modern, clean implementation`,
+  io: `var processor = new PaymentProcessor();
+processor.setStrategy(PaymentStrategy.UPI);
+processor.process(new Payment(amount, userId)); // uses UPI
+// switch at runtime:
+processor.setStrategy(PaymentStrategy.CARD);
+processor.process(payment); // now uses Card — zero code change in processor`,
+  followup: "Follow-ups: How does Strategy differ from State pattern? When would you use a Map<Enum, Strategy> vs a switch statement? How does Spring's @Qualifier implement a form of strategy selection?",
+  bruteTitle: "Giant if-else or switch — Open/Closed violation",
+  brute: `// WRONG: adding PayPay requires editing this class — OCP violation
+public class PaymentProcessor {
+    public void process(Payment p, String method) {
+        if (method.equals("UPI")) {
+            // 50 lines of UPI logic
+        } else if (method.equals("CARD")) {
+            // 50 lines of card logic
+        } else if (method.equals("NETBANKING")) {
+            // 50 lines of netbanking logic
+        }
+        // Adding new method: edit THIS class — risk of breaking existing methods
+        // Untestable in isolation — can't mock individual strategies
+    }
+}`,
+  tabs: ["Strategy interface","Registry","Processor","Demo"],
+  optimal: [
+`// Functional strategy interface — implementable as lambda
+@FunctionalInterface
+public interface PaymentStrategy {
+    PaymentResult execute(Payment payment);
+
+    // Chaining: try this strategy, fallback to other on failure
+    default PaymentStrategy withFallback(PaymentStrategy fallback) {
+        return payment -> {
+            try {
+                return this.execute(payment);
+            } catch (Exception e) {
+                System.out.println("Primary failed: " + e.getMessage() + ", trying fallback");
+                return fallback.execute(payment);
+            }
+        };
+    }
+}
+
+// Domain types
+public record Payment(BigDecimal amount, String userId, String currency) {}
+public record PaymentResult(boolean success, String txId, String method) {}`,
+`// Strategy registry — add new strategies with ZERO changes to PaymentProcessor
+public enum PaymentMethod { UPI, CARD, NETBANKING, WALLET, CRYPTO }
+
+public final class StrategyRegistry {
+    private final Map<PaymentMethod, PaymentStrategy> strategies;
+
+    public StrategyRegistry() {
+        strategies = new EnumMap<>(PaymentMethod.class);
+        // Register built-in strategies
+        register(PaymentMethod.UPI, p -> {
+            System.out.println("Processing UPI: ₹" + p.amount());
+            return new PaymentResult(true, "UPI-" + UUID.randomUUID(), "UPI");
+        });
+        register(PaymentMethod.CARD, p -> {
+            System.out.println("Processing Card: ₹" + p.amount());
+            return new PaymentResult(true, "CARD-" + UUID.randomUUID(), "CARD");
+        });
+        register(PaymentMethod.WALLET, p -> {
+            System.out.println("Processing Wallet: ₹" + p.amount());
+            return new PaymentResult(true, "WALL-" + UUID.randomUUID(), "WALLET");
+        });
+    }
+
+    // Open for extension: add new payment method without touching PaymentProcessor
+    public void register(PaymentMethod method, PaymentStrategy strategy) {
+        strategies.put(method, strategy);
+    }
+
+    public PaymentStrategy get(PaymentMethod method) {
+        PaymentStrategy s = strategies.get(method);
+        if (s == null) throw new IllegalArgumentException("No strategy for: " + method);
+        return s;
+    }
+}`,
+`public final class PaymentProcessor {
+    private final StrategyRegistry registry;
+    private volatile PaymentStrategy currentStrategy; // volatile for visibility
+
+    public PaymentProcessor(StrategyRegistry registry, PaymentMethod defaultMethod) {
+        this.registry = registry;
+        this.currentStrategy = registry.get(defaultMethod);
+    }
+
+    // Runtime strategy switch — no restart needed
+    public void setStrategy(PaymentMethod method) {
+        this.currentStrategy = registry.get(method);
+    }
+
+    // Strategy with fallback chain
+    public void setStrategyWithFallback(PaymentMethod primary, PaymentMethod fallback) {
+        this.currentStrategy = registry.get(primary)
+            .withFallback(registry.get(fallback));
+    }
+
+    public PaymentResult process(Payment payment) {
+        Objects.requireNonNull(payment);
+        return currentStrategy.execute(payment);
+    }
+}`,
+`var registry = new StrategyRegistry();
+var processor = new PaymentProcessor(registry, PaymentMethod.UPI);
+var payment = new Payment(new BigDecimal("500"), "u123", "INR");
+
+processor.process(payment); // UPI
+
+// Runtime switch — no restart, no if-else
+processor.setStrategy(PaymentMethod.CARD);
+processor.process(payment); // CARD
+
+// Fallback chain: try UPI, fall back to WALLET
+processor.setStrategyWithFallback(PaymentMethod.UPI, PaymentMethod.WALLET);
+
+// Register new strategy at runtime — zero changes to PaymentProcessor
+registry.register(PaymentMethod.CRYPTO, p -> {
+    System.out.println("Processing Crypto: ₹" + p.amount());
+    return new PaymentResult(true, "BTC-" + UUID.randomUUID(), "CRYPTO");
+});
+processor.setStrategy(PaymentMethod.CRYPTO);
+processor.process(payment); // CRYPTO — added without touching PaymentProcessor`
+  ],
+  altTitle: "Spring Boot approach with @Qualifier + @Service",
+  alt: `// Spring injects the right strategy based on qualifier at startup
+@Service @Qualifier("upi") class UpiStrategy implements PaymentStrategy { ... }
+@Service @Qualifier("card") class CardStrategy implements PaymentStrategy { ... }
+
+// Processor receives a Map of all strategies, indexed by qualifier name
+@Autowired
+Map<String, PaymentStrategy> strategies; // {"upi": UpiStrategy, "card": CardStrategy}
+PaymentStrategy active = strategies.get(userPreference);`,
+  cmpRows: [
+    ["New payment method?","Edit PaymentProcessor — risky","Register in registry — zero touch"],
+    ["Unit testable?","Must test whole class","Each strategy mocked/tested alone"],
+    ["Runtime switching?","No — restart required","setStrategy() — instant switch"],
+    ["Fallback support?","Nested if-else","withFallback() functional chain"],
+    ["OCP compliance?","Violated — open for modification","Respected — open for extension"],
+  ],
+  verdict: "The withFallback() default method on the interface is the elegant touch — it lets you compose strategies without any infrastructure code in PaymentProcessor. It's a practical example of interface default methods enabling decorator composition without inheritance."
+},
+
+{
+  title: "Deadlock Detection & Prevention",
+  tags: ["Concurrency","Core Java","OS Concepts"],
+  tagClass: ["conc","conc","design"],
+  stmt: `Demonstrate <strong>deadlock conditions, detection, and prevention</strong> in Java:
+<br><br>— Write code that <strong>deliberately creates a deadlock</strong>
+<br>— Explain all <strong>four Coffman conditions</strong> with code references
+<br>— Implement <strong>three prevention strategies</strong>: lock ordering, tryLock timeout, and lock-free
+<br>— Show how <strong>ThreadMXBean</strong> detects deadlocks at runtime
+<br>— Implement a <strong>transfer() between bank accounts</strong> safely`,
+  io: `// Safe transfer — no deadlock possible regardless of call order
+bank.transfer(accountA, accountB, 500); // Thread 1
+bank.transfer(accountB, accountA, 300); // Thread 2 — concurrent, no deadlock`,
+  followup: "Follow-ups: What are the four Coffman conditions? What is livelock vs deadlock vs starvation? How does Java's ThreadMXBean.findDeadlockedThreads() work? What is lock-free programming and what JVM instructions power it?",
+  bruteTitle: "Classic AB-BA deadlock",
+  brute: `// CLASSIC DEADLOCK: Thread 1 locks A then tries B, Thread 2 locks B then tries A
+class BrokenBank {
+    synchronized void transfer(Account from, Account to, int amount) {
+        synchronized(from) {         // Thread 1 holds A, Thread 2 holds B
+            synchronized(to) {       // Thread 1 waits for B, Thread 2 waits for A
+                from.debit(amount);  // DEADLOCK — neither can proceed
+                to.credit(amount);
+            }
+        }
+    }
+}
+// Coffman conditions all present:
+// 1. Mutual exclusion: synchronized blocks
+// 2. Hold and wait: holds 'from' lock while waiting for 'to'
+// 3. No preemption: JVM cannot forcibly take a lock away
+// 4. Circular wait: A→B and B→A cycle`,
+  tabs: ["Deadlock demo","Lock ordering","tryLock timeout","Lock-free","Detection"],
+  optimal: [
+`// DELIBERATE DEADLOCK — for illustration only
+Thread t1 = new Thread(() -> {
+    synchronized(lockA) {
+        sleep(50); // give t2 time to grab lockB
+        synchronized(lockB) { System.out.println("T1 done"); }
+    }
+});
+Thread t2 = new Thread(() -> {
+    synchronized(lockB) {
+        sleep(50);
+        synchronized(lockA) { System.out.println("T2 done"); }
+    }
+});
+t1.start(); t2.start();
+// Both hang forever — classic AB-BA deadlock`,
+`// PREVENTION 1: Lock Ordering — always acquire locks in a consistent global order
+class SafeBankOrdering {
+    void transfer(Account from, Account to, int amount) {
+        // Order by account ID — same order ALWAYS regardless of from/to direction
+        Account first  = from.id() < to.id() ? from : to;
+        Account second = from.id() < to.id() ? to : from;
+
+        synchronized(first) {        // always lock lower-ID account first
+            synchronized(second) {   // no circular wait possible
+                from.debit(amount);
+                to.credit(amount);
+            }
+        }
+    }
+    // Thread 1: transfer(A→B): locks A(1) then B(2)
+    // Thread 2: transfer(B→A): locks A(1) then B(2) — SAME ORDER!
+    // Neither can deadlock — they queue on A(1), proceed sequentially
+}`,
+`// PREVENTION 2: tryLock with timeout — back off if can't acquire
+class SafeBankTryLock {
+    private final Map<String, ReentrantLock> locks = new ConcurrentHashMap<>();
+
+    void transfer(Account from, Account to, int amount) throws InterruptedException {
+        ReentrantLock l1 = locks.computeIfAbsent(from.id(), k -> new ReentrantLock());
+        ReentrantLock l2 = locks.computeIfAbsent(to.id(), k -> new ReentrantLock());
+
+        while (true) {
+            if (l1.tryLock(50, TimeUnit.MILLISECONDS)) {
+                try {
+                    if (l2.tryLock(50, TimeUnit.MILLISECONDS)) {
+                        try {
+                            from.debit(amount); to.credit(amount);
+                            return; // success
+                        } finally { l2.unlock(); }
+                    }
+                    // Couldn't get l2 — back off and retry
+                } finally { l1.unlock(); }
+            }
+            Thread.sleep(new Random().nextInt(10)); // random backoff
+        }
+    }
+}`,
+`// PREVENTION 3: Lock-free using AtomicInteger CAS — no locks = no deadlock possible
+class LockFreeAccount {
+    private final AtomicInteger balance;
+
+    boolean debit(int amount) {
+        return balance.updateAndGet(b -> b >= amount ? b - amount : b) >= 0;
+    }
+    void credit(int amount) { balance.addAndGet(amount); }
+}
+// AtomicInteger.updateAndGet() uses CPU CAS instruction (LOCK CMPXCHG)
+// Guaranteed atomic: no OS lock, no deadlock, no starvation (wait-free)`,
+`// DETECTION: ThreadMXBean can find deadlocked threads at runtime
+import java.lang.management.*;
+
+ThreadMXBean tmx = ManagementFactory.getThreadMXBean();
+long[] deadlockedIds = tmx.findDeadlockedThreads(); // null if no deadlock
+
+if (deadlockedIds != null) {
+    ThreadInfo[] infos = tmx.getThreadInfo(deadlockedIds, true, true);
+    for (ThreadInfo info : infos) {
+        System.out.println("DEADLOCK: " + info.getThreadName());
+        System.out.println("  Waiting for: " + info.getLockName());
+        System.out.println("  Held by:     " + info.getLockOwnerName());
+        for (StackTraceElement e : info.getStackTrace())
+            System.out.println("    " + e);
+    }
+}
+// Can be run from a ScheduledExecutorService to periodically health-check`
+  ],
+  altTitle: "Livelock vs Deadlock — know the difference",
+  alt: `// LIVELOCK: threads are active but no progress — they keep yielding to each other
+// Example: two threads both see the other has a lock, both back off, retry, repeat.
+// The tryLock+backoff approach can degrade into livelock without random jitter.
+// Fix: exponential backoff with random jitter (same as TCP congestion control).
+
+// STARVATION: a thread never gets CPU time because higher-priority threads always win.
+// Fix: Semaphore(fair=true) or ReentrantLock(fair=true) — FIFO ordering.`,
+  cmpRows: [
+    ["AB-BA lock order?","Causes deadlock","Lock ordering prevents it"],
+    ["Blocks forever?","Yes — no timeout","tryLock(timeout) breaks cycle"],
+    ["Starvation risk?","Yes with unfair locks","Random backoff reduces it"],
+    ["Detectable at runtime?","Not automatically","ThreadMXBean.findDeadlockedThreads()"],
+    ["Lock-free?","No","AtomicInteger CAS — mathematically deadlock-free"],
+  ],
+  verdict: "Lock ordering is the simplest and most robust prevention strategy — it breaks the circular wait Coffman condition by making the wait graph a DAG (no cycles). tryLock is a recovery mechanism, not prevention — it handles deadlock after it starts forming. For maximum throughput, lock-free CAS (AtomicInteger, AtomicReference) eliminates the problem entirely."
+},
+
+{
+  title: "Decorator Pattern — I/O Pipeline",
+  tags: ["LLD","Design Patterns","Core Java"],
+  tagClass: ["lld","design","ds"],
+  stmt: `Implement the <strong>Decorator pattern</strong> for a data processing pipeline:
+<br><br>— Base <strong>DataReader</strong> reads raw bytes from a source
+<br>— Decorators add: <strong>buffering, compression, encryption, logging</strong>
+<br>— Decorators are <strong>composable in any order</strong> without subclass explosion
+<br>— Each decorator adds <strong>exactly one concern</strong> (Single Responsibility)
+<br>— Model this after <strong>Java's InputStream hierarchy</strong> — explain how it uses Decorator`,
+  io: `DataReader reader = new LoggingReader(
+    new EncryptingReader(
+      new BufferedReader(
+        new FileReader("data.bin"), 8192), key), logger);
+String data = reader.read(); // decrypted, buffered, logged — in order`,
+  followup: "Follow-ups: How does java.io.InputStream use Decorator pattern (BufferedInputStream, GZIPInputStream)? What is the difference between Decorator and Proxy? What is Decorator vs Inheritance for adding behavior?",
+  bruteTitle: "Inheritance for each combination — subclass explosion",
+  brute: `// WRONG: combinatorial explosion with inheritance
+class FileReader              extends Reader { }
+class BufferedFileReader      extends FileReader { }     // 1 decorator
+class EncryptedFileReader     extends FileReader { }     // 1 decorator
+class BufferedEncryptedReader extends BufferedFileReader { } // 2 decorators
+// Add LoggingReader: 4 new subclasses needed (log, log+buf, log+enc, log+buf+enc)
+// Add CompressionReader: 8 new subclasses... exponential growth
+// Solution: composition, not inheritance`,
+  tabs: ["Interface","Decorators","Demo"],
+  optimal: [
+`// Base component interface — all decorators AND implementations share this type
+public interface DataReader extends AutoCloseable {
+    String read() throws Exception;
+    void close() throws Exception;
+}
+
+// Concrete component: reads from a string source (in production: file/socket)
+public final class StringDataReader implements DataReader {
+    private final String source;
+    private boolean consumed = false;
+
+    public StringDataReader(String source) { this.source = source; }
+
+    @Override
+    public String read() {
+        if (consumed) return "";
+        consumed = true; return source;
+    }
+    @Override public void close() { /* nothing to release */ }
+}`,
+`// Base decorator: wraps another DataReader — all decorators extend this
+public abstract class DataReaderDecorator implements DataReader {
+    protected final DataReader wrapped;
+    protected DataReaderDecorator(DataReader wrapped) { this.wrapped = wrapped; }
+    @Override public void close() throws Exception { wrapped.close(); }
+}
+
+// DECORATOR 1: Logging — adds read timing and byte count
+public final class LoggingReader extends DataReaderDecorator {
+    public LoggingReader(DataReader wrapped) { super(wrapped); }
+
+    @Override
+    public String read() throws Exception {
+        long start = System.nanoTime();
+        String data = wrapped.read();
+        long ms = (System.nanoTime() - start) / 1_000_000;
+        System.out.printf("[LOG] Read %d chars in %dms%n", data.length(), ms);
+        return data;
+    }
+}
+
+// DECORATOR 2: Uppercase transform (simulates compression/decompression)
+public final class UpperCaseReader extends DataReaderDecorator {
+    public UpperCaseReader(DataReader wrapped) { super(wrapped); }
+
+    @Override
+    public String read() throws Exception {
+        return wrapped.read().toUpperCase();
+    }
+}
+
+// DECORATOR 3: Prefix/Suffix wrapper (simulates encryption headers)
+public final class EncryptingReader extends DataReaderDecorator {
+    private final String key;
+    public EncryptingReader(DataReader wrapped, String key) {
+        super(wrapped); this.key = key;
+    }
+
+    @Override
+    public String read() throws Exception {
+        String data = wrapped.read();
+        // XOR with key length for demo — use AES in production
+        return "[ENC:" + key.length() + "]" + data + "[/ENC]";
+    }
+}
+
+// DECORATOR 4: Trimming (simulates buffering — accumulates then flushes)
+public final class TrimmingReader extends DataReaderDecorator {
+    public TrimmingReader(DataReader wrapped) { super(wrapped); }
+
+    @Override
+    public String read() throws Exception {
+        return wrapped.read().trim();
+    }
+}`,
+`// Compose decorators in any order — each adds one concern
+DataReader reader = new LoggingReader(
+    new EncryptingReader(
+        new UpperCaseReader(
+            new TrimmingReader(
+                new StringDataReader("  hello, world!  ")
+            )
+        ), "secret-key"
+    )
+);
+
+// Java's try-with-resources — close() cascades through decorator chain
+try (reader) {
+    System.out.println(reader.read());
+    // Execution: StringDataReader.read()
+    //         → TrimmingReader: trims whitespace
+    //         → UpperCaseReader: HELLO, WORLD!
+    //         → EncryptingReader: [ENC:10]HELLO, WORLD![/ENC]
+    //         → LoggingReader: logs timing
+    //         Output: "[ENC:10]HELLO, WORLD![/ENC]"
+}
+
+// Change order — completely different pipeline, no new classes
+DataReader reader2 = new UpperCaseReader(
+    new LoggingReader(
+        new StringDataReader("yash")));
+// Now: log FIRST (logs lowercase), then uppercase`
+  ],
+  altTitle: "Java's InputStream is the canonical Decorator example",
+  alt: `// java.io IS the Decorator pattern:
+InputStream raw = new FileInputStream("data.bin");    // Concrete component
+InputStream buf = new BufferedInputStream(raw, 8192); // Decorator
+InputStream gz  = new GZIPInputStream(buf);           // Decorator on decorator
+// Exact same pattern: wrap, delegate, add one concern.
+// DataInputStream, CipherInputStream, CheckedInputStream — all decorators.`,
+  cmpRows: [
+    ["Adding new combination?","New subclass for each combo","Compose existing decorators"],
+    ["Number of classes for N features?","2^N subclasses","N decorator classes only"],
+    ["Runtime composition?","Fixed at compile time","Composable dynamically"],
+    ["Single responsibility?","Mixed concerns in subclass","One concern per decorator"],
+    ["Java stdlib example?","None — antipattern","BufferedInputStream, GZIPInputStream"],
+  ],
+  verdict: "The key OOP insight: decorators work because they share the same interface as the component they wrap. This is why you can stack them infinitely — each layer just sees a DataReader, doesn't know or care what's underneath. It's interface-based composition eliminating the N*M subclass explosion of inheritance."
+},
+
+{
+  title: "Producer-Consumer with Backpressure",
+  tags: ["Concurrency","System Design","Core Java"],
+  tagClass: ["conc","design","conc"],
+  stmt: `Implement a <strong>multi-producer multi-consumer pipeline with backpressure</strong>:
+<br><br>— N producer threads generate work items and push to a <strong>bounded queue</strong>
+<br>— M consumer threads pull items and process them
+<br>— When queue is <strong>full, producers slow down</strong> (backpressure — not OOM)
+<br>— When queue is <strong>empty, consumers park</strong> (not busy-wait)
+<br>— Track <strong>throughput, latency, drop rate</strong> metrics
+<br>— Graceful <strong>shutdown</strong>: drain remaining items before stopping consumers`,
+  io: `var pipeline = new Pipeline<String>(
+    producers: 3, consumers: 5, queueCapacity: 100);
+pipeline.start(producer -> generateEvents(producer));
+// producers slow automatically when queue fills — no OOM
+pipeline.shutdown(); // drains queue, then stops consumers`,
+  followup: "Follow-ups: What is backpressure and why does it matter? How does Reactive Streams (Project Reactor, RxJava) implement backpressure? What is the difference between drop, buffer, and block backpressure strategies?",
+  bruteTitle: "Unbounded queue — OOM on slow consumers",
+  brute: `// WRONG: unbounded queue — if producers are faster than consumers, OOM
+LinkedList<String> queue = new LinkedList<>(); // grows without bound
+
+// Producer:
+while (true) queue.add(generateWork()); // never slows down — queue = ∞
+
+// Consumer:
+while (true) {
+    if (!queue.isEmpty()) process(queue.poll());
+    else Thread.sleep(10); // busy polling — CPU waste
+}
+// At producer 10k/s, consumer 1k/s: queue grows 9k/s → OOM in minutes`,
+  tabs: ["Pipeline","Metrics","Demo"],
+  optimal: [
+`import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
+import java.util.function.*;
+
+public final class Pipeline<T> {
+    // LinkedBlockingQueue with bound = backpressure mechanism
+    // put() blocks producers when full — naturally throttles them
+    private final LinkedBlockingQueue<T> queue;
+    private final int producerCount, consumerCount;
+    private volatile boolean running = true;
+    private volatile boolean shutdown = false;
+
+    // Metrics
+    private final AtomicLong produced  = new AtomicLong();
+    private final AtomicLong consumed  = new AtomicLong();
+    private final AtomicLong dropped   = new AtomicLong();
+
+    private final List<Thread> threads = new ArrayList<>();
+
+    public Pipeline(int producers, int consumers, int queueCapacity) {
+        this.producerCount = producers;
+        this.consumerCount = consumers;
+        this.queue = new LinkedBlockingQueue<>(queueCapacity); // bounded!
+    }
+
+    public void startProducing(Supplier<T> itemFactory) {
+        for (int i = 0; i < producerCount; i++) {
+            Thread t = Thread.ofVirtual().start(() -> {
+                while (running) {
+                    try {
+                        T item = itemFactory.get();
+                        // BACKPRESSURE: put() blocks if queue full
+                        // Producer thread parks until consumer creates space
+                        queue.put(item);
+                        produced.incrementAndGet();
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt(); break;
+                    }
+                }
+            });
+            threads.add(t);
+        }
+    }
+
+    public void startConsuming(Consumer<T> processor) {
+        for (int i = 0; i < consumerCount; i++) {
+            Thread t = Thread.ofVirtual().start(() -> {
+                while (!shutdown || !queue.isEmpty()) {
+                    try {
+                        // poll() with timeout — consumers park when empty
+                        // Returns null on timeout — checks shutdown condition
+                        T item = queue.poll(100, TimeUnit.MILLISECONDS);
+                        if (item != null) {
+                            processor.accept(item);
+                            consumed.incrementAndGet();
+                        }
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt(); break;
+                    }
+                }
+            });
+            threads.add(t);
+        }
+    }
+
+    public void shutdown() throws InterruptedException {
+        running = false;   // stop producers
+        // Consumers continue draining the queue until it's empty (shutdown=false still)
+        for (Thread t : threads.subList(0, producerCount)) t.join();
+        shutdown = true;   // now consumers know producers are done + queue drained
+        for (Thread t : threads.subList(producerCount, threads.size())) t.join();
+    }`,
+`    public Metrics snapshot() {
+        return new Metrics(
+            produced.get(), consumed.get(), dropped.get(), queue.size());
+    }
+
+    public record Metrics(long produced, long consumed, long dropped, int queueSize) {
+        public double backpressureRatio() {
+            return produced == 0 ? 0 : (double) dropped / produced;
+        }
+        @Override public String toString() {
+            return "produced=%d consumed=%d dropped=%d queueSize=%d".formatted(
+                produced, consumed, dropped, queueSize);
+        }
+    }
+}`,
+`var pipeline = new Pipeline<String>(3, 5, 100);
+
+pipeline.startConsuming(item -> {
+    try {
+        Thread.sleep(5); // simulate processing — slower than production
+        System.out.println("Consumed: " + item);
+    } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+});
+
+var counter = new AtomicInteger();
+pipeline.startProducing(() -> "task-" + counter.incrementAndGet());
+
+Thread.sleep(2000); // let it run 2 seconds
+
+pipeline.shutdown();
+System.out.println(pipeline.snapshot());
+// Queue full → producers block → natural backpressure — no OOM`
+  ],
+  altTitle: "Project Reactor — reactive backpressure (production standard)",
+  alt: `// Reactive Streams: consumers REQUEST items — producers send only what's asked
+// This is demand-driven backpressure — superior to blocking queues for async systems
+Flux.range(1, 1_000_000)
+    .onBackpressureBuffer(100)  // buffer strategy: hold 100, then drop
+    .publishOn(Schedulers.boundedElastic())
+    .subscribe(item -> slowProcess(item));
+// Strategies: BUFFER (queue), DROP (discard), LATEST (keep newest), ERROR (fail fast)`,
+  cmpRows: [
+    ["Queue overflow?","OOM — unbounded growth","Blocks producer — bounded memory"],
+    ["Consumer when empty?","Busy-poll with sleep","Parks in poll() — zero CPU"],
+    ["Shutdown drains queue?","No — items lost","Yes — consumers drain before stopping"],
+    ["Metrics?","None","produced/consumed/dropped/queueSize"],
+    ["Production alternative?","Manual queues","Reactor Flux / RxJava Observable"],
+  ],
+  verdict: "The two-phase shutdown is the subtle correctness requirement. Setting running=false stops producers. But you must wait for producers to finish (join) before setting shutdown=true — otherwise consumers exit while the queue still has items. The drain phase (running=false, shutdown=false) is where remaining items get processed."
+}
+];
+
+// Render sidebar
+const navList = document.getElementById('nav-list');
+const mainContent = document.getElementById('main-content');
+
+problems.forEach((p, i) => {
+  const item = document.createElement('div');
+  item.className = 'sidebar-item' + (i === 0 ? ' active' : '');
+  item.onclick = () => showProblem(i);
+  item.innerHTML = `<span class="sidebar-num">${String(i+1).padStart(2,'0')}</span>
+    <span style="flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.title}</span>
+    <span class="sidebar-tag">${p.tags[0]}</span>`;
+  navList.appendChild(item);
+});
+
+function buildProblem(p, idx) {
+  const tagHtml = p.tags.map((t,i) => `<span class="tag ${p.tagClass[i]}">${t}</span>`).join('');
+  const tabBtns = p.tabs.map((t,i) => `<button class="tab-btn ${i===0?'active':''}" onclick="showTab(this,'opt-${idx}-${i}')">${t}</button>`).join('');
+  const tabPanes = p.optimal.map((code,i) => `<div id="opt-${idx}-${i}" class="tab-pane ${i===0?'active':''}"><pre>${esc(code)}</pre></div>`).join('');
+  const cmpRows = p.cmpRows.map(([key,bad,good]) =>
+    `<div class="cmp-row"><span class="cmp-key">${key}</span><span class="cmp-bad">${bad}</span></div>
+     <div class="cmp-row"><span class="cmp-key"></span><span class="cmp-good">${good}</span></div>`).join('');
+  const cmpRowsFmt = p.cmpRows.map(([key,bad,good]) =>
+    `<div class="cmp-row"><span class="cmp-key">${key}</span></div>
+     <div class="cmp-row"><span class="cmp-key"  style="color:var(--red);font-weight:600">✗ ${bad}</span></div>
+     <div class="cmp-row"><span class="cmp-key" style="color:var(--green);font-weight:600">✓ ${good}</span></div>`).join('');
+
+  return `
+<div class="prob-header">
+  <div class="prob-num">Problem ${String(idx+1).padStart(2,'0')} / 20</div>
+  <div class="prob-title">${p.title}</div>
+  <div class="prob-tags">${tagHtml}</div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="card-label label-stmt">Problem Statement</span></div>
+  <div class="card-body">
+    <p class="stmt">${p.stmt}</p>
+    <div class="io">${esc(p.io)}</div>
+    <div class="followup">${p.followup}</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="card-label label-brute">Brute Force / Wrong — ${p.bruteTitle}</span></div>
+  <div class="card-body"><pre>${esc(p.brute)}</pre></div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="card-label label-opt">Optimal Solution — Java 17+</span></div>
+  <div class="card-body">
+    <div class="tabs">${tabBtns}</div>
+    ${tabPanes}
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="card-label label-alt">Alternative — ${p.altTitle}</span></div>
+  <div class="card-body"><pre>${esc(p.alt)}</pre></div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="card-label label-cmp">Comparison — Brute vs Optimal</span></div>
+  <div class="card-body">
+    ${p.cmpRows.map(([key,bad,good]) => `
+      <div class="cmp-row">
+        <span class="cmp-key">${key}</span>
+        <span style="display:flex;gap:16px">
+          <span class="cmp-bad">✗ ${bad}</span>
+          <span class="cmp-good">✓ ${good}</span>
+        </span>
+      </div>`).join('')}
+    <div class="verdict">${p.verdict}</div>
+  </div>
+</div>
+
+<div class="nav-bar">
+  <button class="nav-btn" onclick="showProblem(${idx-1})" ${idx===0?'disabled':''}>← Previous</button>
+  <span class="nav-pos">${idx+1} / ${problems.length}</span>
+  <button class="nav-btn" onclick="showProblem(${idx+1})" ${idx===problems.length-1?'disabled':''}>Next →</button>
+</div>`;
+}
+
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// Render all problems (hidden)
+problems.forEach((p, i) => {
+  const div = document.createElement('div');
+  div.className = 'problem' + (i === 0 ? ' active' : '');
+  div.id = 'prob-' + i;
+  div.innerHTML = buildProblem(p, i);
+  mainContent.appendChild(div);
+});
+
+function showProblem(idx) {
+  if (idx < 0 || idx >= problems.length) return;
+  document.querySelectorAll('.problem').forEach((el,i) => el.classList.toggle('active', i===idx));
+  document.querySelectorAll('.sidebar-item').forEach((el,i) => el.classList.toggle('active', i===idx));
+  document.getElementById('prog').style.width = ((idx+1)/problems.length*100) + '%';
+  mainContent.scrollTop = 0;
+  window.scrollTo(0,0);
+}
+
+function showTab(btn, id) {
+  const card = btn.closest('.card-body');
+  card.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  card.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+</script>
+</body>
+</html>

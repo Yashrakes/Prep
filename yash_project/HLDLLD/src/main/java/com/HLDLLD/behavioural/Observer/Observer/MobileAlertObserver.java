@@ -6,11 +6,9 @@ import com.HLDLLD.behavioural.Observer.Observable.StockObservable;
 public class MobileAlertObserver implements NotAlertObserver{
 
     String userName;
-    StockObservable observable;
 
-    public MobileAlertObserver(String userName, StockObservable observable){
+    public MobileAlertObserver(String userName){
         this.userName = userName;
-        this.observable = observable;
     }
 
     private void sendmsg(String userName, String msg){

@@ -9,7 +9,6 @@ public class User {
     private final String email;
     private final String phone;
     private final String address;
-
     // Private constructor (only Builder can create)
     private User(UserBuilder builder) {
         this.firstName = builder.firstName;

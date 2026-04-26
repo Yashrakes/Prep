@@ -1,0 +1,1334 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-mono); }
+.app { padding: 1rem 0; }
+.header { margin-bottom: 1.5rem; }
+.header h1 { font-size: 18px; font-weight: 500; color: var(--color-text-primary); font-family: var(--font-sans); }
+.header p { font-size: 13px; color: var(--color-text-secondary); font-family: var(--font-sans); margin-top: 4px; }
+.problem-list { display: flex; flex-direction: column; gap: 0; }
+.problem-row { border: 0.5px solid var(--color-border-tertiary); border-radius: 0; background: var(--color-background-primary); transition: background 0.15s; }
+.problem-row:first-child { border-radius: var(--border-radius-md) var(--border-radius-md) 0 0; }
+.problem-row:last-child { border-radius: 0 0 var(--border-radius-md) var(--border-radius-md); }
+.problem-row + .problem-row { border-top: none; }
+.problem-header { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; user-select: none; }
+.problem-header:hover { background: var(--color-background-secondary); }
+.problem-num { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: 4px; padding: 2px 7px; font-family: var(--font-sans); min-width: 28px; text-align: center; }
+.problem-title { font-size: 14px; font-weight: 500; color: var(--color-text-primary); font-family: var(--font-sans); flex: 1; }
+.problem-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag { font-size: 11px; padding: 2px 8px; border-radius: 20px; font-family: var(--font-sans); font-weight: 400; }
+.tag-ds { background: #E6F1FB; color: #0C447C; }
+.tag-pattern { background: #E1F5EE; color: #085041; }
+.tag-java { background: #FAEEDA; color: #633806; }
+.chevron { font-size: 12px; color: var(--color-text-secondary); transition: transform 0.2s; }
+.chevron.open { transform: rotate(90deg); }
+.problem-body { display: none; padding: 0 16px 16px; }
+.problem-body.open { display: block; }
+.tabs { display: flex; gap: 0; border-bottom: 0.5px solid var(--color-border-tertiary); margin-bottom: 14px; }
+.tab { font-size: 12px; font-family: var(--font-sans); padding: 6px 14px; cursor: pointer; color: var(--color-text-secondary); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 0.15s; }
+.tab.active { color: var(--color-text-primary); border-bottom-color: var(--color-text-primary); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.problem-stmt { font-size: 13px; color: var(--color-text-secondary); font-family: var(--font-sans); line-height: 1.6; background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px; margin-bottom: 14px; }
+.code-block { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 12px; overflow-x: auto; }
+.code-block pre { font-size: 11.5px; line-height: 1.6; color: var(--color-text-primary); white-space: pre; font-family: var(--font-mono); }
+.section-label { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; font-family: var(--font-sans); }
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+.info-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; }
+.info-card-title { font-size: 11px; color: var(--color-text-secondary); font-family: var(--font-sans); margin-bottom: 4px; }
+.info-card-body { font-size: 12px; color: var(--color-text-primary); font-family: var(--font-sans); line-height: 1.5; }
+.bullet-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.bullet-list li { font-size: 12px; color: var(--color-text-primary); font-family: var(--font-sans); line-height: 1.5; padding-left: 12px; position: relative; }
+.bullet-list li::before { content: '—'; position: absolute; left: 0; color: var(--color-text-secondary); }
+.warn-list li::before { content: '!'; color: #BA7517; }
+.followup-btn { font-size: 12px; font-family: var(--font-sans); background: transparent; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 6px 12px; cursor: pointer; color: var(--color-text-primary); margin: 4px 4px 0 0; display: inline-block; transition: background 0.15s; }
+.followup-btn:hover { background: var(--color-background-secondary); }
+</style>
+
+<div class="app">
+<div class="header">
+  <h1>LLD Interview Prep — Java Edition</h1>
+  <p>10 problems · core Java logic · design patterns · tradeoffs · Java 8–21 features</p>
+</div>
+<div class="problem-list" id="list"></div>
+</div>
+
+<script>
+const problems = [
+{
+  num: "01",
+  title: "OrderBook — Limit Order Book",
+  tags: [{t:"TreeMap + HashMap",k:"ds"},{t:"NavigableMap",k:"ds"},{t:"Comparable",k:"java"}],
+  stmt: "Given an Order class with (id, price, side B/O, size), implement an OrderBook that supports: add order, remove by id, modify size, get price at level N, get total size at level N, get all orders from a side in level-then-time order.",
+  code: `import java.util.*;
+
+public class OrderBook {
+
+    // Key insight: TreeMap gives O(log N) sorted access by price.
+    // Bids: reversed (highest first). Offers: natural (lowest first).
+    // Each price level holds a LinkedHashMap to preserve insertion order.
+    
+    private final TreeMap<Double, LinkedHashMap<Long, Order>> bids =
+        new TreeMap<>(Comparator.reverseOrder()); // highest bid = best
+    private final TreeMap<Double, LinkedHashMap<Long, Order>> offers =
+        new TreeMap<>();                           // lowest offer = best
+    private final Map<Long, Order> index = new HashMap<>(); // O(1) id lookup
+
+    // O(log N) add — N = distinct price levels
+    public void addOrder(Order o) {
+        var book = sideBook(o.getSide());
+        book.computeIfAbsent(o.getPrice(), p -> new LinkedHashMap<>())
+            .put(o.getId(), o);
+        index.put(o.getId(), o);
+    }
+
+    // O(log N) remove — lookup by id is O(1) via index
+    public boolean removeOrder(long id) {
+        var o = index.remove(id);
+        if (o == null) return false;
+        var book = sideBook(o.getSide());
+        var level = book.get(o.getPrice());
+        level.remove(id);
+        if (level.isEmpty()) book.remove(o.getPrice()); // clean up empty level
+        return true;
+    }
+
+    // O(1) modify — size-only, does NOT affect price/time priority
+    public boolean modifySize(long id, long newSize) {
+        var o = index.get(id);
+        if (o == null) return false;
+        o.setSize(newSize); // mutate in place — keeps same map position
+        return true;
+    }
+
+    // O(level) — skip N entries in the TreeMap using streams
+    public OptionalDouble getPriceAtLevel(char side, int level) {
+        return sideBook(side).keySet().stream()
+            .skip(level - 1L)
+            .mapToDouble(Double::doubleValue)
+            .findFirst();
+    }
+
+    // O(level + orders at that level)
+    public long getSizeAtLevel(char side, int level) {
+        return getPriceAtLevel(side, level)
+            .stream()
+            .mapToObj(p -> sideBook(side).get(p))
+            .flatMap(m -> m.values().stream())
+            .mapToLong(Order::getSize)
+            .sum();
+    }
+
+    // Returns all orders: level order, then insertion time within level
+    public List<Order> getAllOrders(char side) {
+        return sideBook(side).values().stream()
+            .flatMap(m -> m.values().stream())
+            .toList(); // Java 16+ immutable list from stream
+    }
+
+    private TreeMap<Double, LinkedHashMap<Long, Order>> sideBook(char side) {
+        return side == 'B' ? bids : offers;
+    }
+}
+
+// Order with mutable size (only field that changes post-creation)
+public class Order {
+    private final long id;
+    private final double price;
+    private final char side;
+    private long size; // mutable for modify operation
+
+    public Order(long id, double price, char side, long size) {
+        this.id = id; this.price = price; this.side = side; this.size = size;
+    }
+    public long getId() { return id; }
+    public double getPrice() { return price; }
+    public char getSide() { return side; }
+    public long getSize() { return size; }
+    public void setSize(long size) { this.size = size; }
+}`,
+  tradeoffs: "TreeMap for levels gives O(log N) add/remove and O(1) best-price peek. LinkedHashMap inside each level preserves FIFO ordering (time priority) at O(1) cost. The id→Order index enables O(1) lookup for remove/modify — without it you'd have to scan. Double as price key risks floating-point equality bugs in prod; use long (price * 10000) instead. Alternative: skip list (ConcurrentSkipListMap for lock-free concurrent access).",
+  stuck: ["Why LinkedHashMap inside TreeMap? — HashMap loses insertion order; TreeSet has no per-entry data. LinkedHashMap is the only structure giving O(1) insert AND ordered iteration.","Why reverse order for bids? — TreeMap is ascending by default. Best bid = highest price, so you must invert the comparator.","What if level > number of price levels? — stream().skip() returns empty stream → OptionalDouble.empty(). Always guard with isPresent().", "Double equality trap — never use == or HashMap with raw doubles for prices. In prod, use BigDecimal or scaled longs."],
+  followups: ["How do you make OrderBook thread-safe for concurrent trading? (Hint: ConcurrentSkipListMap + StampedLock)", "How would you support market orders (fill at best available price)?", "Add a getTotalNotional(side) method — price × size across all levels.", "What changes if orders can be partially filled?"]
+},
+{
+  num: "02",
+  title: "Rate Limiter — Token Bucket & Sliding Window",
+  tags: [{t:"ConcurrentHashMap",k:"ds"},{t:"AtomicLong",k:"java"},{t:"Strategy Pattern",k:"pattern"}],
+  stmt: "Design a RateLimiter that supports: isAllowed(userId) returning true/false, configurable max requests per window, two strategies — Token Bucket and Sliding Window Log. Must be thread-safe. No external libraries.",
+  code: `import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
+import java.util.*;
+import java.util.function.Supplier;
+
+// Strategy interface — lets us swap algorithms at runtime (Strategy Pattern)
+public interface RateLimitStrategy {
+    boolean isAllowed(String userId);
+}
+
+// ── Token Bucket ──────────────────────────────────────────────────────────────
+// Tokens refill at a fixed rate. Burst-friendly: unused tokens accumulate.
+public class TokenBucketStrategy implements RateLimitStrategy {
+
+    private final int capacity;
+    private final double refillRatePerMs; // tokens added per millisecond
+    private final ConcurrentHashMap<String, double[]> buckets = new ConcurrentHashMap<>();
+    // double[] = {currentTokens, lastRefillTimeMs}
+
+    public TokenBucketStrategy(int capacity, int refillPerSecond) {
+        this.capacity = capacity;
+        this.refillRatePerMs = refillPerSecond / 1000.0;
+    }
+
+    @Override
+    public boolean isAllowed(String userId) {
+        long now = System.currentTimeMillis();
+        // computeIfAbsent is atomic — safe under concurrency for bucket creation
+        double[] bucket = buckets.computeIfAbsent(userId,
+            k -> new double[]{capacity, now});
+
+        // synchronized on the bucket array for per-user atomicity
+        synchronized (bucket) {
+            double elapsed = now - bucket[1];
+            // refill — cap at capacity
+            bucket[0] = Math.min(capacity, bucket[0] + elapsed * refillRatePerMs);
+            bucket[1] = now;
+
+            if (bucket[0] >= 1.0) {
+                bucket[0] -= 1.0; // consume one token
+                return true;
+            }
+            return false;
+        }
+    }
+}
+
+// ── Sliding Window Log ────────────────────────────────────────────────────────
+// Stores exact timestamps of each request. Accurate but memory-heavy.
+public class SlidingWindowLogStrategy implements RateLimitStrategy {
+
+    private final int maxRequests;
+    private final long windowMs;
+    private final ConcurrentHashMap<String, Deque<Long>> logs = new ConcurrentHashMap<>();
+
+    public SlidingWindowLogStrategy(int maxRequests, long windowMs) {
+        this.maxRequests = maxRequests;
+        this.windowMs = windowMs;
+    }
+
+    @Override
+    public boolean isAllowed(String userId) {
+        long now = System.currentTimeMillis();
+        long windowStart = now - windowMs;
+
+        Deque<Long> log = logs.computeIfAbsent(userId, k -> new ArrayDeque<>());
+        synchronized (log) {
+            // evict timestamps outside the window (from front — oldest)
+            while (!log.isEmpty() && log.peekFirst() <= windowStart) {
+                log.pollFirst();
+            }
+            if (log.size() < maxRequests) {
+                log.addLast(now); // record this request
+                return true;
+            }
+            return false;
+        }
+    }
+}
+
+// ── Factory / Context ─────────────────────────────────────────────────────────
+// Sealed interface (Java 17) + pattern matching (Java 21) for config
+public sealed interface RateLimiterConfig
+    permits RateLimiterConfig.TokenBucket, RateLimiterConfig.SlidingWindow {
+    record TokenBucket(int capacity, int refillPerSecond) implements RateLimiterConfig {}
+    record SlidingWindow(int maxRequests, long windowMs)  implements RateLimiterConfig {}
+}
+
+public class RateLimiter {
+    private final RateLimitStrategy strategy;
+
+    public RateLimiter(RateLimiterConfig config) {
+        // Java 21 pattern matching switch — exhaustive, no default needed
+        this.strategy = switch (config) {
+            case RateLimiterConfig.TokenBucket tb ->
+                new TokenBucketStrategy(tb.capacity(), tb.refillPerSecond());
+            case RateLimiterConfig.SlidingWindow sw ->
+                new SlidingWindowLogStrategy(sw.maxRequests(), sw.windowMs());
+        };
+    }
+
+    public boolean isAllowed(String userId) {
+        return strategy.isAllowed(userId);
+    }
+}`,
+  tradeoffs: "Token Bucket: O(1) per check, burst-tolerant (users can accumulate tokens during quiet periods), low memory. Sliding Window Log: exact accuracy, O(N) memory where N = requests in window, good for strict rate limiting. Fixed Window Counter is simplest but has edge-case double-burst at window boundary. The synchronized(bucket) block is a deliberate narrow lock — it only serializes per-user, not globally. Using AtomicReference<double[]> with CAS loop would be fully lock-free but harder to reason about.",
+  stuck: ["Why synchronized(bucket) instead of a global lock? — Per-user locking means user A and user B never contend. Global lock = serializing all users = throughput killer.", "Why double[] and not a POJO for token state? — Avoids object allocation on every check. Small perf win at high throughput.", "Memory leak: buckets map grows forever — in prod, add eviction via a ScheduledExecutorService that removes stale entries.", "Sliding window vs fixed window — Fixed window can allow 2x maxRequests at boundary (end of window + start of next). Sliding window is exact."],
+  followups: ["How do you distribute this rate limiter across multiple JVM instances? (Hint: Redis + Lua script for atomic check-and-decrement)", "Implement a Leaky Bucket variant.", "Add per-endpoint limits in addition to per-user limits.", "How do you handle clock skew in a distributed rate limiter?"]
+},
+{
+  num: "03",
+  title: "LRU Cache with TTL",
+  tags: [{t:"LinkedHashMap",k:"ds"},{t:"ScheduledExecutor",k:"java"},{t:"Decorator Pattern",k:"pattern"}],
+  stmt: "Implement a generic LRU Cache<K,V> with: get(K), put(K,V), put(K,V,ttlMs), eviction of LRU entry when capacity exceeded, TTL-based expiry (expired entries appear absent), and thread safety.",
+  code: `import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.locks.*;
+
+public class LRUCache<K, V> {
+
+    // Entry wraps value + optional expiry time
+    private record CacheEntry<V>(V value, long expiryMs) {
+        // Java 16 records — compact, immutable, auto equals/hashCode
+        boolean isExpired() {
+            return expiryMs > 0 && System.currentTimeMillis() > expiryMs;
+        }
+    }
+
+    private final int capacity;
+    private final LinkedHashMap<K, CacheEntry<V>> map;
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
+    // ReadWriteLock: concurrent reads are fine; only writes need exclusion
+    
+    private final ScheduledExecutorService cleaner =
+        Executors.newSingleThreadScheduledExecutor(
+            Thread.ofVirtual().name("lru-cleaner-", 0).factory() // Java 21 VirtualThread
+        );
+
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        // accessOrder=true is the magic — moves accessed entries to tail automatically
+        this.map = new LinkedHashMap<>(capacity, 0.75f, true) {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<K, CacheEntry<V>> eldest) {
+                return size() > LRUCache.this.capacity;
+            }
+        };
+        // Periodic cleanup of expired entries every 30s
+        cleaner.scheduleAtFixedRate(this::evictExpired, 30, 30, TimeUnit.SECONDS);
+    }
+
+    public Optional<V> get(K key) {
+        lock.writeLock().lock(); // write lock because LinkedHashMap reorders on access
+        try {
+            var entry = map.get(key); // triggers LRU reorder internally
+            if (entry == null || entry.isExpired()) {
+                if (entry != null) map.remove(key); // lazy TTL eviction
+                return Optional.empty();
+            }
+            return Optional.of(entry.value());
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    public void put(K key, V value) {
+        put(key, value, 0); // 0 = no TTL
+    }
+
+    public void put(K key, V value, long ttlMs) {
+        long expiry = ttlMs > 0 ? System.currentTimeMillis() + ttlMs : 0;
+        lock.writeLock().lock();
+        try {
+            map.put(key, new CacheEntry<>(value, expiry));
+            // LinkedHashMap.removeEldestEntry handles capacity eviction
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    public void invalidate(K key) {
+        lock.writeLock().lock();
+        try { map.remove(key); }
+        finally { lock.writeLock().unlock(); }
+    }
+
+    // Background cleaner — avoids holding stale TTL entries indefinitely
+    private void evictExpired() {
+        lock.writeLock().lock();
+        try {
+            map.entrySet().removeIf(e -> e.getValue().isExpired());
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    public void shutdown() {
+        cleaner.shutdown();
+    }
+
+    // Java 21 — structured concurrency demo for bulk fetch
+    public Map<K, V> getAll(List<K> keys) throws InterruptedException {
+        var result = new ConcurrentHashMap<K, V>();
+        try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+            for (K key : keys) {
+                scope.fork(() -> {
+                    get(key).ifPresent(v -> result.put(key, v));
+                    return null;
+                });
+            }
+            scope.join().throwIfFailed();
+        }
+        return result;
+    }
+}`,
+  tradeoffs: "LinkedHashMap(accessOrder=true) is the core trick — it moves accessed entries to the tail in O(1), making LRU almost free. The alternative (maintain a doubly linked list + HashMap manually) is what you'd do in an interview whiteboard, but LinkedHashMap gives the same complexity with less code. The get() needs a write lock (not read lock) because accessing an entry reorders the internal doubly-linked list — a read-only lock would cause data corruption. ReentrantReadWriteLock reduces contention vs synchronized when you have many concurrent reads.",
+  stuck: ["Why use writeLock on get()? — LinkedHashMap with accessOrder=true modifies internal structure on get. A readLock would allow two threads to corrupt the linked list simultaneously.", "TTL lazy eviction vs active eviction — lazy (check on get) avoids waking up a background thread but entries occupy memory until accessed. Background cleaner prevents memory leaks for entries never accessed again.", "Why Optional<V> return type? — Forces the caller to handle the 'not found' case at compile time. Returning null would allow NPE to slip through (null-hostile design).", "Record for CacheEntry — records can't extend classes, so you can't make CacheEntry extend LinkedHashMap.Entry. This is fine since we're using the map's own Entry internally."],
+  followups: ["How do you implement a 2-tier cache (L1 in-memory LRU, L2 Redis fallback)?", "Make LRUCache implement the java.util.Map interface.", "Add a getOrLoad(K, Supplier<V>) method with stampede prevention (only one thread loads on miss).", "How would you size the cache for a given heap budget?"]
+},
+{
+  num: "04",
+  title: "Pub/Sub Event Bus",
+  tags: [{t:"CopyOnWriteArrayList",k:"ds"},{t:"CompletableFuture",k:"java"},{t:"Observer Pattern",k:"pattern"}],
+  stmt: "Build a type-safe EventBus that supports: subscribe(eventType, handler), publish(event) dispatching to all subscribers, unsubscribe, async dispatch, and dead-letter handling for failed handlers.",
+  code: `import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.Consumer;
+
+// Marker interface for all events — enforces type safety
+public interface Event {}
+
+// Concrete events as records (Java 16)
+public record OrderPlaced(String orderId, double amount) implements Event {}
+public record PaymentFailed(String orderId, String reason) implements Event {}
+
+public class EventBus {
+
+    // Map<EventType, List<Handler>> — CopyOnWriteArrayList for thread-safe
+    // iteration under concurrent subscribe/unsubscribe. Trade-off: writes are
+    // O(N) copy but reads (publish path) are O(1) and always consistent.
+    private final Map<Class<? extends Event>, CopyOnWriteArrayList<Consumer<Event>>>
+        handlers = new ConcurrentHashMap<>();
+
+    // Dead-letter queue — events whose handlers all threw exceptions
+    private final BlockingQueue<DeadLetter> deadLetterQueue =
+        new LinkedBlockingQueue<>(1000); // bounded to prevent OOM
+
+    private final Executor asyncExecutor =
+        Executors.newVirtualThreadPerTaskExecutor(); // Java 21 virtual threads
+
+    // Subscription token for easy unsubscribe (no need to hold handler reference)
+    public record Subscription(Class<? extends Event> eventType,
+                               Consumer<Event> handler) {}
+
+    @SuppressWarnings("unchecked")
+    public <T extends Event> Subscription subscribe(Class<T> eventType,
+                                                    Consumer<T> handler) {
+        handlers.computeIfAbsent(eventType, k -> new CopyOnWriteArrayList<>())
+            // Cast is safe: we only call this handler when event is instanceof T
+            .add((Consumer<Event>) (Consumer<?>) handler);
+        return new Subscription(eventType, (Consumer<Event>)(Consumer<?>)handler);
+    }
+
+    public void unsubscribe(Subscription sub) {
+        var list = handlers.get(sub.eventType());
+        if (list != null) list.remove(sub.handler());
+    }
+
+    // Sync publish — all handlers run on caller's thread
+    public void publish(Event event) {
+        dispatchTo(event, handlers.getOrDefault(
+            event.getClass(), new CopyOnWriteArrayList<>()));
+    }
+
+    // Async publish — each handler runs on its own virtual thread
+    public CompletableFuture<Void> publishAsync(Event event) {
+        var list = handlers.getOrDefault(event.getClass(), new CopyOnWriteArrayList<>());
+        var futures = list.stream()
+            .map(h -> CompletableFuture.runAsync(() -> safeInvoke(h, event), asyncExecutor))
+            .toArray(CompletableFuture[]::new);
+        return CompletableFuture.allOf(futures);
+    }
+
+    private void dispatchTo(Event event, List<Consumer<Event>> list) {
+        for (var handler : list) { // CopyOnWriteArrayList snapshot — safe iteration
+            safeInvoke(handler, event);
+        }
+    }
+
+    private void safeInvoke(Consumer<Event> handler, Event event) {
+        try {
+            handler.accept(event);
+        } catch (Exception ex) {
+            // Never let a bad handler crash the bus
+            var dl = new DeadLetter(event, handler, ex, System.currentTimeMillis());
+            deadLetterQueue.offer(dl); // non-blocking; drops if full
+        }
+    }
+
+    // Dead letter consumer — call from a monitoring thread
+    public Optional<DeadLetter> pollDeadLetter() {
+        return Optional.ofNullable(deadLetterQueue.poll());
+    }
+
+    public record DeadLetter(Event event, Consumer<Event> handler,
+                             Exception cause, long timestampMs) {}
+
+    // Type-safe wildcard subscribe — fires for ANY event
+    @SuppressWarnings("unchecked")
+    public Subscription subscribeAll(Consumer<Event> handler) {
+        return subscribe((Class<Event>)(Class<?>)Event.class, handler);
+    }
+}
+
+// Usage
+class Demo {
+    public static void main(String[] args) throws Exception {
+        var bus = new EventBus();
+
+        var sub = bus.subscribe(OrderPlaced.class, e ->
+            System.out.println("Order placed: " + e.orderId()));
+
+        bus.publish(new OrderPlaced("ORD-001", 299.99)); // sync
+        bus.publishAsync(new OrderPlaced("ORD-002", 149.0))
+           .thenRun(() -> System.out.println("Async done"))
+           .join();
+
+        bus.unsubscribe(sub);
+    }
+}`,
+  tradeoffs: "CopyOnWriteArrayList is chosen because the publish path (reads) vastly outweighs subscribe/unsubscribe (writes). COW snapshots on iteration mean a subscribe during a publish doesn't affect the current dispatch — predictable behavior. ConcurrentHashMap for the outer map avoids locking the entire bus when subscribing to different event types simultaneously. Dead-letter queue is bounded (1000) to prevent runaway memory usage if handlers are consistently failing.",
+  stuck: ["Why CopyOnWriteArrayList instead of synchronized List? — synchronized List locks during iteration, blocking new subscriptions. COW never blocks readers.", "The wildcard subscribeAll is a type-erasure hack — at runtime all generic types erase, so Consumer<OrderPlaced> becomes Consumer. The unchecked cast is safe because we only pass events of the registered type.", "CompletableFuture.allOf vs anyOf — allOf waits for ALL handlers; use it when you need to know every subscriber processed the event.", "Why virtual threads for async? — Each handler is an independent task that may block (DB call, HTTP). Virtual threads are cheap (no OS thread per handler), so 10,000 concurrent handlers don't cause thread pool exhaustion."],
+  followups: ["Add priority levels to handlers (high-priority handlers fire first).", "How do you implement event replay — re-deliver the last N events to a new subscriber?", "Make the EventBus persistent — what if the JVM crashes mid-dispatch?", "Add a filter to subscribe(eventType, predicate, handler) so the handler only fires when the predicate matches."]
+},
+{
+  num: "05",
+  title: "Thread-Safe Connection Pool",
+  tags: [{t:"BlockingQueue",k:"ds"},{t:"Semaphore",k:"java"},{t:"Object Pool Pattern",k:"pattern"}],
+  stmt: "Implement a generic ConnectionPool<C> that manages a fixed pool of reusable connections. Support: acquire() with timeout, release(conn), health checking, eviction of broken connections, and graceful shutdown.",
+  code: `import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
+import java.util.function.*;
+
+public class ConnectionPool<C> implements AutoCloseable {
+
+    private final BlockingDeque<PooledConnection<C>> available;
+    private final Semaphore permits;       // controls max concurrent borrows
+    private final Supplier<C> factory;     // creates new connections
+    private final Predicate<C> healthCheck;
+    private final Consumer<C> closer;
+    private final int maxSize;
+    private final AtomicBoolean shutdown = new AtomicBoolean(false);
+    private final ScheduledExecutorService healthChecker =
+        Executors.newSingleThreadScheduledExecutor();
+
+    // PooledConnection wraps the raw connection with metadata
+    private static class PooledConnection<C> {
+        final C conn;
+        volatile long lastUsedMs; // volatile for visibility across threads
+        volatile boolean valid = true;
+
+        PooledConnection(C conn) {
+            this.conn = conn;
+            this.lastUsedMs = System.currentTimeMillis();
+        }
+    }
+
+    public ConnectionPool(int maxSize, Supplier<C> factory,
+                          Predicate<C> healthCheck, Consumer<C> closer) {
+        this.maxSize = maxSize;
+        this.factory = factory;
+        this.healthCheck = healthCheck;
+        this.closer = closer;
+        this.available = new LinkedBlockingDeque<>(maxSize);
+        this.permits = new Semaphore(maxSize, true); // fair = FIFO waiters
+
+        // Pre-warm the pool
+        for (int i = 0; i < maxSize; i++) {
+            available.offer(new PooledConnection<>(factory.get()));
+        }
+
+        // Periodic health check — remove stale/broken connections
+        healthChecker.scheduleAtFixedRate(this::evictUnhealthy, 30, 30, TimeUnit.SECONDS);
+    }
+
+    // Returns an AutoCloseable wrapper — enables try-with-resources
+    public Lease<C> acquire(long timeout, TimeUnit unit)
+            throws InterruptedException, TimeoutException {
+        if (shutdown.get()) throw new IllegalStateException("Pool is shut down");
+        
+        if (!permits.tryAcquire(timeout, unit)) {
+            throw new TimeoutException("No connection available within timeout");
+        }
+        
+        PooledConnection<C> pc = available.poll();
+        if (pc == null || !pc.valid || !healthCheck.test(pc.conn)) {
+            // Connection is stale — replace it
+            if (pc != null) closer.accept(pc.conn);
+            pc = new PooledConnection<>(factory.get());
+        }
+        
+        final PooledConnection<C> finalPc = pc;
+        return new Lease<>(pc.conn, () -> release(finalPc)); // lambda for release
+    }
+
+    private void release(PooledConnection<C> pc) {
+        if (!shutdown.get()) {
+            pc.lastUsedMs = System.currentTimeMillis();
+            available.offerFirst(pc); // return to front (LIFO) — hot connections
+        } else {
+            closer.accept(pc.conn);
+        }
+        permits.release(); // must always release, even on shutdown
+    }
+
+    private void evictUnhealthy() {
+        // removeIf is atomic per-element on BlockingDeque
+        available.removeIf(pc -> {
+            boolean stale = (System.currentTimeMillis() - pc.lastUsedMs) > 60_000;
+            boolean broken = !healthCheck.test(pc.conn);
+            if (stale || broken) {
+                closer.accept(pc.conn);
+                permits.release(); // free the slot so new connection can be created
+                return true;
+            }
+            return false;
+        });
+    }
+
+    @Override
+    public void close() {
+        shutdown.set(true);
+        healthChecker.shutdown();
+        available.forEach(pc -> closer.accept(pc.conn));
+        available.clear();
+    }
+
+    // Lease — try-with-resources support for safe release
+    public record Lease<C>(C connection, Runnable releaser) implements AutoCloseable {
+        @Override public void close() { releaser.run(); }
+    }
+}
+
+// Usage with try-with-resources — connection auto-released even on exception
+class PoolDemo {
+    public static void main(String[] args) throws Exception {
+        var pool = new ConnectionPool<>(
+            5,
+            () -> new FakeConnection(),     // factory
+            c -> c.isAlive(),               // health check
+            FakeConnection::disconnect      // closer
+        );
+
+        try (var lease = pool.acquire(2, TimeUnit.SECONDS)) {
+            lease.connection().doWork();
+        } // auto-released here
+    }
+}`,
+  tradeoffs: "Semaphore controls how many threads can borrow simultaneously — tryAcquire with timeout prevents indefinite blocking. BlockingDeque vs BlockingQueue: deque allows LIFO return (offerFirst) so recently used, warm connections are reused first, reducing connection churn. Volatile on lastUsedMs ensures the health-checker thread sees updates made by borrowing threads without a full lock. The Lease record + AutoCloseable pattern prevents connection leaks — even if the caller throws, the try-with-resources releases.",
+  stuck: ["Why Semaphore + BlockingDeque instead of just BlockingQueue.poll(timeout)? — Semaphore tracks slots accurately even during eviction. If you evict a connection and want to allow a new one, you release the semaphore permit independently of the queue state.", "LIFO vs FIFO pool return — LIFO reuses hot connections (still warm in the TCP stack). FIFO distributes load more evenly. Pick based on your connection cost (LIFO if reconnect is expensive).", "Lease record can be extended — add retry logic, metrics recording (connection hold time), or circuit-breaker integration.", "Shutdown race: a thread could acquire a permit then enter release() after shutdown — the permits.release() in release() must still run to avoid semaphore leak."],
+  followups: ["Add a maxIdleTime — connections idle longer than N seconds are closed and replaced on next acquire.", "How would you implement adaptive pool sizing (grow/shrink based on demand)?", "Add metrics: average wait time, active borrows, total evictions.", "How does this differ from HikariCP's design? (Hint: ConcurrentBag instead of BlockingDeque)"]
+},
+{
+  num: "06",
+  title: "Workflow Engine (DAG Task Scheduler)",
+  tags: [{t:"Topological Sort",k:"ds"},{t:"CompletableFuture",k:"java"},{t:"Builder Pattern",k:"pattern"}],
+  stmt: "Design a WorkflowEngine where tasks have dependencies (forming a DAG). Execute tasks in topological order, run independent tasks in parallel, handle task failure with configurable retry, and detect cyclic dependencies at definition time.",
+  code: `import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.Supplier;
+
+public class WorkflowEngine {
+
+    public record Task(String id, Supplier<Object> action, int maxRetries) {
+        public Task(String id, Supplier<Object> action) { this(id, action, 0); }
+    }
+
+    // Builder — fluent API for defining workflow graph
+    public static class WorkflowBuilder {
+        private final Map<String, Task> tasks = new LinkedHashMap<>();
+        private final Map<String, Set<String>> deps = new HashMap<>(); // id → dependsOn
+
+        public WorkflowBuilder task(Task t, String... dependsOn) {
+            tasks.put(t.id(), t);
+            deps.put(t.id(), new HashSet<>(List.of(dependsOn)));
+            return this;
+        }
+
+        public WorkflowEngine build() {
+            validateNoCycle(tasks.keySet(), deps); // fail fast at definition time
+            return new WorkflowEngine(tasks, deps);
+        }
+
+        private static void validateNoCycle(Set<String> ids, Map<String, Set<String>> deps) {
+            // Kahn's algorithm — if we can't drain all nodes, there's a cycle
+            Map<String, Integer> inDegree = new HashMap<>();
+            ids.forEach(id -> inDegree.put(id, 0));
+            deps.forEach((id, ds) -> ds.forEach(d -> inDegree.merge(id, 1, Integer::sum)));
+
+            Deque<String> queue = new ArrayDeque<>();
+            inDegree.entrySet().stream()
+                .filter(e -> e.getValue() == 0)
+                .forEach(e -> queue.add(e.getKey()));
+
+            int processed = 0;
+            while (!queue.isEmpty()) {
+                String cur = queue.poll();
+                processed++;
+                deps.entrySet().stream()
+                    .filter(e -> e.getValue().contains(cur))
+                    .forEach(e -> {
+                        if (inDegree.merge(e.getKey(), -1, Integer::sum) == 0)
+                            queue.add(e.getKey());
+                    });
+            }
+            if (processed != ids.size())
+                throw new IllegalStateException("Cyclic dependency detected in workflow");
+        }
+    }
+
+    private final Map<String, Task> tasks;
+    private final Map<String, Set<String>> deps;
+    private final Executor executor = Executors.newVirtualThreadPerTaskExecutor();
+
+    private WorkflowEngine(Map<String, Task> tasks, Map<String, Set<String>> deps) {
+        this.tasks = tasks;
+        this.deps = deps;
+    }
+
+    public Map<String, Object> execute() throws Exception {
+        Map<String, CompletableFuture<Object>> futures = new HashMap<>();
+        Map<String, Object> results = new ConcurrentHashMap<>();
+
+        for (String id : tasks.keySet()) {
+            futures.put(id, buildFuture(id, futures, results));
+        }
+
+        // Wait for all tasks
+        CompletableFuture.allOf(futures.values().toArray(new CompletableFuture[0])).join();
+        return Collections.unmodifiableMap(results);
+    }
+
+    private CompletableFuture<Object> buildFuture(
+            String id,
+            Map<String, CompletableFuture<Object>> futures,
+            Map<String, Object> results) {
+
+        var task = tasks.get(id);
+        var taskDeps = deps.getOrDefault(id, Set.of());
+
+        // Collect all dependency futures
+        CompletableFuture<Void> allDeps = taskDeps.isEmpty()
+            ? CompletableFuture.completedFuture(null)
+            : CompletableFuture.allOf(
+                taskDeps.stream()
+                    .map(d -> futures.computeIfAbsent(d, k -> buildFuture(k, futures, results)))
+                    .toArray(CompletableFuture[]::new));
+
+        // After all deps complete, run this task (with retry)
+        return allDeps.thenApplyAsync(__ -> executeWithRetry(task, results), executor);
+    }
+
+    private Object executeWithRetry(Task task, Map<String, Object> results) {
+        int attempts = 0;
+        while (true) {
+            try {
+                Object result = task.action().get();
+                results.put(task.id(), result);
+                return result;
+            } catch (Exception ex) {
+                if (++attempts > task.maxRetries())
+                    throw new RuntimeException("Task " + task.id() + " failed after " + attempts + " attempts", ex);
+                try { Thread.sleep(100L * attempts); } // exponential backoff
+                catch (InterruptedException ie) { Thread.currentThread().interrupt(); throw new RuntimeException(ie); }
+            }
+        }
+    }
+
+    // Static factory for clean entry point
+    public static WorkflowBuilder define() { return new WorkflowBuilder(); }
+}
+
+// Usage
+class WorkflowDemo {
+    public static void main(String[] args) throws Exception {
+        var engine = WorkflowEngine.define()
+            .task(new WorkflowEngine.Task("fetchUser",  () -> "User:Yash"))
+            .task(new WorkflowEngine.Task("fetchOrders", () -> List.of("O1","O2")))
+            .task(new WorkflowEngine.Task("buildReport", () -> "Report ready", 2),
+                  "fetchUser", "fetchOrders") // depends on both
+            .build();
+
+        var results = engine.execute();
+        System.out.println(results); // {fetchUser=User:Yash, fetchOrders=[O1,O2], buildReport=Report ready}
+    }
+}`,
+  tradeoffs: "CompletableFuture chaining naturally expresses DAG execution — thenApplyAsync triggers as soon as all upstream futures complete, without polling or sleeps. Kahn's algorithm for cycle detection is O(V+E) and chosen over DFS because it's iterative (no stack overflow for large DAGs) and doubles as a topological sort. Virtual threads mean 10,000 tasks don't create 10,000 OS threads. The results map is ConcurrentHashMap because multiple tasks can write simultaneously.",
+  stuck: ["Why not topological sort + sequential execution? — That would miss parallelism. fetchUser and fetchOrders have no dependency on each other; they should run simultaneously.", "computeIfAbsent recursion — when building futures, a dep's future may not exist yet. computeIfAbsent with a recursive call handles this lazily.", "ConcurrentHashMap for results — allOf.join() returns, but individual tasks may have written to results at different times. ConcurrentHashMap ensures no torn writes.", "Retry with Thread.sleep in a CompletableFuture — sleep blocks the virtual thread, which is fine. On platform threads, this would waste a real OS thread."],
+  followups: ["Add task cancellation — if one task fails, cancel all downstream tasks.", "How would you visualize the DAG for debugging?", "Add a timeout per task in addition to retry.", "How do you handle tasks with dynamic outputs that determine which tasks run next (dynamic DAG)?"]
+},
+{
+  num: "07",
+  title: "Consistent Hash Ring",
+  tags: [{t:"TreeMap NavigableMap",k:"ds"},{t:"MessageDigest",k:"java"},{t:"Sharding",k:"pattern"}],
+  stmt: "Implement a ConsistentHashRing<N> for distributing keys across nodes. Support: addNode, removeNode, getNode(key), virtual nodes for uniform distribution, and rebalancing metrics (which keys moved on node add/remove).",
+  code: `import java.security.MessageDigest;
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class ConsistentHashRing<N> {
+
+    // The ring: sorted by hash position → wraps around at max long
+    private final TreeMap<Long, N> ring = new TreeMap<>();
+    private final int virtualNodes; // replication factor for balance
+    private final Map<N, List<Long>> nodePositions = new HashMap<>();
+
+    public ConsistentHashRing(int virtualNodes) {
+        this.virtualNodes = virtualNodes;
+    }
+
+    public void addNode(N node) {
+        List<Long> positions = new ArrayList<>(virtualNodes);
+        for (int i = 0; i < virtualNodes; i++) {
+            long hash = hash(node.toString() + "#VN" + i);
+            ring.put(hash, node);
+            positions.add(hash);
+        }
+        nodePositions.put(node, positions);
+    }
+
+    public void removeNode(N node) {
+        List<Long> positions = nodePositions.remove(node);
+        if (positions != null) positions.forEach(ring::remove);
+    }
+
+    // O(log V) — ceiling of key hash on the ring, wrap around if needed
+    public Optional<N> getNode(String key) {
+        if (ring.isEmpty()) return Optional.empty();
+        long hash = hash(key);
+        Map.Entry<Long, N> entry = ring.ceilingEntry(hash);
+        if (entry == null) entry = ring.firstEntry(); // wrap-around
+        return Optional.of(entry.getValue());
+    }
+
+    // Returns the N successor nodes for a key (replication)
+    public List<N> getNodes(String key, int replicas) {
+        if (ring.isEmpty()) return List.of();
+        long hash = hash(key);
+        Set<N> seen = new LinkedHashSet<>();
+        // Iterate the ring from the hash point, wrapping around
+        var tail = ring.tailMap(hash);
+        for (N n : tail.values()) {
+            if (seen.size() == replicas) break;
+            seen.add(n);
+        }
+        if (seen.size() < replicas) {
+            for (N n : ring.values()) {
+                if (seen.size() == replicas) break;
+                seen.add(n);
+            }
+        }
+        return new ArrayList<>(seen);
+    }
+
+    // Shows which keys (from a sample) would move after adding a node
+    public Map<String, N> rebalanceImpact(N newNode, List<String> sampleKeys) {
+        Map<String, N> before = sampleKeys.stream()
+            .collect(Collectors.toMap(k -> k, k -> getNode(k).orElseThrow()));
+        addNode(newNode);
+        Map<String, N> moved = new LinkedHashMap<>();
+        for (String k : sampleKeys) {
+            N after = getNode(k).orElseThrow();
+            if (!after.equals(before.get(k))) moved.put(k, after);
+        }
+        removeNode(newNode); // restore state — caller calls addNode explicitly
+        return moved;
+    }
+
+    // SHA-256 → long via first 8 bytes; unsigned shift avoids negative hash
+    private long hash(String input) {
+        try {
+            var md = MessageDigest.getInstance("SHA-256");
+            byte[] b = md.digest(input.getBytes());
+            long h = 0;
+            for (int i = 0; i < 8; i++) h = (h << 8) | (b[i] & 0xFF);
+            return h >>> 1; // keep positive
+        } catch (Exception e) { throw new RuntimeException(e); }
+    }
+
+    public Map<N, Integer> distribution() {
+        return ring.values().stream()
+            .collect(Collectors.groupingBy(n -> n,
+                Collectors.collectingAndThen(Collectors.counting(), Math::toIntExact)));
+    }
+}`,
+  tradeoffs: "TreeMap.ceilingEntry is O(log V) where V = virtualNodes × nodeCount. Without virtual nodes, a few real nodes create a heavily skewed ring. With 150 virtual nodes per real node (industry standard), distribution variance drops from 40% to <5%. SHA-256 vs MurmurHash: SHA-256 is more uniform but slower. For a low-latency ring, use MurmurHash3 (no JDK built-in, add a dependency). The ring is not thread-safe — in production, wrap with a StampedLock or use ConcurrentSkipListMap.",
+  stuck: ["Why TreeMap and not a sorted array? — ceilingEntry is O(log N) without any binary search code. Array binary search is equivalent performance but more code.", "Virtual node count tradeoff — more virtual nodes = better balance but more memory and slower addNode/removeNode. 100–200 is typical.", "Wrap-around logic — if hash falls past the last ring entry, you must use ring.firstEntry(). Missing this means keys with high hashes always map to the same node.", "SHA-256 negative hash — Java byte is signed. The & 0xFF and >>> 1 ensure a positive long. Negative hash values would still work mathematically but are confusing."],
+  followups: ["Implement weighted nodes — a node with 4x capacity gets 4x virtual nodes.", "How do you handle hot-spot keys (one key getting 80% of traffic)?", "Add a consistentGet(key, version) that picks the same node deterministically for a given version of the ring.", "How does this compare to rendezvous hashing?"]
+},
+{
+  num: "08",
+  title: "Circuit Breaker",
+  tags: [{t:"AtomicReference",k:"java"},{t:"Enum State Machine",k:"pattern"},{t:"ScheduledExecutor",k:"java"}],
+  stmt: "Implement a CircuitBreaker wrapping a Supplier<T>. States: CLOSED (normal), OPEN (fast-fail), HALF_OPEN (probe). Transitions on failure threshold, success threshold, and timeout. Must be thread-safe.",
+  code: `import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
+import java.util.function.*;
+
+public class CircuitBreaker<T> {
+
+    public enum State { CLOSED, OPEN, HALF_OPEN }
+
+    // All mutable state in one record — atomic CAS replace keeps it consistent
+    private record CircuitState(State state, int failures, int successes,
+                                long openedAtMs) {
+        static CircuitState initial() { return new CircuitState(State.CLOSED, 0, 0, 0); }
+    }
+
+    private final AtomicReference<CircuitState> stateRef =
+        new AtomicReference<>(CircuitState.initial());
+
+    private final int failureThreshold;   // open after N failures
+    private final int successThreshold;   // close after N successes in HALF_OPEN
+    private final long openDurationMs;    // how long to stay OPEN before probing
+    private final Supplier<T> command;
+
+    public CircuitBreaker(Supplier<T> command, int failureThreshold,
+                          int successThreshold, long openDurationMs) {
+        this.command = command;
+        this.failureThreshold = failureThreshold;
+        this.successThreshold = successThreshold;
+        this.openDurationMs = openDurationMs;
+    }
+
+    public T call() throws Exception {
+        CircuitState cs = stateRef.get();
+
+        return switch (cs.state()) {
+            case OPEN -> {
+                // Check if we should transition to HALF_OPEN
+                if (System.currentTimeMillis() - cs.openedAtMs() > openDurationMs) {
+                    // CAS: only one thread transitions to HALF_OPEN (the probe)
+                    if (stateRef.compareAndSet(cs,
+                            new CircuitState(State.HALF_OPEN, 0, 0, 0))) {
+                        yield probe();
+                    }
+                }
+                throw new CircuitOpenException("Circuit is OPEN — fast failing");
+            }
+            case HALF_OPEN -> probe(); // in half-open, all calls are probes
+            case CLOSED -> execute();
+        };
+    }
+
+    private T execute() throws Exception {
+        try {
+            T result = command.get();
+            onSuccess();
+            return result;
+        } catch (Exception e) {
+            onFailure();
+            throw e;
+        }
+    }
+
+    private T probe() throws Exception {
+        try {
+            T result = command.get();
+            // CAS loop to increment success count — thread-safe without lock
+            while (true) {
+                CircuitState cs = stateRef.get();
+                int newSuccesses = cs.successes() + 1;
+                CircuitState next = newSuccesses >= successThreshold
+                    ? new CircuitState(State.CLOSED, 0, 0, 0)  // close the circuit
+                    : new CircuitState(State.HALF_OPEN, 0, newSuccesses, 0);
+                if (stateRef.compareAndSet(cs, next)) break;
+            }
+            return result;
+        } catch (Exception e) {
+            // Any failure in HALF_OPEN → go back to OPEN immediately
+            stateRef.set(new CircuitState(State.OPEN, 0, 0, System.currentTimeMillis()));
+            throw e;
+        }
+    }
+
+    private void onSuccess() {
+        // Success in CLOSED resets failure counter
+        stateRef.updateAndGet(cs ->
+            cs.state() == State.CLOSED
+                ? new CircuitState(State.CLOSED, 0, 0, 0)
+                : cs);
+    }
+
+    private void onFailure() {
+        // CAS loop to increment failures and possibly open the circuit
+        while (true) {
+            CircuitState cs = stateRef.get();
+            if (cs.state() != State.CLOSED) break; // only count failures in CLOSED
+            int newFailures = cs.failures() + 1;
+            CircuitState next = newFailures >= failureThreshold
+                ? new CircuitState(State.OPEN, newFailures, 0, System.currentTimeMillis())
+                : new CircuitState(State.CLOSED, newFailures, 0, 0);
+            if (stateRef.compareAndSet(cs, next)) break;
+        }
+    }
+
+    public State getState() { return stateRef.get().state(); }
+
+    public static class CircuitOpenException extends RuntimeException {
+        public CircuitOpenException(String msg) { super(msg); }
+    }
+}`,
+  tradeoffs: "AtomicReference<CircuitState> with CAS (compareAndSet) gives lock-free thread safety. The alternative — synchronized methods — would work but create a bottleneck at every call. By packing all state into one immutable record and CAS-replacing it atomically, we avoid partial-state visibility. The CAS loop in onFailure() handles the race where two threads simultaneously hit failure: only one will successfully transition to OPEN. The key insight is that double-OPEN is fine (idempotent), but we want exactly one thread to probe in HALF_OPEN.",
+  stuck: ["Why CAS loop instead of synchronized? — At high throughput, a global lock serializes all calls through the circuit breaker. CAS retries are rare (only on contention) and complete in microseconds.", "HALF_OPEN probing race — without the CAS in the OPEN→HALF_OPEN transition, many threads could simultaneously probe, overwhelming a recovering service. The CAS ensures only one thread flips to HALF_OPEN.", "Record for state — records are value-objects (immutable), making them ideal for CAS patterns. You never partially update the state.", "Real-world addition: sliding window failure rate instead of absolute count. 5 failures out of 100 calls is different from 5 out of 5."],
+  followups: ["Extend to support a fallback supplier — return a default value when the circuit is OPEN.", "Add metrics: failure rate, state transition timestamps, total calls blocked.", "Implement a bulkhead pattern alongside the circuit breaker (limit concurrent calls).", "How does Netflix Resilience4j differ from this implementation?"]
+},
+{
+  num: "09",
+  title: "Inventory Management System",
+  tags: [{t:"ConcurrentHashMap",k:"ds"},{t:"StampedLock",k:"java"},{t:"CQRS Pattern",k:"pattern"}],
+  stmt: "Design an InventorySystem with: addProduct, reserveStock(productId, qty) with rollback support, confirmReservation, cancelReservation, getLowStockAlerts(threshold), and concurrent safety for flash sales (many simultaneous reserve calls).",
+  code: `import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.locks.*;
+import java.util.stream.Collectors;
+
+public class InventorySystem {
+
+    public record Product(String id, String name) {}
+
+    private static class Stock {
+        final StampedLock lock = new StampedLock();
+        int available;    // can be purchased now
+        int reserved;     // held but not yet confirmed
+
+        Stock(int initial) { this.available = initial; }
+
+        int total() { return available + reserved; }
+    }
+
+    private final ConcurrentHashMap<String, Stock> inventory = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Reservation> reservations = new ConcurrentHashMap<>();
+    private final String reservationIdPrefix = "RES-";
+    private final AtomicLong reservationCounter = new AtomicLong();
+
+    public record Reservation(String reservationId, String productId, int qty,
+                              ReservationStatus status, long createdMs) {}
+    public enum ReservationStatus { PENDING, CONFIRMED, CANCELLED }
+
+    public void addProduct(Product p, int initialStock) {
+        inventory.put(p.id(), new Stock(initialStock));
+    }
+
+    public void restockProduct(String productId, int qty) {
+        Stock s = getStock(productId);
+        long stamp = s.lock.writeLock();
+        try { s.available += qty; }
+        finally { s.lock.unlockWrite(stamp); }
+    }
+
+    // Optimistic reserve — uses StampedLock optimistic read then write if needed
+    public Optional<String> reserveStock(String productId, int qty) {
+        Stock s = getStock(productId);
+
+        // Optimistic read — no lock at all if stock is clearly sufficient
+        long stamp = s.lock.tryOptimisticRead();
+        int avail = s.available;
+        if (!s.lock.validate(stamp)) {
+            // Race detected — fall back to full read lock
+            stamp = s.lock.readLock();
+            try { avail = s.available; }
+            finally { s.lock.unlockRead(stamp); }
+        }
+
+        if (avail < qty) return Optional.empty(); // fail fast without write lock
+
+        // Now acquire write lock to actually deduct
+        stamp = s.lock.writeLock();
+        try {
+            if (s.available < qty) return Optional.empty(); // re-check under write lock
+            s.available -= qty;
+            s.reserved += qty;
+        } finally {
+            s.lock.unlockWrite(stamp);
+        }
+
+        String resId = reservationIdPrefix + reservationCounter.incrementAndGet();
+        reservations.put(resId, new Reservation(resId, productId, qty,
+            ReservationStatus.PENDING, System.currentTimeMillis()));
+        return Optional.of(resId);
+    }
+
+    public boolean confirmReservation(String reservationId) {
+        return updateReservation(reservationId, ReservationStatus.PENDING, (s, res) -> {
+            s.reserved -= res.qty(); // confirmed = stock leaves the building
+        });
+    }
+
+    public boolean cancelReservation(String reservationId) {
+        return updateReservation(reservationId, ReservationStatus.PENDING, (s, res) -> {
+            s.reserved -= res.qty();
+            s.available += res.qty(); // return to available
+        });
+    }
+
+    // Generalized reservation state machine helper
+    private boolean updateReservation(String resId, ReservationStatus requiredStatus,
+                                       BiConsumer<Stock, Reservation> stockUpdater) {
+        Reservation res = reservations.get(resId);
+        if (res == null || res.status() != requiredStatus) return false;
+
+        Stock s = getStock(res.productId());
+        long stamp = s.lock.writeLock();
+        try {
+            stockUpdater.accept(s, res);
+        } finally {
+            s.lock.unlockWrite(stamp);
+        }
+
+        ReservationStatus newStatus = requiredStatus == ReservationStatus.PENDING
+            ? (stockUpdater.toString().contains("available") 
+               ? ReservationStatus.CANCELLED : ReservationStatus.CONFIRMED)
+            : requiredStatus;
+        // Simpler: replace with explicit enum
+        reservations.compute(resId, (k, v) ->
+            new Reservation(resId, res.productId(), res.qty(),
+                res.status() == ReservationStatus.PENDING
+                    ? ReservationStatus.CONFIRMED : ReservationStatus.CANCELLED,
+                res.createdMs()));
+        return true;
+    }
+
+    // Query side — read-optimized using streams
+    public Map<String, Integer> getLowStockAlerts(int threshold) {
+        return inventory.entrySet().stream()
+            .filter(e -> {
+                Stock s = e.getValue();
+                long stamp = s.lock.tryOptimisticRead();
+                int avail = s.available;
+                if (!s.lock.validate(stamp)) {
+                    stamp = s.lock.readLock();
+                    try { avail = s.available; } finally { s.lock.unlockRead(stamp); }
+                }
+                return avail <= threshold;
+            })
+            .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().available));
+    }
+
+    private Stock getStock(String productId) {
+        Stock s = inventory.get(productId);
+        if (s == null) throw new NoSuchElementException("Product not found: " + productId);
+        return s;
+    }
+}`,
+  tradeoffs: "StampedLock is chosen over synchronized/ReentrantLock because its optimistic read mode avoids any locking for the common case (sufficient stock). Only on actual reservation does it escalate to a write lock. The double-check (re-verify under write lock after optimistic pre-check) is essential — the stock could drop between the pre-check and write lock acquisition. Per-product locks (one StampedLock per Stock) means product A and product B never contend with each other, critical for flash sales on different SKUs.",
+  stuck: ["Double-check under write lock — the classic TOCTOU (time-of-check-time-of-use) race. You check available=10 under optimistic read, but by the time you get the write lock, another thread already consumed it.", "StampedLock is not reentrant — calling another method that also acquires the same lock from within a locked section deadlocks. Keep lock regions small and never call external methods from within them.", "Reservation as a separate map — enables rollback without touching inventory. The reservation record is the single source of truth for pending/confirmed/cancelled state.", "Why not use database transactions? — In-memory systems like this mirror what a DB engine does internally. Understanding this helps you reason about MVCC and row-level locking."],
+  followups: ["Add reservation expiry — auto-cancel reservations older than N minutes using a ScheduledExecutor.", "How do you prevent overselling under eventual consistency (distributed inventory)?", "Implement a waitlist — if stock is 0, queue a reservation that auto-confirms when stock is restocked.", "Add an audit log of all stock movements (event sourcing pattern)."]
+},
+{
+  num: "10",
+  title: "Distributed ID Generator (Snowflake)",
+  tags: [{t:"Bit manipulation",k:"ds"},{t:"AtomicLong",k:"java"},{t:"Singleton Pattern",k:"pattern"}],
+  stmt: "Implement a Snowflake ID generator that produces 64-bit unique, sortable IDs. Structure: 41-bit timestamp + 10-bit machine ID + 12-bit sequence. Must handle clock skew, sequence overflow, and be thread-safe. Support batch generation.",
+  code: `import java.util.concurrent.atomic.*;
+import java.util.*;
+import java.util.stream.*;
+
+public class SnowflakeIdGenerator {
+
+    // Bit layout (64-bit long, sign bit unused):
+    // [1 unused][41 timestamp ms][10 machine id][12 sequence]
+    private static final long EPOCH_MS      = 1_700_000_000_000L; // custom epoch (Nov 2023)
+    private static final int  TS_BITS       = 41;
+    private static final int  MACHINE_BITS  = 10;
+    private static final int  SEQ_BITS      = 12;
+
+    private static final long MAX_MACHINE   = (1L << MACHINE_BITS) - 1; // 1023
+    private static final long MAX_SEQUENCE  = (1L << SEQ_BITS) - 1;     // 4095
+    private static final int  TS_SHIFT      = MACHINE_BITS + SEQ_BITS;  // 22
+    private static final int  MACHINE_SHIFT = SEQ_BITS;                  // 12
+
+    private final long machineId;
+
+    // Pack lastTimestamp + sequence into one AtomicLong for CAS atomicity
+    // [32-bit relative ms | 12-bit seq | 20-bit padding] — simplified packing
+    // For clarity we use two separate AtomicLongs with a StampedLock instead:
+    private volatile long lastTimestamp = -1;
+    private volatile long sequence = 0;
+    private final Object lock = new Object(); // simple monitor for correctness
+
+    public SnowflakeIdGenerator(long machineId) {
+        if (machineId < 0 || machineId > MAX_MACHINE)
+            throw new IllegalArgumentException(
+                "Machine ID must be in [0, " + MAX_MACHINE + "]");
+        this.machineId = machineId;
+    }
+
+    public long nextId() {
+        synchronized (lock) { // monitor lock — low contention, high correctness
+            long now = currentMs();
+
+            if (now < lastTimestamp) {
+                // Clock moved backward — either wait or throw
+                long skew = lastTimestamp - now;
+                if (skew <= 5) { // tolerate up to 5ms skew by waiting
+                    try { Thread.sleep(skew + 1); } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        throw new RuntimeException("Interrupted during clock skew wait");
+                    }
+                    now = currentMs();
+                } else {
+                    throw new IllegalStateException(
+                        "Clock moved backward by " + skew + "ms — refusing to generate ID");
+                }
+            }
+
+            if (now == lastTimestamp) {
+                sequence = (sequence + 1) & MAX_SEQUENCE;
+                if (sequence == 0) {
+                    // Sequence exhausted — wait for next millisecond
+                    now = waitNextMs(lastTimestamp);
+                }
+            } else {
+                sequence = 0; // new millisecond — reset sequence
+            }
+
+            lastTimestamp = now;
+
+            // Bit packing — compose the 64-bit ID
+            return ((now - EPOCH_MS) << TS_SHIFT)
+                 | (machineId      << MACHINE_SHIFT)
+                 |  sequence;
+        }
+    }
+
+    // Batch generation — acquires lock once for N IDs (avoids N lock acquisitions)
+    public long[] nextIds(int count) {
+        long[] ids = new long[count];
+        synchronized (lock) {
+            for (int i = 0; i < count; i++) {
+                // Inline the critical section to avoid re-acquiring the lock
+                long now = currentMs();
+                if (now == lastTimestamp) {
+                    sequence = (sequence + 1) & MAX_SEQUENCE;
+                    if (sequence == 0) now = waitNextMs(lastTimestamp);
+                } else {
+                    sequence = 0;
+                }
+                lastTimestamp = now;
+                ids[i] = ((now - EPOCH_MS) << TS_SHIFT)
+                        | (machineId << MACHINE_SHIFT)
+                        | sequence;
+            }
+        }
+        return ids;
+    }
+
+    // Decode an ID back to its components — useful for debugging
+    public record DecodedId(long timestampMs, long machineId, long sequence, Date date) {}
+
+    public DecodedId decode(long id) {
+        long seq       = id & MAX_SEQUENCE;
+        long machine   = (id >> MACHINE_SHIFT) & MAX_MACHINE;
+        long tsRelative = id >> TS_SHIFT;
+        long tsAbsolute = tsRelative + EPOCH_MS;
+        return new DecodedId(tsAbsolute, machine, seq, new Date(tsAbsolute));
+    }
+
+    // 41-bit timestamp supports ~69 years from epoch before overflow
+    public static long maxDate() {
+        return EPOCH_MS + (1L << TS_BITS) - 1;
+    }
+
+    private long currentMs() { return System.currentTimeMillis(); }
+
+    private long waitNextMs(long lastMs) {
+        long now;
+        do { now = currentMs(); } while (now <= lastMs);
+        return now;
+    }
+}
+
+// Usage
+class SnowflakeDemo {
+    public static void main(String[] args) {
+        var gen = new SnowflakeIdGenerator(42); // machineId=42
+
+        long id = gen.nextId();
+        System.out.println("ID: " + id);
+        System.out.println("Decoded: " + gen.decode(id));
+        System.out.println("IDs are sortable: " + (gen.nextId() > id));
+
+        long[] batch = gen.nextIds(1000);
+        // Verify uniqueness
+        var unique = Arrays.stream(batch).distinct().count();
+        System.out.println("1000 IDs, " + unique + " unique");
+    }
+}`,
+  tradeoffs: "Bit packing into a long gives sortable IDs — higher timestamps produce numerically larger IDs, enabling range scans in databases (unlike UUID v4). The custom epoch extends the timestamp's useful life (41 bits from Jan 1970 lasts only until 2039; from Nov 2023 it lasts until ~2093). Sequence overflow (>4095 IDs/ms/machine) is handled by waiting — at 4096 IDs/ms = 4M IDs/sec, this is rarely hit. Clock skew of ≤5ms is tolerated; larger skew is rejected to prevent ID duplication.",
+  stuck: ["Why synchronized instead of AtomicLong? — You need to atomically update lastTimestamp AND sequence together. AtomicLong can only atomically update one value. AtomicReference<long[]> with CAS is possible but complex. For a low-throughput generator, synchronized is clearest.", "Bit shift arithmetic — (now - EPOCH_MS) << 22 moves the timestamp to the high 41 bits. | (machineId << 12) adds machine ID in the middle. | sequence adds the low 12 bits. OR (|) never overlaps because the bit regions are disjoint.", "41-bit overflow — will hit in ~69 years from epoch. Plan for it: migrate to 64-bit timestamps or change bit layout.", "Distributed machine ID assignment — in prod, machine IDs are assigned via ZooKeeper, etcd, or a DB sequence. Collisions in machine ID assignment mean duplicate IDs across machines."],
+  followups: ["How do you assign machine IDs automatically in Kubernetes where pods are ephemeral?", "Compare Snowflake with UUID v7 (timestamp-ordered UUID from RFC 9562).", "What changes if you need sub-millisecond precision (nano-second timestamp)?", "Add a ShardedIdGenerator that uses multiple SnowflakeIdGenerator instances to scale beyond 4096 IDs/ms."]
+}
+];
+
+function renderProblem(p, i) {
+  const div = document.createElement('div');
+  div.className = 'problem-row';
+  const tagsHtml = p.tags.map(t =>
+    `<span class="tag tag-${t.k}">${t.t}</span>`
+  ).join('');
+  div.innerHTML = `
+    <div class="problem-header" onclick="toggle(${i})">
+      <span class="problem-num">${p.num}</span>
+      <span class="problem-title">${p.title}</span>
+      <div class="problem-tags">${tagsHtml}</div>
+      <span class="chevron" id="chev-${i}">›</span>
+    </div>
+    <div class="problem-body" id="body-${i}">
+      <div class="tabs" id="tabs-${i}">
+        <span class="tab active" onclick="switchTab(${i},'problem',this)">problem</span>
+        <span class="tab" onclick="switchTab(${i},'code',this)">java code</span>
+        <span class="tab" onclick="switchTab(${i},'analysis',this)">analysis</span>
+        <span class="tab" onclick="switchTab(${i},'followups',this)">follow-ups</span>
+      </div>
+      <div class="tab-content active" id="tab-${i}-problem">
+        <div class="problem-stmt">${p.stmt}</div>
+        <div class="section-label">data structures &amp; patterns</div>
+        <div class="problem-tags" style="margin-top:0;margin-bottom:14px;">${tagsHtml}</div>
+      </div>
+      <div class="tab-content" id="tab-${i}-code">
+        <div class="code-block"><pre>${escHtml(p.code)}</pre></div>
+      </div>
+      <div class="tab-content" id="tab-${i}-analysis">
+        <div class="info-grid">
+          <div class="info-card">
+            <div class="info-card-title">tradeoffs &amp; ds reasoning</div>
+            <div class="info-card-body">${p.tradeoffs}</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-title">where you might get stuck</div>
+            <ul class="bullet-list warn-list" style="margin-top:4px;">
+              ${p.stuck.map(s => `<li>${s}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="tab-content" id="tab-${i}-followups">
+        <div class="section-label" style="margin-bottom:10px;">follow-up questions</div>
+        ${p.followups.map(f => `<button class="followup-btn" onclick="sendPrompt('${f.replace(/'/g,"\\'")} — explain in detail with Java code')">${f} ↗</button>`).join('')}
+      </div>
+    </div>`;
+  return div;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function toggle(i) {
+  const body = document.getElementById('body-'+i);
+  const chev = document.getElementById('chev-'+i);
+  const open = body.classList.toggle('open');
+  chev.classList.toggle('open', open);
+}
+
+function switchTab(i, name, el) {
+  document.querySelectorAll(`#tabs-${i} .tab`).forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll(`[id^="tab-${i}-"]`).forEach(t => t.classList.remove('active'));
+  document.getElementById(`tab-${i}-${name}`).classList.add('active');
+}
+
+const list = document.getElementById('list');
+problems.forEach((p, i) => list.appendChild(renderProblem(p, i)));
+</script>
