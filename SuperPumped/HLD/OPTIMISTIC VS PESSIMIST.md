@@ -1,8 +1,4 @@
-# Optimistic vs Pessimistic Locking in Distributed Systems
-
----
-
-## The Core Problem: Concurrent Access
+### The Core Problem: Concurrent Access
 
 In any distributed system, multiple processes/services can try to read and modify the same data simultaneously. Without coordination, you get **race conditions**, **lost updates**, and **data corruption**.
 
@@ -10,15 +6,15 @@ In any distributed system, multiple processes/services can try to read and modif
 
 ---
 
-## Pessimistic Locking
+### Pessimistic Locking
 
-### Philosophy
+#### Philosophy
 
 _"Something WILL go wrong, so I'll lock the resource before touching it."_
 
 You assume conflict is likely and prevent it upfront by acquiring a lock before reading or writing data. No one else can touch that resource until you're done.
 
-### How It Works (Flow)
+#### How It Works (Flow)
 
 ```
 Client A                    Database/Lock Manager           Client B
@@ -37,11 +33,11 @@ Client A                    Database/Lock Manager           Client B
    |                               |<-- Client B can now read--|
 ```
 
-### In SQL (PostgreSQL Example)
+#### In SQL (PostgreSQL Example)
 
 sql
 
-````sql
+```sql
 BEGIN;
 
 -- Acquires an exclusive row-level lock
@@ -58,15 +54,17 @@ COMMIT; -- Lock released here
 ```
 
 Other variants:
+
 - `FOR SHARE` — allows others to read, blocks writes
 - `FOR UPDATE NOWAIT` — fails immediately if lock unavailable (no blocking)
 - `FOR UPDATE SKIP LOCKED` — skips locked rows (useful for job queues)
 
-### In Distributed Systems (Beyond Single DB)
+#### In Distributed Systems (Beyond Single DB)
 
 A single DB `SELECT FOR UPDATE` only works within one database. In distributed systems you need external lock managers:
 
 **Redis-based distributed lock (Redlock):**
+
 ```
 1. Client gets current timestamp T1
 2. Client tries to SET lock_key "client_id" NX PX 30000
@@ -74,11 +72,11 @@ A single DB `SELECT FOR UPDATE` only works within one database. In distributed s
 3. If SET succeeds → lock acquired
 4. Do your work
 5. DELETE lock_key (only if value == client_id)
-````
+```
 
 python
 
-````python
+```python
 # Using redis-py
 import redis
 import uuid
@@ -106,6 +104,7 @@ if acquired:
 ```
 
 **ZooKeeper-based locking:**
+
 - Create ephemeral sequential node `/locks/resource-0000001`
 - Watch the node with the next lower sequence number
 - If yours is lowest → you hold the lock
@@ -114,17 +113,16 @@ if acquired:
 
 ---
 
+### Optimistic Locking
 
-````
+#### Philosophy
 
-## Optimistic Locking
-
-### Philosophy
-*"Conflicts are RARE, so let's not lock at all. We'll detect and handle conflicts at write time."*
+_"Conflicts are RARE, so let's not lock at all. We'll detect and handle conflicts at write time."_
 
 You read freely, do your work, and when you go to write, you verify nothing changed while you were working. If it did change, you retry or fail.
 
-### How It Works (Flow)
+#### How It Works (Flow)
+
 ```
 Client A                    Database                    Client B
    |                           |                           |
@@ -142,7 +140,9 @@ Client A                    Database                    Client B
    |                           |    SET version=6 ---------|
    |                           |--- Rows updated: 0 ------->
    |                           |   ❌ CONFLICT! Retry?    |
-### In SQL
+```
+
+#### In SQL
 
 sql
 
@@ -167,7 +167,7 @@ WHERE product_id = 42
 -- 0 rows → CONFLICT (someone else changed it, retry or fail)
 ```
 
-### Using Timestamps Instead of Version Numbers
+#### Using Timestamps Instead of Version Numbers
 
 sql
 
@@ -181,7 +181,7 @@ WHERE product_id = 42
 
 Timestamps are less reliable than version integers because of clock skew in distributed systems. Prefer integer versions.
 
-### In Application Code (Java/JPA Example)
+#### In Application Code (Java/JPA Example)
 
 java
 
@@ -201,7 +201,7 @@ public class Inventory {
 inventoryRepository.save(updatedInventory);
 ```
 
-### In Distributed Systems (CAS — Compare and Swap)
+#### In Distributed Systems (CAS — Compare and Swap)
 
 Many distributed datastores implement this natively:
 
@@ -246,7 +246,7 @@ with r.pipeline() as pipe:
 
 python
 
-````python
+```python
 # Only update if current value matches expected
 etcd_client.replace(
     key='/inventory/42',
@@ -257,11 +257,12 @@ etcd_client.replace(
 
 ---
 
-## How Real Production Systems Work
+### How Real Production Systems Work
 
-### E-Commerce (Amazon/Shopify style)
+#### E-Commerce (Amazon/Shopify style)
 
 **Inventory reservation uses pessimistic locking:**
+
 ```
 User clicks "Buy Now"
     → Lock inventory row (SELECT FOR UPDATE)
@@ -271,26 +272,28 @@ User clicks "Buy Now"
     → Commit → Lock released
     → Payment async (saga pattern)
 ```
+
 Why pessimistic here? Because inventory is scarce, contention is HIGH during flash sales. Optimistic would cause massive retry storms.
 
 **Order status updates use optimistic locking:**
+
 ```
 Order state: PENDING → CONFIRMED → SHIPPED → DELIVERED
     → Read order (get version)
     → Apply state transition
     → UPDATE WHERE version = N
     → If conflict → re-read and retry
-````
+```
 
 Why optimistic here? Order status conflicts are rare. Most of the time only one system is updating a given order at a time.
 
-### Banking Systems
+#### Banking Systems
 
 **Debit/Credit transactions use pessimistic locking:**
 
 sql
 
-````sql
+```sql
 BEGIN;
 SELECT balance FROM accounts WHERE id = 123 FOR UPDATE;
 -- Verify sufficient funds
@@ -300,9 +303,10 @@ COMMIT;
 
 **Audit logs / read-heavy analytics use optimistic locking** or MVCC (Multi-Version Concurrency Control).
 
-### Ticket Booking (IRCTC, BookMyShow)
+#### Ticket Booking (IRCTC, BookMyShow)
 
 Hybrid approach:
+
 ```
 Phase 1 - Seat Selection (Optimistic):
     Show available seats (no lock)
@@ -317,7 +321,8 @@ Phase 3 - Confirm or Release:
     Timeout/Failure → Release lock
 ```
 
-### Microservices with Saga Pattern
+#### Microservices with Saga Pattern
+
 ```
 Order Service           Inventory Service       Payment Service
      |                        |                       |
@@ -334,9 +339,10 @@ Order Service           Inventory Service       Payment Service
 
 ---
 
-## MVCC — What Real Databases Actually Use
+### MVCC — What Real Databases Actually Use
 
 Most modern databases (PostgreSQL, MySQL InnoDB, Oracle) use **Multi-Version Concurrency Control (MVCC)** under the hood. It's a form of optimistic locking at the DB engine level.
+
 ```
 Timeline:
 T=1: Row inserted: {id:1, val:"A", txn_id:100}
@@ -350,26 +356,26 @@ MVCC gives readers never blocking writers and writers never blocking readers, wh
 
 ---
 
-## Tradeoffs: Deep Comparison
+### Tradeoffs: Deep Comparison
 
-| Dimension | Pessimistic Locking | Optimistic Locking |
+|Dimension|Pessimistic Locking|Optimistic Locking|
 |---|---|---|
-| **Concurrency** | Low — serializes access | High — parallel reads |
-| **Throughput** | Lower under high load | Higher under low contention |
-| **Latency** | Higher (wait for locks) | Lower (no waiting) |
-| **Deadlock Risk** | YES — must handle | NO deadlocks |
-| **Starvation Risk** | YES — long queues | Lower |
-| **Retry Complexity** | Simple (just wait) | Complex (retry logic needed) |
-| **Network Overhead** | Lock acquire/release calls | Extra version checks |
-| **Best Scenario** | High contention, scarce resources | Low contention, read-heavy |
-| **Failure Mode** | Deadlock, timeout | Retry storm under high load |
-| **DB Support** | Native (`FOR UPDATE`) | Via version column or CAS |
+|**Concurrency**|Low — serializes access|High — parallel reads|
+|**Throughput**|Lower under high load|Higher under low contention|
+|**Latency**|Higher (wait for locks)|Lower (no waiting)|
+|**Deadlock Risk**|YES — must handle|NO deadlocks|
+|**Starvation Risk**|YES — long queues|Lower|
+|**Retry Complexity**|Simple (just wait)|Complex (retry logic needed)|
+|**Network Overhead**|Lock acquire/release calls|Extra version checks|
+|**Best Scenario**|High contention, scarce resources|Low contention, read-heavy|
+|**Failure Mode**|Deadlock, timeout|Retry storm under high load|
+|**DB Support**|Native (`FOR UPDATE`)|Via version column or CAS|
 
 ---
 
-## When to Use What — Decision Framework
+### When to Use What — Decision Framework
 
-### Use Pessimistic Locking When:
+#### Use Pessimistic Locking When:
 
 - **Contention is high** — many concurrent users on the same resource
 - **Data is scarce** — last N seats, limited inventory, unique resources
@@ -380,7 +386,7 @@ MVCC gives readers never blocking writers and writers never blocking readers, wh
 
 Real examples: seat booking, bank transfers, stock trading, job queues, flash sale inventory
 
-### Use Optimistic Locking When:
+#### Use Optimistic Locking When:
 
 - **Contention is low** — conflicts are rare in practice
 - **Read-heavy workloads** — most operations are reads
@@ -391,7 +397,8 @@ Real examples: seat booking, bank transfers, stock trading, job queues, flash sa
 
 Real examples: CMS document editing, user profile updates, configuration changes, order status updates, social media posts
 
-### Decision Tree
+#### Decision Tree
+
 ```
 Is conflict rate > 20-30%?
 ├── YES → Pessimistic
@@ -404,9 +411,10 @@ Is conflict rate > 20-30%?
 
 ---
 
-## Complete Service + Database Flow
+### Complete Service + Database Flow
 
-### Pessimistic Flow (Microservice → DB)
+#### Pessimistic Flow (Microservice → DB)
+
 ```
 [Client Request]
       ↓
@@ -436,7 +444,8 @@ Failure paths:
 - Connection pool exhausted → Queue or 503
 ```
 
-### Optimistic Flow (Microservice → DB)
+#### Optimistic Flow (Microservice → DB)
+
 ```
 [Client Request]
       ↓
@@ -456,13 +465,13 @@ Failure paths:
     ├── Exponential backoff + re-read + retry
     ├── Max retries exceeded → Return 409 Conflict
     └── Dead letter queue for async processing
-````
+```
 
-### Retry Strategy for Optimistic Locking
+#### Retry Strategy for Optimistic Locking
 
 python
 
-````python
+```python
 import time
 import random
 
@@ -489,9 +498,10 @@ def update_with_retry(entity_id, new_value, max_retries=3):
 
 ---
 
-## Deadlock Deep Dive (Pessimistic Problem)
+### Deadlock Deep Dive (Pessimistic Problem)
 
 Deadlock happens when two transactions each hold a lock the other needs:
+
 ```
 Transaction A:           Transaction B:
 LOCK row 1               LOCK row 2
@@ -510,11 +520,11 @@ LOCK row 1               LOCK row 2
 
 ---
 
-## Interview Questions + Answers
+### Interview Questions + Answers
 
 ---
 
-### Foundational Questions
+#### Foundational Questions
 
 **Q1: What is the difference between optimistic and pessimistic locking?**
 
@@ -546,7 +556,7 @@ It's a SQL statement that reads rows while acquiring an exclusive lock on them s
 
 ---
 
-### Intermediate Questions
+#### Intermediate Questions
 
 **Q6: How do you implement distributed locking when your data is spread across multiple databases or services?**
 
@@ -590,7 +600,7 @@ A retry storm is when many clients simultaneously get optimistic locking conflic
 
 ---
 
-### Advanced Questions
+#### Advanced Questions
 
 **Q13: How would you implement optimistic locking in a microservices architecture without a shared database?**
 
@@ -622,7 +632,7 @@ A shared/read lock allows multiple transactions to read simultaneously but block
 
 ---
 
-### Follow-Up / Scenario Questions
+#### Follow-Up / Scenario Questions
 
 **Q18: Your service is experiencing frequent deadlocks. How do you diagnose and fix it?**
 
@@ -642,7 +652,8 @@ Add a `version` integer column to the table with `DEFAULT 0`. Update all INSERT 
 
 ---
 
-## Quick Reference Cheat Sheet
+### Quick Reference Cheat Sheet
+
 ```
 ┌────────────────────────────────────────────────────────────┐
 │  HIGH CONTENTION    →  PESSIMISTIC  (lock first, work safe)│
@@ -652,6 +663,4 @@ Add a `version` integer column to the table with `DEFAULT 0`. Update all INSERT 
 │  DISTRIBUTED + CAS  →  OPTIMISTIC   (cheaper, no lock mgr) │
 │  FINANCIAL TX       →  PESSIMISTIC  (correctness > speed)  │
 └────────────────────────────────────────────────────────────┘
-````
-
----
+```

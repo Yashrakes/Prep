@@ -93,4 +93,18 @@
 13th march -> google, olx, mmt, flipkart,salesforce,sprinkler
 28th macrh -> dp world
 
+29 April -> wells fargo
+
+
+interviewed
+amazon 3 times
+salesforce 
+service now 
+kotak
+expedia 
+linkedin 
+rubrik
+jp morgan
+
+
 

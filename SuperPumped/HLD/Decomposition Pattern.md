@@ -53,7 +53,7 @@ A **decomposition pattern** refers to the strategy you use to break a monolithic
     - **Healthcare System:**  
         A core subdomain might include patient management, a supporting subdomain could involve appointment scheduling, and a generic subdomain might cover billing. This separation allows critical operations to remain robust while less critical services can evolve more freely.
 
----
+	---
 
 # Interview Questions
 

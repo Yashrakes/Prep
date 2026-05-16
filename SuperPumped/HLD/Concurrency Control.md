@@ -39,11 +39,11 @@
 # Isolation Property and Isolation Levels
 
 - The isolation property of ACID ensures that concurrent transactions execute as if they were running one after another (serially). However, perfect isolation can severely limit performance, so databases offer different isolation levels that trade some isolation guarantees for improved performance.
-
+  
 ## Problems in Concurrent Transactions:
 #### 1. DIRTY Read Problem
 - A dirty read occurs when a transaction reads data that has been modified by another transaction that has not yet committed. If the modifying transaction rolls back, the reading transaction has seen data that never "officially" existed.
-#### 2. NON-REPEATABLE Read Problem
+#### 2. NON-REPEATABLE Read Problem 
 - A non-repeatable read occurs when a transaction reads the same row twice and gets different results because another transaction has modified the row between the reads. This breaks the consistency of the reading transaction's view of the data.
 #### 3. PHANTOM Read Problem
 - A phantom read occurs when a transaction retrieves a set of rows twice, and the second retrieval finds new rows ("phantoms") that weren't visible in the first retrieval. This happens because another transaction inserted new rows that match the query criteria.

@@ -247,7 +247,7 @@ Redis merges both internally (since Redis 7) and stores as **one file** in "mult
 This gives:
 
 - Fast restart
-    
+     
 - Minimal data loss
     
 - Backup + durability

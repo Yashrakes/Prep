@@ -1,4 +1,4 @@
-# Index
+ # Index
 
 - [[# RESOURCE]]
 - [[#PROBLEM STATMENT]]
@@ -32,7 +32,7 @@ We call **Bloom filters** a **space-optimized** or **space-efficient** approach 
 
 - Very **space-efficient**.
     
-- **Fast** insert and lookup (constant time).
+- **Fast** insert and lookup (constant time). 
     
 - Suitable for large-scale, memory-sensitive applications.
     
