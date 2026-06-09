@@ -22,5 +22,13 @@
 	- [ ] Concurrency Control
 
 
+Thread pool
+Circuit breaker
+logger
+amazon locker
+cache
+Pub sub
+
+
 ---
 

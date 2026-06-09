@@ -145,7 +145,7 @@ LIMIT 1
 FOR UPDATE SKIP LOCKED;
 
 Problems at 50,000 jobs/second scale:
-────────────────────────────────────────────────
+─── ─────────────────────────────────────────────
 → 100 workers × 10 polls/sec = 1000 SELECT queries/sec
 → Index on (status, schedule_time, priority) needed
 → Index bloat from constant status updates

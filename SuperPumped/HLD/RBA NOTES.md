@@ -2,9 +2,9 @@
 
 **
 
-Describe an instance when you dealt with a demanding customer and how you arrived at a solution to resolve a fundamental problem.
+## Describe an instance when you dealt with a demanding customer and how you arrived at a solution to resolve a fundamental problem.
 
-Situation:
+Situation: 
 
 Regulatory Flag ka bolna hai… Global Asset Class. Ka… 
 
@@ -38,13 +38,7 @@ The issue was resolved ahead of the expected deadline, which not only restored t
 
   
 
-  
-
-  
-
-  
-
-Tell us about a challenging personal circumstance and how you dealt with it.
+## Tell us about a challenging personal circumstance and how you dealt with it.
 
 Situation:  
 During one of my important work projects, my father had to go through a nose surgery. He was admitted to the hospital and my family needed my support during recovery. At the same time, we were close to delivering the Lite Approval feature. Most of the development was done, and what was left was mainly user testing and coordination with other teams.
@@ -68,23 +62,7 @@ We completed the user testing on time, and the Lite Approval feature was deliver
 
   
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-How do you analyze risk? Describe a time when you took a risk that paid off.
+## How do you analyze risk? Describe a time when you took a risk that paid off.
 
 How I analyze risk:  
 When I analyze risk, I look at:
@@ -125,7 +103,7 @@ The deployment on FT was successful, testing passed, and we gained confidence to
 
   
 
-What would you do if you discovered your manager was going against company policy?
+## What would you do if you discovered your manager was going against company policy?
 
 I have handled the situation respectfully and carefully.
 
@@ -151,23 +129,7 @@ We met the deadline without breaking policy. The code went live smoothly and lat
 
   
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-Describe your ideal work environment.
+## Describe your ideal work environment.
 
 My ideal work environment is one where people are customer-focused, take ownership of their work, and are encouraged to innovate. I enjoy being part of a team where everyone is motivated, supports each other, and is willing to go the extra mile to solve tough problems.
 
@@ -190,9 +152,11 @@ From what I know, Amazon encourages ownership, fast-paced execution, and custome
 
   
 
-Can you share an example of how you have saved money for your previous business?
+## Can you share an example of how you have saved money for your previous business?
 
 Most importantly, I introduced .zip compression for the build artifacts before uploading them to Artifactory. This helped compress the final build files significantly.
+fabric cost optimization
+
 
   
 
@@ -204,29 +168,10 @@ Dono me Lite Approval ka bolna hai…. 
 
   
 
-  
 
-  
+## What is the most interesting project you have worked on that you haven't had the chance to talk about yet?
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-What is the most interesting project you have worked on that you haven't had the chance to talk about yet?
-
-Risk Tracker -> Application…
+AI datafix genrator
 
 What is your greatest professional accomplishment that isn’t on your resume?
 
@@ -234,7 +179,7 @@ What is your greatest professional accomplishment that isn’t on your resume?
 
   
 
-Describe a Time When You Had to Make a Difficult Decision. What makes it difficult?
+## Describe a Time When You Had to Make a Difficult Decision. What makes it difficult?
 
 Isme technical vs business change ka bolna h 
 
@@ -254,7 +199,7 @@ Are their any of your qualifications that you want to share with us
 
 Is there a proud moment or accomplishment in your career which you haven't shared yet ?
 
-Customer Obsession Question: “Tell me about a time when you went above and beyond to serve a customer’s needs.”
+## Customer Obsession Question: “Tell me about a time when you went above and beyond to serve a customer’s needs.”
 
 Situation: While developing the Credit Limit Request/Writeup Angular application, I noticed that credit officers were manually validating loan data a process that was both time‑consuming and error‑prone.
 
@@ -265,7 +210,7 @@ Action: I carefully reviewed the existing RBA code and identified opportunities 
 Result: The improvements significantly reduced processing time, increased data accuracy, and boosted user confidence in the system. Credit officers were extremely satisfied with the enhanced functionality, which streamlined their workflow  
   
 
-Ownership Question: “Describe a situation where you took responsibility for a project or problem that wasn’t directly in your job description.”  
+## Ownership Question: “Describe a situation where you took responsibility for a project or problem that wasn’t directly in your job description.”  
 Situation: We were enhancing our Rule Based Approval (RBA) system by introducing the Lite Approval functionality—a critical business enhancement designed to automatically approve high-risk loan requests, thereby reducing manual workload by 30‑40%.
 
 Task: Although my primary role was backend development, I recognized the strategic importance of this feature. I took ownership of the project by gathering detailed requirements directly from stakeholders, planning the entire enhancement, and coordinating the execution—all without needing to rely on the product owner for every detail.
@@ -276,7 +221,7 @@ Result: The Lite Approval functionality was successfully implemented, leading to
 
   
 
-Invent and Simplify Question: “Can you provide an example of when you simplified a complex process or introduced an innovative solution to solve a problem?”
+## Invent and Simplify Question: “Can you provide an example of when you simplified a complex process or introduced an innovative solution to solve a problem?”
 
 Answer:
 
@@ -288,7 +233,7 @@ Action: I designed and implemented a parameterized approach in Java that ran pre
 
 Result: The streamlined process not only reduced manual workload but also increased processing accuracy, making loan approvals faster and more reliable for our internal teams.
 
-Are Right, A Lot Question: “Tell me about a decision you made based on your judgment that turned out to be correct. How did you arrive at that decision?”
+## Are Right, A Lot Question: “Tell me about a decision you made based on your judgment that turned out to be correct. How did you arrive at that decision?”
 
 Situation: After implementing the Lite Approval functionality—a major enhancement for auto-approving high-risk loan requests—we encountered a significant challenge. Our production environment wasn’t available for release, and given the extensive changes, we needed several days of integrated regression testing to cover all scenarios.
 
@@ -298,7 +243,7 @@ Action: I decided to deploy the changes to our development environment. I took t
 
 Result: Thanks to this proactive decision, we were able to test and validate the majority of use cases in a stable environment. My judgment not only ensured the functionality’s reliability but also built confidence among stakeholders in our ability to overcome challenges and deliver robust solutions.
 
-Learn and Be Curious Question: “Describe a time when you had to quickly learn something new to address a challenge or seize an opportunity.”
+## Learn and Be Curious Question: “Describe a time when you had to quickly learn something new to address a challenge or seize an opportunity.”
 
 NGINX wala answer dena hai
 
@@ -362,3 +307,179 @@ Reference for Leadership principles:
 
 
 **
+
+
+
+**RBA**
+
+  
+
+  
+
+Let me explain what exactly bra is and why do we need this project 
+
+  
+
+So basically our bank provides loans to the respective companies,  
+and this process  of providing loan to any company is been taken care by credit offices manually earlier
+
+So to automate this process or reduce the credit offices manual efforts , we introduces RBA to solve this problem
+
+  
+
+So now lets jump to how rba works and what rba is 
+
+  
+
+So basically we have a ui screen where we can generate a loan amount from cla-ui-request 
+
+And that loan request is been passed to RBA on submit
+
+  
+
+So now RBA component gets the json object as input in RBA 
+
+  
+
+So we have set of 50 rules in the System , and to run those rules , we need data , so we populating the data iusing different services
+
+Like (industry , glc, mrca , WATCHLIST , DAL)
+
+  
+
+And these rules are created in rules ui and stored in rules service 
+
+Now we do the complex calculation , we only run limited type of rules ,  we basically support risk inc and risk dec case in system
+
+  
+
+So out of 50+ , we have 8 differentiator rul\s, including 33 dec 17 , common 5
+
+  
+
+Based on the diff types os rule rule , we decide , whereto this is a risk increase c case or decrease
+
+And these rules are run every time and in every request
+
+  
+
+So we call call executor service with list of rules and credit decision request and in response we get execution summary request output
+
+  
+
+So first execute differentiator rule a, and based one execution summary , based on that we again execute either inch or dec rules to execute 
+
+  
+
+If all rules are passing of differentiator then we call decrease rule
+
+Else calll inc rule 
+
+  
+
+So after all these execution we store  it in credit decision response
+
+  
+
+If all inc rule pass , we say bra true , if any one fail we state rba false
+
+Same with decreasing 
+
+  
+
+And after this execution results , we call parallel calls to return response and generate document through document service we us jasper reports 
+
+  
+
+So user can see a ui option on screen
+
+  
+
+  
+
+Follow ups 
+
+  
+
+1. We can have miultiple loans , if any limit show rba fails , we don’t show bra true
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+2. Ui request  fields ( name any)  group limit , industry aggregation see from rba credit decion request lld loan amount tenor
+3. rules( name and explain any)(increasing , decreasing common) limit.tenor<= 5  common  kwg13 keg15 company level flags whether that cpty is eligible or not fir kwg 13 article  
+
+        Glc product specific headroom
+
+        Increasing credit review  not overdue
+
+       Rating review not over due
+
+       Decreasing. 
+
+4. Data population (name and explain any)  access ticket etmm country industry , mrca  minimumrated credit authority , glc, dal
+5. Document service
+
+  
+
+  
+
+( loan amount(transaction size) , counterparty rating (probability of default, ), tenor restriction. (Tenor  low , high risk). )
+
+  
+
+And for identifying the portfolio under which the company , we have glc raikey parameter to identify under which portfolio willl get  and based on 
+
+German madcap , Financial institution, large corporates 
+
+  
+ , we have introduces
+
+  
+
+  
+
+  
+
+  
+
+Diff rules -> new limit, limit amount inc, tenor inc, currency change,
+
+Cancel rule -> cancel flag simply 
+
+Dec rule ->  underwriting amount , underwriting indicator ,underwritng date , pd  rating 
+
+Inc rules -> transaction size, headroom underglc , product specific  headroomm glc, credit rating , no of approve in last 24, in last72, excess ticket, credit, rating review dates
+
+Common -> lgd change , kwg 13 ,15 , request reason, predial flag,  no credit writeup pending, common
+
+  
+
+  
+
+Waiver -> 24 hr, 72 hr, excess ticket , grm , credit rating review dates
+
+  
+
+Parameterised ,  tenor , transaction, facility pd rating

@@ -34,7 +34,7 @@ Redis Sorted Set internals:
 ────────────────────────────────────────────────
 Implemented using TWO data structures together:
 
-1. Skip List (for ordered operations):
+1. Skip List (for ordered operations): 
    → O(log N) rank queries
    → O(log N) range queries
    → O(log N) insertions

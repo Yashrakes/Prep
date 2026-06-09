@@ -198,7 +198,7 @@ timestamp           │ video_id  │ user_id  │ category │ region │ devic
 2024-02-26 10:00:00 │ video_123 │ user_001 │ music    │ US     │ mobile  │ 180
 2024-02-26 10:00:01 │ video_456 │ user_002 │ gaming   │ UK     │ desktop │ 320
 2024-02-26 10:00:02 │ video_123 │ user_003 │ music    │ JP     │ mobile  │ 145
-
+ 
 Table engine: MergeTree
 Partition by: toYYYYMM(timestamp)  (monthly partitions)
 Order by: (video_id, timestamp)

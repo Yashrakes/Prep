@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "HLD/Cursor vs Offset Pagination.md",
+                "file": "HLD/RBA NOTES.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Cursor vs Offset Pagination"
+              "title": "RBA NOTES"
             }
           },
           {
@@ -27,16 +27,15 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "HLD/problems/Database/BITLY.md",
+                "file": "HLD/problems/Database/NOTIFICATION SYSTEM.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "BITLY"
+              "title": "NOTIFICATION SYSTEM"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -68,7 +67,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "pessimist",
+                "query": "rba ",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -93,7 +92,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 256
+    "width": 400
   },
   "right": {
     "id": "36f4326f84202314",
@@ -153,53 +152,53 @@
       "markdown-importer:Open format converter": false
     }
   },
-  "active": "80adf5975e135de9",
+  "active": "83b90de9b00ed928",
   "lastOpenFiles": [
-    "HLD/problems/ALL HLDS DIAGRAM.md",
-    "HLD/Attachments/Pasted image 20260320125108.png",
-    "HLD/Attachments/Pasted image 20260320125046.png",
-    "HLD/Attachments/Pasted image 20260320125042.png",
-    "HLD/Attachments/Pasted image 20260201105754.png",
-    "HLD/Attachments/Pasted image 20250522170736.png",
-    "HLD/Attachments/Pasted image 20250412164917.png",
-    "HLD/Attachments/key value store 2.png",
-    "HLD/Attachments/kafka1.png",
-    "HLD/Attachments/job scheduler.md",
-    "HLD/Attachments/google docs.png",
-    "HLD/Attachments/calendar.png",
-    "HLD/problems/Database/BITLY.md",
-    "HLD/problems/Database/ADD CLICK AGGREGATOR.md",
+    "LLD DOCS/Thread_Pool_LLD_Interview_Guide.docx",
     "HLD/problems/company wise/amazon hld.md",
-    "HLD/OPTIMISTIC VS PESSIMIST.md",
-    "LLD DOCS/Rate_Limiter_LLD_Interview_Guide.docx",
-    "HLD/OT AND CRDT.md",
-    "HLD/problems/Google DOCS.md",
-    "HLD/problems/Database/GOOGLE DOCS.md",
-    "HLD/Proxy Server.md",
-    "HLD/RAFT VS PAXOS.md",
-    "HLD/Redis.md",
+    "LLD/TODO.md",
+    "HLD/problems/key insights on every hld.md",
+    "HLD/problems/HLD_Tradeoffs_Interview_Guide.docx",
+    "HLD/problems/job.md",
+    "HLD/problems/HLD system design Boss sheet.pdf",
+    "LLD DOCS/in_memory_database_lld_complete.md",
+    "LLD/eh7Un7BNnzoayUYwYjC9Mf.pdf",
+    "HLD/problems/Microservice_SystemDesign-DesignPatterns_KnowledgeBoost.pdf",
+    "HLD/Microservice_SystemDesign-DesignPatterns_KnowledgeBoost.pdf",
+    "HLD/0. Index.md",
     "HLD/RBA NOTES.md",
-    "HLD/SAGA Pattern.md",
-    "HLD/Service Mesh.md",
-    "HLD/sharding_combined.md",
-    "HLD/SQL vs NoSQL.md",
-    "HLD/tradeoffs Analysis of Sharding Approaches_ Pros, Cons, and Trade-offs.pdf",
-    "HLD/Transport Layer.md",
-    "HLD/Understanding Server Throughput Limits.md",
-    "HLD/Vector clocks.md",
-    "HLD/webrtc vs rtmp vs sfu.md",
+    "HLD/problems/ALL HLDS DIAGRAM.md",
+    "HLD/problems/Twitter_Timeline_System_Design_In_Depth.md",
+    "HLD/Attachments/notification system.png",
+    "HLD/Attachments/notification sysytem 2.png",
+    "HLD/Attachments/metrics monitoring.png",
+    "HLD/Attachments/local delivery system 2.png",
+    "HLD/Attachments/local delivery system 1.png",
+    "HLD/Attachments/rate limiter 2.png",
+    "HLD/Attachments/rate llimiter.png",
+    "HLD/Attachments/ticketmaster.png",
+    "HLD/Attachments/web crawler.png",
+    "HLD/problems/Database/LEETCODE.md",
+    "HLD/Attachments/leetcode.png",
+    "HLD/Attachments/job scheduler.md",
     "HLD/Write ahead log.md",
-    "HLD/count min sketch.md",
-    "HLD/dynamo vs casandra.md",
-    "HLD/Dynamo db.md",
-    "HLD/Dual Write Problem.md",
+    "HLD/Vector clocks.md",
+    "HLD/OPTIMISTIC VS PESSIMIST.md",
+    "HLD/nginx.md",
+    "HLD/problems/TO DO.md",
+    "revise_dsa/Algo Master 300.md",
+    "HLD/problems/Database/METRIX MONITORING.md",
+    "HLD/problems/Database/KEY VALUE STORE.md",
+    "HLD/problems/Database/JOB SCHEDULER.md",
+    "HLD/problems/Database/GOOGLE DOCS.md",
+    "HLD/OT AND CRDT.md",
+    "HLD/problems/Database/GOOGLE CALENDAR.md",
+    "HLD/problems/Database/GAMING LEADERBOARD.md",
+    "HLD/Cursor vs Offset Pagination.md",
+    "LLD DOCS/Rate_Limiter_LLD_Interview_Guide.docx",
+    "HLD/tradeoffs Analysis of Sharding Approaches_ Pros, Cons, and Trade-offs.pdf",
     "HLD/Database Sharding and Partitioning in Distributed Systems.pdf",
     "HLD/problems/System-Design-Alex-Xu-Vol-1.pdf",
-    "HLD/problems/System-Design-Alex-Xu-Vol-2.pdf",
-    "LLD DOCS/junit_interview_guide.html",
-    "LLD DOCS/java_lld_20_problems.html",
-    "LLD DOCS/lld_interview_prep_java.html",
-    "LLD/java_lld_20_problems.html",
-    "LLD/lld_interview_prep_java.html"
+    "HLD/problems/System-Design-Alex-Xu-Vol-2.pdf"
   ]
 }

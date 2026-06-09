@@ -6,7 +6,7 @@
 5. 1 mb = 10 power 6   
 6. 1 gb = 10 power 9    ,   1tb = 10 power 12 ,  1pb = 10 power 15 
 7. redis pub sub handle 100 gb of data 
-8. non func req - > scalbility, consistency , availablilty, security , throughput, fault tolerance, latency, read/write heavy, faqilure(gossip)
+8. non func req - > scalbility, consistency , availablilty, security , throughput, fault tolerance, latency, read/write heavy, faqilure(gossip), durabillity,delivery semantics,observability
 9. SSD can handle around 100,000 IOPS (Input/Output Operations Per Second),
 10. redis uses lua scripts for concurrent swipes like in tinder
 11. postgress handles 10k writes per second easily
@@ -15,6 +15,9 @@
      SSD access time: ~0.1 millisecond
      HDD access time: ~10 millisecond
     A typical SSD can handle around 100,000 IOPS
+14. 1 million request oer day = 10 qps
+15. 99 percent accuracy = 14 min per day down time 
+16. 99.99 percent = 8.6 sec per day down time
  
 
 

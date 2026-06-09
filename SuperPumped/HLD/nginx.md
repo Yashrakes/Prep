@@ -383,7 +383,52 @@ Typically, you’ll touch **two things**:
 
 Here’s a **production-style config** when Nginx sits in front of Tomcat:
 
-`http {     # Enable gzip     gzip on;     gzip_comp_level 5;     gzip_min_length 256;     gzip_vary on;     gzip_proxied any;     gzip_types         text/plain         text/css         text/javascript         application/javascript         application/json         application/xml         application/rss+xml         application/atom+xml         application/xhtml+xml         application/font-woff         application/font-woff2         image/svg+xml;      server {         listen 80;          server_name yourdomain.com;          # Serve static files directly from Nginx         location /static/ {             root /var/www/yourapp;   # directory where static assets live             expires 30d;             add_header Cache-Control "public";         }          # Reverse proxy dynamic requests to Tomcat         location / {             proxy_pass http://127.0.0.1:8080;   # Tomcat running on port 8080             proxy_set_header Host $host;             proxy_set_header X-Real-IP $remote_addr;             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;             proxy_set_header X-Forwarded-Proto $scheme;         }     } }`
+http {
+
+    # Enable gzip compression
+    gzip on;
+    gzip_comp_level 5;
+    gzip_min_length 256;
+    gzip_vary on;
+    gzip_proxied any;
+
+    gzip_types
+        text/plain
+        text/css
+        text/javascript
+        application/javascript
+        application/json
+        application/xml
+        application/rss+xml
+        application/atom+xml
+        application/xhtml+xml
+        application/font-woff
+        application/font-woff2
+        image/svg+xml;
+
+    server {
+        listen 80;
+
+        server_name yourdomain.com;
+
+        # Serve static files directly from Nginx
+        location /static/ {
+            root /var/www/yourapp;   # Directory where static assets live
+            expires 30d;
+            add_header Cache-Control "public";
+        }
+
+        # Reverse proxy dynamic requests to Tomcat
+        location / {
+            proxy_pass http://127.0.0.1:8080;   # Tomcat running on port 8080
+
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+}
 
 👉 This setup does three things:
 
@@ -402,7 +447,41 @@ If you’re using **Maven Assembly Plugin** to package deployment artifacts (e.g
 
 Example `assembly.xml` snippet:
 
-`<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"           xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2           https://maven.apache.org/xsd/assembly-1.1.2.xsd">      <id>dist</id>     <formats>         <format>tar.gz</format>     </formats>      <fileSets>         <!-- Include your WAR or JAR -->         <fileSet>             <directory>target</directory>             <includes>                 <include>*.war</include>             </includes>             <outputDirectory>/app/tomcat/webapps</outputDirectory>         </fileSet>          <!-- Include nginx.conf -->         <fileSet>             <directory>src/main/resources/nginx</directory>             <includes>                 <include>nginx.conf</include>             </includes>             <outputDirectory>/etc/nginx/conf.d</outputDirectory>         </fileSet>     </fileSets> </assembly>`
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="
+              http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2
+              https://maven.apache.org/xsd/assembly-1.1.2.xsd">
+
+    <id>dist</id>
+
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+
+    <fileSets>
+
+        <!-- Include WAR file -->
+        <fileSet>
+            <directory>target</directory>
+            <includes>
+                <include>*.war</include>
+            </includes>
+            <outputDirectory>/app/tomcat/webapps</outputDirectory>
+        </fileSet>
+
+        <!-- Include nginx configuration -->
+        <fileSet>
+            <directory>src/main/resources/nginx</directory>
+            <includes>
+                <include>nginx.conf</include>
+            </includes>
+            <outputDirectory>/etc/nginx/conf.d</outputDirectory>
+        </fileSet>
+
+    </fileSets>
+
+</assembly>
 
 👉 With this:
 

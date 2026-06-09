@@ -28,7 +28,7 @@ Compare this to PostgreSQL, which uses a B-tree structure requiring random disk 
 
 **MongoDB** — Better write performance than SQL, but MongoDB is a single-primary system by default. All writes go to the primary node, creating a bottleneck. Cassandra has **no primary node** — every node accepts writes equally, distributing load across the entire cluster.
 
-**DynamoDB** — Actually a reasonable alternative to Cassandra here. Also write-optimized, also distributed, also leaderless. The tradeoff is vendor lock-in (AWS only) and cost at extreme scale. Many companies (Discord, Netflix) choose Cassandra precisely to avoid cloud vendor dependency. For a startup, DynamoDB might be the pragmatic choice. For a large independent system, Cassandra wins.
+**DynamoDB** — Actually a reasonable alternative to Cassandra here. Also write optimised, also distributed, also leaderless. The tradeoff is vendor lock-in (AWS only) and cost at extreme scale. Many companies (Discord, Netflix) choose Cassandra precisely to avoid cloud vendor dependency. For a startup, DynamoDB might be the pragmatic choice. For a large independent system, Cassandra wins.
 
 **Redis** — Fast enough for writes but notifications need durability. If Redis crashes before persistence kicks in, you lose notifications permanently. Users noticing missed notifications is a serious product failure. Cassandra's built-in replication across nodes ensures no data loss.
 

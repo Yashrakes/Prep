@@ -478,7 +478,7 @@ Additional columns:
   server_version:  BIGINT  // What it became after transformation
   transformed:     BOOLEAN // Whether this was transformed against concurrent ops
   
-Primary key: (doc_id, operation_id)
+Primary key: (doc_id, operation_id) 
 Indexes:
   - PRIMARY KEY (doc_id, operation_id)
   - INDEX (doc_id, timestamp) for history queries

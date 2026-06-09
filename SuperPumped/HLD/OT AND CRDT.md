@@ -991,14 +991,6 @@ No matter what order operations arrive — same result always!
 
 Take a shot at any of these and I'll give you **detailed feedback** like a real interviewer — pointing out what's strong, what's missing, and what would impress vs what would raise red flags. Which one do you want to tackle first? 🎯
 
-## You said: explain in detail with example how ot is working
-
-explain in detail with example how ot is working
-
-13 Feb
-
-## Claude responded: Operational Transformation — Deep Dive with Examples
-
 ## Operational Transformation — Deep Dive with Examples
 
 Let me build this up from absolute scratch, because OT is one of those topics where if you skip even one conceptual step, the whole thing feels like magic. By the end, you'll be able to derive it yourself.
@@ -1291,16 +1283,6 @@ The solution Google uses (and what you should say in interviews) is the **single
 
 But what if that one server gets overloaded with a viral shared doc? That's actually a deep scaling challenge — and a great interview question to answer. Want to go there next? Or would you rather try answering one of the five interview questions from before, and I'll critique your answer like a real interviewer? 🎯
 
-## You said: T(Insert(pos1, char1), Insert(pos2, char2)): if pos1 < pos2: return Insert(pos1, char1) // op1 is before op2, no shift needed if pos1 > pos2: return Insert(pos…
-
-T(Insert(pos1, char1), Insert(pos2, char2)): if pos1 < pos2: return Insert(pos1, char1) // op1 is before op2, no shift needed if pos1 > pos2: return Insert(pos1 + 1, char1) // op2 inserted before op1's target, shift right if pos1 == pos2: // TIE BREAKER — both want to insert at same spot // Use client ID or timestamp to break tie deterministically if client1_id < client2_id: return Insert(pos1, char1) // client1 goes first, no shift else: return Insert(pos1 + 1, char1) // client2 goes first, client1 shifts right
-
-explain this with exmaple this all scenrios
-
-13 Feb
-
-## Claude responded: Insert vs Insert — All 3 Scenarios Explained with Full Examples
-
 ## Insert vs Insert — All 3 Scenarios Explained with Full Examples
 
 Let me walk through each scenario one by one, building a concrete picture in your head so the logic feels _obvious_, not memorized.
@@ -1556,13 +1538,6 @@ Once you internalize this, you can derive the rules yourself in an interview wit
 
 That's really all OT's Insert-vs-Insert transform is — pure positional logic, like understanding how a queue shifts when someone cuts in line. Want to now tackle Delete vs Delete (which has the fascinating "ghost delete" no-op case), or jump to how the server applies a _chain_ of transforms when a client has been offline for many operations? 🎯
 
-## You said: now similarly explain me about crdts with example lets keeo text t=document only
-
-now similarly explain me about crdts with example lets keeo text t=document only
-
-13 Feb
-
-## Claude responded: CRDTs for Text Documents — Deep Dive with Examples
 
 ## CRDTs for Text Documents — Deep Dive with Examples
 

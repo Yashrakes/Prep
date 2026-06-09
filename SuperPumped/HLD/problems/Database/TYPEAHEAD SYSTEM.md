@@ -79,7 +79,7 @@ Why not a **SQL table with ORDER BY frequency**? Every time someone searches, yo
 
 ## Why Elasticsearch for Analytics?
 
-Elasticsearch enters the picture for a different job entirely. While Redis handles the real-time "what should I show right now" problem, Elasticsearch handles the analytical "what are people searching for over time" problem.
+Elastic search enters the picture for a different job entirely. While Redis handles the real-time "what should I show right now" problem, Elastic search handles the analytical "what are people searching for over time" problem.
 
 Elasticsearch is built on Apache Lucene and is fundamentally a **distributed full-text search and analytics engine**. It excels at:
 
