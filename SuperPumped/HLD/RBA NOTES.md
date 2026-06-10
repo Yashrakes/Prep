@@ -308,9 +308,7 @@ Reference for Leadership principles:
 
 **
 
-
-
-**RBA**
+## **RBA**
 
   
 
@@ -483,3 +481,6 @@ Waiver -> 24 hr, 72 hr, excess ticket , grm , credit rating review dates
   
 
 Parameterised ,  tenor , transaction, facility pd rating
+
+
+

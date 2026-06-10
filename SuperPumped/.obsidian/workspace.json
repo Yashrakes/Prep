@@ -154,6 +154,7 @@
   },
   "active": "83b90de9b00ed928",
   "lastOpenFiles": [
+    "LLD DOCS/Circuit_Breaker_LLD_Interview_Guide.docx",
     "LLD DOCS/Thread_Pool_LLD_Interview_Guide.docx",
     "HLD/problems/company wise/amazon hld.md",
     "LLD/TODO.md",
@@ -198,7 +199,6 @@
     "LLD DOCS/Rate_Limiter_LLD_Interview_Guide.docx",
     "HLD/tradeoffs Analysis of Sharding Approaches_ Pros, Cons, and Trade-offs.pdf",
     "HLD/Database Sharding and Partitioning in Distributed Systems.pdf",
-    "HLD/problems/System-Design-Alex-Xu-Vol-1.pdf",
-    "HLD/problems/System-Design-Alex-Xu-Vol-2.pdf"
+    "HLD/problems/System-Design-Alex-Xu-Vol-1.pdf"
   ]
 }
