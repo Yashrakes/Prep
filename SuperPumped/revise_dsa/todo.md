@@ -10,3 +10,4 @@ https://leetcode.com/problems/longest-duplicate-substring/solutions/3786707/hard
 lc - 546
 
 rolling hash  1044, 686
+m4erge sort  327
