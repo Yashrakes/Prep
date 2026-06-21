@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "HLD/problems/ALL HLDS DIAGRAM.md",
+                "file": "HLD/patterns/Dealing with Contention [Adv - Concurrency].md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "ALL HLDS DIAGRAM"
+              "title": "Dealing with Contention [Adv - Concurrency]"
             }
           }
         ]
@@ -140,8 +140,24 @@
   },
   "active": "80adf5975e135de9",
   "lastOpenFiles": [
-    "HLD/Attachments/Youtube.png",
+    "HLD/patterns/Handling Large Blobs.md",
+    "HLD/patterns/Scaling Writes.md",
+    "HLD/patterns/Scaling Reads.md",
+    "HLD/patterns/Dealing with Contention [Adv - Concurrency].md",
+    "HLD/dynamo vs casandra.md",
+    "HLD/patterns/Real-time Updates Pattern.md",
+    "HLD/patterns/Multi-Step Processes [Adv - SAGA and Tx].md",
+    "HLD/patterns/Managing Long-Running Tasks.md",
+    "HLD/patterns/Proximity-Based Services.md",
+    "HLD/patterns/Pagination - Cursor based.md",
+    "HLD/patterns",
+    "patterns",
+    "HLD/cassandra.md",
+    "HLD/RBA NOTES.md",
+    "HLD/problems/company wise/amazon hld.md",
+    "HLD/HTTP VS HTTPS.md",
     "HLD/problems/ALL HLDS DIAGRAM.md",
+    "HLD/Attachments/Youtube.png",
     "HLD/Attachments/web crawler.png",
     "HLD/Attachments/  Yotube.png_files/unnamed.jpg",
     "HLD/Attachments/Screenshot 2026-06-15 at 9.47.27 PM.png",
@@ -159,8 +175,6 @@
     "HLD/Attachments/  Yotube.png_files/182.5dbgjzlaj.js",
     "HLD/Attachments/  Yotube.png_files/13x5jxwenzv8a.js",
     "HLD/Attachments/  Yotube.png_files/17up4sem_tdcz.js",
-    "HLD/Attachments/  Yotube.png_files/16b__0ou4lwth.js",
-    "HLD/Attachments/  Yotube.png_files/15ptth.n~vgh1.js",
     "HLD/problems/key insights on every hld.md",
     "LLD/problems/Design Traps.md",
     "LLD/problems/inventory managment system.md",
@@ -171,19 +185,6 @@
     "HLD/problems/Database/TICKET MASTER.md",
     "HLD/problems/Database/JOB SCHEDULER.md",
     "HLD/problems/Database/ADD CLICK AGGREGATOR.md",
-    "HLD/problems/Database/NOTIFICATION SYSTEM.md",
-    "LLD/problems/Car Rental System.md",
-    "LLD/problems/ATM MACHINE.md",
-    "LLD/problems/ID genrator.md",
-    "HLD/Redis.md",
-    "HLD/RBA NOTES.md",
-    "revise_dsa/revise.md",
-    "revise_dsa/hard.md",
-    "revise_dsa/todo.md",
-    "HLD/problems/company wise/amazon hld.md",
-    "LLD/TODO.md",
-    "HLD/problems/job.md",
-    "LLD DOCS/in_memory_database_lld_complete.md",
-    "HLD/0. Index.md"
+    "HLD/problems/Database/NOTIFICATION SYSTEM.md"
   ]
 }

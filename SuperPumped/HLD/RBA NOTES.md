@@ -181,7 +181,7 @@ What is your greatest professional accomplishment that isn’t on your resume?
 
 ## Describe a Time When You Had to Make a Difficult Decision. What makes it difficult?
 
-Isme technical vs business change ka bolna h 
+Isme technical vs business work  change ka bolna h  
 
   
 
