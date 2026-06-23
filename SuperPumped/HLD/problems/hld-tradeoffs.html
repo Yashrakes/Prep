@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Tradeoff Ledger — 100 HLD Decisions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0E1116;
+    --ink-2:#141923;
+    --surface:#171D28;
+    --surface-2:#1C2330;
+    --line:#28303E;
+    --line-soft:#222A37;
+    --text:#E7EBF2;
+    --muted:#8B95A7;
+    --faint:#5E6878;
+    /* side A = cool / structural ; side B = warm / pragmatic */
+    --a:#4FD6C4;
+    --a-dim:rgba(79,214,196,0.12);
+    --a-line:rgba(79,214,196,0.32);
+    --b:#EFA94A;
+    --b-dim:rgba(239,169,74,0.12);
+    --b-line:rgba(239,169,74,0.32);
+    --senior:#B79CFF;
+    --senior-dim:rgba(183,156,255,0.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--ink);
+    color:var(--text);
+    font-family:'Inter',system-ui,sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:80px;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(900px 500px at 12% -8%, rgba(79,214,196,0.06), transparent 60%),
+      radial-gradient(900px 500px at 92% -4%, rgba(239,169,74,0.05), transparent 60%);
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    position:relative;z-index:2;
+    border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg, var(--ink-2), var(--ink));
+    padding:38px 22px 26px;
+  }
+  .wrap{max-width:1180px;margin:0 auto}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--faint);margin-bottom:14px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--faint)}
+  h1{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;
+    font-size:clamp(30px,5.4vw,52px);line-height:1.02;letter-spacing:-.02em;
+  }
+  h1 .scale{color:var(--a)}
+  h1 .scale2{color:var(--b)}
+  .sub{
+    color:var(--muted);max-width:640px;margin-top:14px;font-size:15px;
+  }
+  .legend{
+    display:flex;flex-wrap:wrap;gap:18px;margin-top:22px;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);
+  }
+  .legend span{display:inline-flex;align-items:center;gap:7px}
+  .dot{width:9px;height:9px;border-radius:2px;display:inline-block}
+  .dot.a{background:var(--a)} .dot.b{background:var(--b)} .dot.s{background:var(--senior)}
+
+  /* ---------- Controls ---------- */
+  .controls{
+    position:sticky;top:0;z-index:5;
+    background:rgba(14,17,22,.86);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+    padding:14px 22px;
+  }
+  .controls-inner{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+  .search-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .search{
+    flex:1;min-width:220px;position:relative;
+  }
+  .search input{
+    width:100%;background:var(--surface);border:1px solid var(--line);
+    color:var(--text);border-radius:10px;padding:11px 14px 11px 38px;
+    font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:border-color .15s;
+  }
+  .search input:focus{border-color:var(--a-line)}
+  .search input::placeholder{color:var(--faint)}
+  .search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);stroke:var(--faint)}
+  .count{
+    font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--muted);
+    white-space:nowrap;
+  }
+  .count b{color:var(--a)}
+  .pills{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+  .pills::-webkit-scrollbar{height:6px}
+  .pills::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px}
+  .pill{
+    flex:0 0 auto;cursor:pointer;border:1px solid var(--line);
+    background:var(--surface);color:var(--muted);
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.04em;
+    padding:7px 13px;border-radius:999px;white-space:nowrap;transition:all .15s;
+    text-transform:uppercase;
+  }
+  .pill:hover{color:var(--text);border-color:var(--faint)}
+  .pill.active{background:var(--text);color:var(--ink);border-color:var(--text);font-weight:600}
+
+  /* ---------- Grid ---------- */
+  main{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:26px 22px}
+  .grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;
+  }
+  .card{
+    background:linear-gradient(180deg,var(--surface),var(--ink-2));
+    border:1px solid var(--line-soft);border-radius:14px;
+    padding:18px 18px 16px;display:flex;flex-direction:column;gap:0;
+    transition:border-color .15s,transform .15s;
+  }
+  .card:hover{border-color:var(--line);transform:translateY(-2px)}
+  .card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+  .id{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint);font-weight:500}
+  .cat{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:3px 7px;
+  }
+  .title{
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18.5px;
+    line-height:1.18;letter-spacing:-.01em;margin-bottom:14px;
+  }
+  .title .vs{color:var(--faint);font-weight:500;font-size:14px;margin:0 4px;font-family:'IBM Plex Mono',monospace}
+  .title .sa{color:var(--a)} .title .sb{color:var(--b)}
+
+  .lean{display:flex;gap:10px;font-size:13.5px;padding:9px 0;border-top:1px solid var(--line-soft)}
+  .lean .tag{
+    flex:0 0 auto;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;
+    letter-spacing:.05em;text-transform:uppercase;padding:3px 7px;border-radius:5px;height:fit-content;
+    margin-top:1px;white-space:nowrap;
+  }
+  .lean.a .tag{background:var(--a-dim);color:var(--a);border:1px solid var(--a-line)}
+  .lean.b .tag{background:var(--b-dim);color:var(--b);border:1px solid var(--b-line)}
+  .lean .txt{color:#C9D0DC}
+  .lean .txt b{color:var(--text);font-weight:600}
+
+  .senior{
+    margin-top:13px;background:var(--senior-dim);border:1px solid rgba(183,156,255,.22);
+    border-radius:9px;padding:10px 12px;display:flex;gap:9px;
+  }
+  .senior .ico{flex:0 0 auto;color:var(--senior);font-size:13px;margin-top:1px}
+  .senior .txt{font-size:13px;color:#D8D2F2}
+  .senior .txt b{color:#EAE4FF}
+
+  .empty{
+    text-align:center;padding:70px 20px;color:var(--muted);
+    font-family:'IBM Plex Mono',monospace;font-size:14px;display:none;
+  }
+
+  footer{
+    position:relative;z-index:1;max-width:1180px;margin:30px auto 0;padding:24px 22px;
+    border-top:1px solid var(--line);color:var(--faint);font-size:12.5px;
+    font-family:'IBM Plex Mono',monospace;line-height:1.7;
+  }
+  footer b{color:var(--muted)}
+
+  @media (max-width:560px){
+    .grid{grid-template-columns:1fr}
+    header{padding:30px 18px 22px}
+    .controls{padding:12px 18px}
+    main{padding:20px 18px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">System Design · Senior Interview Reference</div>
+    <h1>The <span class="scale">Tradeoff</span> <span class="scale2">Ledger</span></h1>
+    <p class="sub">100 decisions that show up in modern high-level design rounds. Each one isn't "X beats Y" — it's <em>when</em> you lean each way and the one line that tells the interviewer you've actually run this in production.</p>
+    <div class="legend">
+      <span><i class="dot a"></i> Lean the structural / "correct" side</span>
+      <span><i class="dot b"></i> Lean the pragmatic / "ship it" side</span>
+      <span><i class="dot s"></i> The senior move</span>
+    </div>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="controls-inner">
+    <div class="search-row">
+      <div class="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="q" type="text" placeholder="Search tradeoffs — kafka, consistency, cache, shard…" autocomplete="off">
+      </div>
+      <div class="count" id="count"></div>
+    </div>
+    <div class="pills" id="pills"></div>
+  </div>
+</div>
+
+<main>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty">No tradeoff matches that filter.</div>
+</main>
+
+<footer class="wrap">
+  <div><b>How to use this in a round:</b> name the tradeoff out loud, state which way you're leaning <i>and why for this specific problem</i>, then say what you're giving up. Naming the cost is what separates SDE-2/Senior from junior.</div>
+  <div style="margin-top:8px">100 entries · 13 categories · tap a category to filter, or search any keyword.</div>
+</footer>
+
+<script>
+const DATA = [
+/* ---------------- DATA & STORAGE ---------------- */
+{id:1,cat:"Data",a:"SQL",b:"NoSQL",leanA:"Relationships, multi-row transactions, ad-hoc queries, and you value a strong schema.",leanB:"Massive scale, flexible/evolving shape, or a known access pattern that maps to one document/key.",senior:"NoSQL doesn't mean 'scales better' — it means you traded joins and ad-hoc querying for horizontal scale on a <b>pre-decided access pattern</b>. If you can't name that pattern, pick SQL."},
+{id:2,cat:"Data",a:"Normalized",b:"Denormalized",leanA:"Write-heavy, integrity-critical (finance, inventory) — single source of truth, no update anomalies.",leanB:"Read-heavy at scale — duplicate data to kill joins and serve from one fetch.",senior:"Denormalization buys read latency with write complexity: now you own keeping copies in sync. Mention the fan-out cost before the interviewer does."},
+{id:3,cat:"Data",a:"Single DB",b:"Sharded",leanA:"Fits on one box (vertical scaling, replicas) — keep it; sharding is a tax you pay forever.",leanB:"Data/throughput exceeds a single primary — partition across nodes.",senior:"Sharding kills cross-shard transactions and joins. The hard part isn't splitting — it's the <b>shard key</b> and resharding when it goes hot."},
+{id:4,cat:"Data",a:"Row-store (OLTP)",b:"Column-store (OLAP)",leanA:"Point reads/writes of whole records — user lookups, orders, transactions.",leanB:"Analytical scans/aggregations over few columns across billions of rows.",senior:"Don't run analytics on your OLTP primary. The senior answer is usually <b>both</b>: OLTP + CDC/ETL into a columnar warehouse (ClickHouse/BigQuery)."},
+{id:5,cat:"Data",a:"Strict schema",b:"Schema-on-read",leanA:"Stable domain, many consumers — the schema is a contract that catches bugs early.",leanB:"Rapidly evolving or heterogeneous data — defer structure to read time.",senior:"Schema-on-read just <b>moves</b> the validation cost to every reader and every analytics job. 'Flexible' today is 'undocumented landmine' in 18 months."},
+{id:6,cat:"Data",a:"ACID",b:"BASE",leanA:"Money, bookings, inventory — correctness over availability.",leanB:"Likes, views, feeds — availability and throughput over momentary correctness.",senior:"Pick per-domain, not per-app. One system can be ACID for payments and BASE for the activity feed — that nuance scores."},
+{id:7,cat:"Data",a:"DB-side joins",b:"App-side joins",leanA:"Single DB, indexed — the engine joins far faster than your code.",leanB:"Data lives across services/shards — you have no choice but to stitch in the app.",senior:"App-side joins are a symptom of a service/shard boundary, not a free choice. They add N+1 risk and latency — flag it as a consequence of the split."},
+{id:8,cat:"Data",a:"More indexes",b:"Fewer indexes",leanA:"Read-dominated and you know the query shapes — index to hit them.",leanB:"Write-heavy — every index is extra write amplification and storage.",senior:"Indexes are read subsidies paid for on every write. Profile real queries; an unused index is pure write tax."},
+{id:9,cat:"Data",a:"DB-enforced FKs",b:"App-enforced integrity",leanA:"Monolith on one DB — let the engine guarantee referential integrity.",leanB:"Microservices / sharded — FKs can't span boundaries, so the app owns it.",senior:"Once data is split across services, the DB <b>cannot</b> enforce cross-service integrity — you've traded it for eventual consistency + reconciliation jobs."},
+{id:10,cat:"Data",a:"Blob in DB",b:"Object store + pointer",leanA:"Tiny blobs, transactional with the row, rarely served directly.",leanB:"Images/video/files — store in S3-class storage, keep only the URL in the DB.",senior:"Large blobs bloat the DB, wreck buffer-cache hit rates, and slow backups. Default to object store + CDN for anything user-facing."},
+
+/* ---------------- CONSISTENCY & REPLICATION ---------------- */
+{id:11,cat:"Consistency",a:"Strong",b:"Eventual",leanA:"Reads must reflect the latest write — balances, auth, inventory counts.",leanB:"Stale-by-seconds is fine — social feeds, view counts, recommendations.",senior:"Strong consistency costs latency and availability (coordination on every read/write). Quantify the staleness window you can tolerate — that's the real question."},
+{id:12,cat:"Consistency",a:"CP",b:"AP",leanA:"On partition, refuse rather than serve wrong data (banking, locks).",leanB:"On partition, stay up and reconcile later (shopping cart, DNS).",senior:"CAP is only forced <b>during a partition</b>. The everyday choice is the latency-vs-consistency (PACELC) tradeoff — bring that up to show depth."},
+{id:13,cat:"Consistency",a:"Sync replication",b:"Async replication",leanA:"Zero data loss on failover (RPO=0) — financial ledgers.",leanB:"Write latency matters more than losing the last few ms on crash.",senior:"Sync replication ties your write latency to your slowest replica and a cross-AZ round trip. Most systems do sync within a region, async across regions."},
+{id:14,cat:"Consistency",a:"Single-leader",b:"Multi-leader",leanA:"Simple, no write conflicts, easy ordering — the default.",leanB:"Multi-region low-latency writes or offline-capable clients.",senior:"Multi-leader trades a single writer for <b>conflict resolution you now own</b> (LWW loses data, CRDTs are complex). Don't reach for it without a latency/geo reason."},
+{id:15,cat:"Consistency",a:"Leader-based (Raft)",b:"Leaderless quorum (Dynamo)",leanA:"Need a clear order of operations and simpler reasoning — config stores, metadata.",leanB:"Maximize write availability — no single leader to fail or fail-over.",senior:"Leaderless trades simplicity for availability and pushes consistency into R+W>N tuning + read-repair. More moving parts, fewer single points of stall."},
+{id:16,cat:"Consistency",a:"Tune reads (W=N)",b:"Tune writes (R=N)",leanA:"Read-heavy: write to all, read from one — cheap fast reads.",leanB:"Write-heavy: write to one, read from all — cheap fast writes.",senior:"In quorum systems consistency holds when R+W>N. You're choosing <b>which operation eats the latency</b> based on your read/write ratio."},
+{id:17,cat:"Consistency",a:"Linearizable",b:"Causal",leanA:"A single global 'now' — leader election, locks, unique constraints.",leanB:"Preserve cause→effect ordering without a global clock — comments, chat.",senior:"Linearizability needs coordination (expensive, geo-hostile). Causal consistency is the sweet spot for collaborative apps — strong enough, cheaper to provide."},
+{id:18,cat:"Consistency",a:"CRDTs / vector clocks",b:"Last-write-wins",leanA:"Conflicting concurrent writes must merge without loss — collaborative editors.",leanB:"Conflicts are rare and a dropped write is acceptable — simplicity wins.",senior:"LWW is one clock-skew away from <b>silent data loss</b>. If concurrent writes to the same key are real, say CRDT and explain you accept the complexity."},
+{id:19,cat:"Consistency",a:"Read-your-writes",b:"Pure eventual",leanA:"Users must see their own action immediately — 'I posted but it's gone?!'",leanB:"Other users' staleness is invisible and harmless.",senior:"Cheap fix: route a user's reads to the primary (or their own replica) for a short window after they write. Session consistency, not global strong."},
+{id:20,cat:"Consistency",a:"Two-phase commit",b:"Saga",leanA:"Few participants, short-lived, and you can tolerate a blocking coordinator.",leanB:"Long-running, many services — orchestrate with compensating actions.",senior:"2PC blocks and the coordinator is a SPOF that can leave locks held forever. At microservice scale, Saga + idempotent compensations is the real-world answer."},
+
+/* ---------------- CACHING ---------------- */
+{id:21,cat:"Cache",a:"Cache-aside",b:"Read-through",leanA:"App controls caching logic; cache can fail without taking down reads.",leanB:"Want the cache layer to own loading so app code stays simple.",senior:"Cache-aside is the default because a cache outage degrades to slow, not down. Call out the first-read miss penalty and the stale-after-write window."},
+{id:22,cat:"Cache",a:"Write-through",b:"Write-back",leanA:"Cache and DB must stay consistent; tolerate slower writes.",leanB:"Absorb write bursts; flush to DB asynchronously for speed.",senior:"Write-back is fastest but a node crash loses un-flushed writes. Only acceptable when the data is reconstructible or loss-tolerant (counters, metrics)."},
+{id:23,cat:"Cache",a:"Write-through",b:"Write-around",leanA:"Just-written data will be re-read soon — keep it hot.",leanB:"Write-once-read-rarely data — don't pollute the cache with it.",senior:"Write-around protects hit-rate from one-shot writes (logs, imports). Matching write policy to access pattern is a subtle, senior-level point."},
+{id:24,cat:"Cache",a:"Local in-process",b:"Distributed (Redis)",leanA:"Nanosecond access, no network — small, hot, read-mostly data.",leanB:"Shared, large, or must be consistent across instances.",senior:"Local caches are fast but cause <b>per-node staleness</b> and N copies to invalidate. Common pattern: small local L1 in front of a shared Redis L2."},
+{id:25,cat:"Cache",a:"TTL expiry",b:"Explicit invalidation",leanA:"Bounded staleness is fine and you want zero invalidation plumbing.",leanB:"Must reflect writes immediately — invalidate/update the key on write.",senior:"TTL is 'eventually correct, always simple.' Explicit invalidation is 'instantly correct, easy to get wrong' (the hardest problem in CS). Most systems combine: invalidate on write + short TTL as a safety net."},
+{id:26,cat:"Cache",a:"LRU",b:"LFU",leanA:"Recency predicts reuse — typical web workloads.",leanB:"Some keys are perennially hot and you don't want a scan to evict them.",senior:"LRU is vulnerable to scan pollution; LFU resists it but is slow to adapt to shifting popularity. Mention TinyLFU/W-TinyLFU if you want to flex."},
+{id:27,cat:"Cache",a:"Cache hot keys only",b:"Cache everything",leanA:"80/20 traffic — cache the hot tail, save memory.",leanB:"Uniform access or memory is cheap relative to backend cost.",senior:"Caching everything wastes RAM on cold keys and tanks hit-rate quality. Size the cache to the working set, not the dataset."},
+{id:28,cat:"Cache",a:"CDN edge cache",b:"Origin-only",leanA:"Static/semi-static, globally consumed assets — push to the edge.",leanB:"Highly personalized or rapidly changing per-user content.",senior:"Edge caching slashes latency and origin load but makes invalidation a global, eventually-consistent problem. Version asset URLs to sidestep it."},
+{id:29,cat:"Cache",a:"Stampede protection",b:"Simplicity",leanA:"A hot key expiring causes a thundering herd to the DB — add locking/coalescing.",leanB:"Low traffic or cheap backend — the herd is harmless.",senior:"For a hot key, name the fix: request coalescing (single-flight), probabilistic early expiry, or stale-while-revalidate. This is a classic 'did they operate it' tell."},
+{id:30,cat:"Cache",a:"Negative caching",b:"Always re-query",leanA:"Frequent misses for nonexistent keys hammer the DB — cache the 'not found'.",leanB:"Misses are rare or 'not found' must be instantly fresh.",senior:"Negative caching defends against lookup-of-nonexistent attacks/spam, but a too-long TTL hides newly-created records. Keep negative TTLs short."},
+
+/* ---------------- MESSAGING & ASYNC ---------------- */
+{id:31,cat:"Messaging",a:"Sync request/response",b:"Async messaging",leanA:"Caller needs the result now and the work is fast.",leanB:"Work is slow, spiky, or the caller doesn't need an immediate answer.",senior:"Async buys decoupling, buffering, and resilience — at the cost of eventual consistency and harder debugging. Don't make a user wait on work that can be a queue."},
+{id:32,cat:"Messaging",a:"Queue (point-to-point)",b:"Pub/Sub",leanA:"One logical consumer group does the work — task distribution.",leanB:"Many independent consumers each need every event — fan-out.",senior:"Pub/sub decouples producers from an unknown set of consumers. The cost: no backpressure signal to the producer and per-subscriber lag to monitor."},
+{id:33,cat:"Messaging",a:"At-least-once",b:"Exactly-once",leanA:"The realistic default — deliver, retry, and make consumers idempotent.",leanB:"Duplicates are catastrophic and unavoidable to dedup downstream.",senior:"True exactly-once delivery is largely a myth across a network. What you really build is at-least-once + idempotency keys = effectively-once <b>processing</b>. Say it that way."},
+{id:34,cat:"Messaging",a:"Push",b:"Pull",leanA:"Low latency, consumers can keep up — broker pushes work.",leanB:"Consumers control their own rate (Kafka) — natural backpressure.",senior:"Push risks overwhelming a slow consumer; pull risks added latency and wasted polls. Kafka chose pull precisely to let consumers self-pace and replay."},
+{id:35,cat:"Messaging",a:"Log-based (Kafka)",b:"Broker queue (Rabbit/SQS)",leanA:"Replay, multiple consumers, ordering per partition, high throughput, event sourcing.",leanB:"Per-message routing, priorities, complex acking, simpler ops.",senior:"Kafka is a durable, replayable log — consumers track offsets and reprocess history. A broker deletes on ack. Choose by whether you need <b>replay/retention</b>."},
+{id:36,cat:"Messaging",a:"Strict ordering",b:"Throughput/parallelism",leanA:"Order matters (state machines, ledgers) — single partition / single consumer.",leanB:"Order is irrelevant — parallelize across partitions/consumers freely.",senior:"Global ordering serializes everything and kills horizontal scale. Order only <b>within a key</b> (partition by entity id) so unrelated events still parallelize."},
+{id:37,cat:"Messaging",a:"Backpressure",b:"Buffer-and-drop",leanA:"Producer can slow down — propagate pressure to protect the system.",leanB:"Producer can't slow (sensors, ads) — bound the buffer and shed load.",senior:"Unbounded buffers just relocate the crash to OOM. Decide the shed policy up front: drop oldest, drop newest, or sample."},
+{id:38,cat:"Messaging",a:"Dead-letter queue",b:"Block-and-retry",leanA:"A poison message shouldn't halt the pipeline — park it, keep moving.",leanB:"Strict ordering means you cannot skip ahead — must succeed in place.",senior:"Without a DLQ, one bad message + ordering = a stuck partition that pages you at 3am. With ordering you can't DLQ freely — that tension is worth naming."},
+{id:39,cat:"Messaging",a:"Orchestration",b:"Choreography",leanA:"Complex multi-step flows — a central coordinator you can see and debug.",leanB:"Loose coupling — services react to events with no central brain.",senior:"Choreography decouples beautifully but the workflow exists nowhere explicitly — it's emergent, hard to trace, and easy to create cyclic event storms. Orchestration centralizes the logic (and the SPOF risk)."},
+{id:40,cat:"Messaging",a:"Transactional outbox",b:"Dual-write",leanA:"Must atomically update DB and publish an event — write event to an outbox table in the same txn.",leanB:"Loss of an occasional event is tolerable and you want zero extra machinery.",senior:"Dual-write (DB then queue) has a window where one succeeds and the other fails. Outbox + CDC closes it — the standard fix for the 'publish-after-commit' bug."},
+
+/* ---------------- PARTITIONING & SHARDING ---------------- */
+{id:41,cat:"Sharding",a:"Hash sharding",b:"Range sharding",leanA:"Even load distribution; avoid hotspots; point lookups.",leanB:"Range/scan queries are common (time-series, leaderboards).",senior:"Hash spreads load but destroys range scans; range enables scans but creates hotspots on sequential keys (e.g. timestamps → all writes hit one shard). Salt the key if you must range-shard time."},
+{id:42,cat:"Sharding",a:"Consistent hashing",b:"Modulo (mod N)",leanA:"Nodes added/removed often — only K/N keys move on a change.",leanB:"Fixed node count forever — mod is simpler.",senior:"mod N remaps <b>almost every key</b> when N changes — a full reshuffle. Consistent hashing + virtual nodes minimizes movement and evens load. This is a near-guaranteed follow-up."},
+{id:43,cat:"Sharding",a:"Vertical partitioning",b:"Horizontal partitioning",leanA:"Split by column/feature — separate hot columns or bound a service's data.",leanB:"Split by rows — same schema, data spread across nodes by key.",senior:"They solve different problems: vertical = separate concerns/columns; horizontal = scale volume. Real systems do both (functional split, then shard each)."},
+{id:44,cat:"Sharding",a:"High-cardinality key",b:"Query-locality key",leanA:"Maximize even spread — avoid hot shards.",leanB:"Co-locate data you query together — avoid scatter-gather.",senior:"The shard-key fight: spread vs locality. user_id spreads well but cross-user queries scatter to every shard. There's rarely a free lunch — name the dominant query and optimize for it."},
+{id:45,cat:"Sharding",a:"Static shards",b:"Dynamic resharding",leanA:"Predictable growth — pre-split and forget.",leanB:"Unpredictable hotspots — split/merge shards live.",senior:"Static is simple until one shard goes hot and you can't move it without downtime. Plan the resharding story (virtual nodes / range splits) before you ship."},
+{id:46,cat:"Sharding",a:"Shard-per-tenant",b:"Shared multi-tenant",leanA:"Strong isolation, noisy-neighbor protection, per-tenant compliance.",leanB:"Many small tenants — packing them is far cheaper.",senior:"Per-tenant isolates blast radius but explodes operational cost (thousands of shards/DBs). Most SaaS uses a hybrid: pooled by default, isolated for whales."},
+{id:47,cat:"Sharding",a:"Fewer coarse partitions",b:"Many fine partitions",leanA:"Lower coordination/metadata overhead.",leanB:"Smoother rebalancing and parallelism; smaller blast radius per partition.",senior:"Too few → hotspots and coarse rebalancing; too many → metadata/connection overhead and tiny inefficient I/O. Partition count is a Goldilocks tuning knob, not a default."},
+{id:48,cat:"Sharding",a:"Colocate related data",b:"Spread for balance",leanA:"Joins/transactions need data together — put it on one shard.",leanB:"Even load matters more than locality.",senior:"Colocation enables single-shard transactions but risks a fat hot shard. The art is grouping by the unit of transaction (e.g. all of one user's data) without that unit getting huge."},
+
+/* ---------------- APIs & COMMUNICATION ---------------- */
+{id:49,cat:"API",a:"gRPC",b:"REST",leanA:"Internal service-to-service — binary, fast, streaming, strict contracts.",leanB:"Public/partner APIs, browsers, broad tooling, human-debuggable.",senior:"gRPC wins on perf and contracts (protobuf, HTTP/2 streaming) but is awkward through browsers/proxies and harder to debug. Common split: gRPC inside, REST at the edge."},
+{id:50,cat:"API",a:"GraphQL",b:"REST",leanA:"Many client shapes, deep nested data, clients want to pick fields — kill over/under-fetching.",leanB:"Simple resources, cacheability, and you control the clients.",senior:"GraphQL solves over-fetching but moves complexity to the server: caching is hard (one endpoint), and a naive query can trigger N+1 explosions. Mention dataloader/query-cost limits."},
+{id:51,cat:"API",a:"Protobuf (binary)",b:"JSON (text)",leanA:"High throughput, strict schema, internal RPC — smaller and faster.",leanB:"Human-readable, browser-native, easy debugging, public APIs.",senior:"Binary cuts payload size and parse cost but you lose 'curl it and read it.' Schema evolution rules (field numbers, never reuse) matter — show you know them."},
+{id:52,cat:"API",a:"Webhooks (push)",b:"Polling",leanA:"Events are rare and freshness matters — server notifies you.",leanB:"You can't expose an endpoint, or want full control of timing.",senior:"Polling wastes calls and adds latency; webhooks need a public endpoint, retries, and signature verification. The robust pattern is webhook + reconciliation poll as a backstop."},
+{id:53,cat:"API",a:"WebSocket",b:"Server-Sent Events",leanA:"Bidirectional, low-latency — chat, multiplayer, live trading.",leanB:"Server→client stream only — notifications, live feeds, dashboards.",senior:"SSE is simpler (plain HTTP, auto-reconnect, works through proxies) for one-way streams. Don't reach for WebSockets if the client never needs to push."},
+{id:54,cat:"API",a:"API gateway",b:"Direct service calls",leanA:"Centralize auth, rate limiting, routing, TLS — one front door.",leanB:"Internal mesh / latency-critical — avoid an extra hop and SPOF.",senior:"A gateway is great for cross-cutting concerns but it's a hop, a SPOF, and can become a deployment bottleneck. Keep business logic out of it."},
+{id:55,cat:"API",a:"Coarse-grained API",b:"Fine-grained API",leanA:"Reduce round trips — return the aggregate the client needs.",leanB:"Reusable, composable, cacheable resources.",senior:"Chatty fine-grained APIs murder mobile latency (each call = a round trip + TLS). Coarse APIs over-fetch and couple. BFF or GraphQL is the usual reconciliation."},
+{id:56,cat:"API",a:"Backward-compat forever",b:"Explicit versioning",leanA:"Public API with unknown clients — additive, non-breaking changes only.",leanB:"You must break the contract — version it (URI/header) and deprecate.",senior:"Every version you support is maintenance you own forever. Prefer additive evolution; version only for true breaking changes, and publish a deprecation timeline."},
+{id:57,cat:"API",a:"Cursor pagination",b:"Offset pagination",leanA:"Large or live-updating datasets — stable, performant deep paging.",leanB:"Small, static datasets where jump-to-page-N is needed.",senior:"OFFSET 1000000 scans and discards a million rows and skips/dupes items as data shifts. Cursor (keyset) pagination is O(1) per page and stable — the scalable choice."},
+{id:58,cat:"API",a:"Sync call",b:"Fire event",leanA:"You need the downstream result to proceed.",leanB:"Downstream is a side-effect (email, audit, search index) — don't couple to it.",senior:"Calling a service synchronously inherits its latency and downtime. If you don't need the result, emit an event so a slow email service can't fail the checkout."},
+
+/* ---------------- SCALING & LOAD ---------------- */
+{id:59,cat:"Scaling",a:"Vertical scaling",b:"Horizontal scaling",leanA:"Simplest path — bigger box, no distributed-systems tax. Do this first.",leanB:"Past a single machine's ceiling, or need fault tolerance — add nodes.",senior:"Vertical is simple but has a hard ceiling and is a SPOF. Horizontal is 'infinite' but unlocks every distributed problem on this list. Scale up until it hurts, then out."},
+{id:60,cat:"Scaling",a:"Stateless services",b:"Stateful services",leanA:"Trivial horizontal scaling and failover — externalize state to DB/cache.",leanB:"Performance demands local state (in-memory game servers, stream processors).",senior:"Stateless is the default because any instance can serve any request — autoscaling and recovery are free. Stateful services need sticky routing, careful failover, and state migration."},
+{id:61,cat:"Scaling",a:"L7 load balancing",b:"L4 load balancing",leanA:"Need content-aware routing — path/header-based, TLS termination, retries.",leanB:"Raw throughput, any protocol, lowest latency — just move packets.",senior:"L7 is smarter (HTTP-aware) but does more work per request; L4 is dumb-fast and protocol-agnostic. Many stacks layer L4 in front of L7."},
+{id:62,cat:"Scaling",a:"Least-connections",b:"Round-robin",leanA:"Request costs vary widely — route to the least-busy node.",leanB:"Uniform, cheap requests — RR is simplest and stateless.",senior:"Round-robin assumes equal request cost — one slow endpoint and a node piles up. Mention consistent-hash LB when you need cache affinity or session stickiness."},
+{id:63,cat:"Scaling",a:"Reactive autoscale",b:"Predictive autoscale",leanA:"Unpredictable load — scale on live metrics (CPU/QPS).",leanB:"Known patterns (9am spike, Black Friday) — pre-warm ahead of demand.",senior:"Reactive always lags the spike (cold starts, warm-up). For known spikes, schedule capacity ahead — reacting to a flash sale is reacting too late."},
+{id:64,cat:"Scaling",a:"Read replicas",b:"Cache",leanA:"Need fresh-ish reads with full query power — replicate the DB.",leanB:"Hot, repeated reads of the same data — cache is cheaper and faster.",senior:"Replicas add replication lag (stale reads) and still run real queries; cache is faster but adds invalidation. Often you need both — cache for hot keys, replicas for the long tail."},
+{id:65,cat:"Scaling",a:"Connection pooling",b:"Per-request connections",leanA:"Reuse expensive DB/TLS connections — essential under load.",leanB:"Rare/serverless calls where holding a pool is wasteful.",senior:"DB connections are scarce and expensive to open. Pool exhaustion is a classic outage; in serverless, an external pooler (PgBouncer/RDS Proxy) prevents connection storms."},
+{id:66,cat:"Scaling",a:"Token bucket",b:"Sliding window",leanA:"Allow bursts up to a cap, then steady rate — API quotas.",leanB:"Smooth, precise rate with no boundary-spike gaming.",senior:"Fixed-window lets users double the limit at the boundary; sliding window fixes it at higher memory cost; token bucket is the pragmatic burst-friendly default. Know all three."},
+{id:67,cat:"Scaling",a:"Server-side LB",b:"Client-side LB",leanA:"Centralized control, simple clients — the standard.",leanB:"Service mesh / very high RPS — skip the LB hop, clients pick endpoints.",senior:"Client-side LB (e.g. mesh sidecars) removes a network hop and SPOF but requires service discovery and pushes LB logic into every client."},
+{id:68,cat:"Scaling",a:"Stateless tokens",b:"Sticky sessions",leanA:"Any node serves any user — clean horizontal scaling.",leanB:"Legacy app keeps session in local memory — pin the user to a node.",senior:"Sticky sessions break clean scaling and failover (node dies → sessions lost). The fix is externalizing session state to Redis, not pinning users."},
+
+/* ---------------- SEARCH & INDEXING ---------------- */
+{id:69,cat:"Search",a:"Dedicated search engine",b:"DB full-text",leanA:"Relevance ranking, fuzzy/typo tolerance, facets at scale — Elasticsearch.",leanB:"Simple LIKE/contains on modest data — don't add a system.",senior:"A search cluster is a second source of truth you must sync (CDC) and operate. Don't add Elasticsearch for what a Postgres GIN index handles."},
+{id:70,cat:"Search",a:"Real-time indexing",b:"Batch indexing",leanA:"Freshness matters — new items searchable in seconds.",leanB:"Throughput/cost matters — rebuild the index periodically.",senior:"Real-time indexing pressures the write path and risks index/store divergence; batch is efficient but stale. Hybrid: serve a near-real-time delta on top of a batch base."},
+{id:71,cat:"Search",a:"Materialized view (precompute)",b:"Query-time compute",leanA:"Expensive aggregation read many times — precompute and store.",leanB:"Data changes faster than it's read, or queries are unpredictable.",senior:"Precompute trades storage + refresh complexity for read latency. The hard part is keeping the view fresh — name the refresh strategy (on-write, scheduled, CDC)."},
+{id:72,cat:"Search",a:"Fan-out on write",b:"Fan-out on read",leanA:"Read-heavy feeds — push posts into each follower's timeline at write time.",leanB:"Celebrity problem — a 100M-follower post would explode on write; merge at read.",senior:"This is the Twitter/Instagram feed classic. The real answer is <b>hybrid</b>: fan-out-on-write for normal users, fan-out-on-read for celebrities, merged at query time."},
+{id:73,cat:"Search",a:"Exact",b:"Approximate (ANN/sketch)",leanA:"Correctness required — exact counts, exact nearest match.",leanB:"Massive scale where 'close enough' is fine — HyperLogLog, ANN vector search.",senior:"Approximate algorithms (HLL for cardinality, ANN for vectors, Bloom filters for membership) trade bounded error for orders-of-magnitude less memory/CPU. Naming one with its error bound scores big."},
+
+/* ---------------- RELIABILITY & FAULT TOLERANCE ---------------- */
+{id:74,cat:"Reliability",a:"Retry",b:"Fail-fast",leanA:"Transient faults (blips, brief contention) — retry with backoff + jitter.",leanB:"Deterministic failures (bad input, 4xx) — retrying just wastes resources.",senior:"Naive retries cause retry storms that turn a blip into an outage. Always: exponential backoff + jitter + a cap + idempotency. Don't retry non-idempotent or 4xx calls."},
+{id:75,cat:"Reliability",a:"Circuit breaker",b:"Unbounded retry",leanA:"A dependency is down — trip the breaker, fail fast, let it recover.",leanB:"Almost never — unbounded retry is an anti-pattern.",senior:"Without a breaker, a slow dependency exhausts your threads/connections and the failure cascades upstream. The breaker contains the blast radius — pair it with a fallback."},
+{id:76,cat:"Reliability",a:"Aggressive timeout",b:"Lenient timeout",leanA:"Protect your resources — a hung call shouldn't tie up a thread for 60s.",leanB:"Legitimately slow work where premature timeout causes wasteful retries.",senior:"No timeout = waiting forever = thread exhaustion = cascading failure. Set timeouts below the caller's, and budget them across the call chain so the deepest call can't outlive the user's patience."},
+{id:77,cat:"Reliability",a:"Graceful degradation",b:"Hard fail",leanA:"Partial service beats none — show cached/default data when a dependency is down.",leanB:"Wrong data is worse than no data (payments, auth).",senior:"Decide per-feature what 'degraded' looks like: recommendations can fall back to 'popular,' but you never fake an account balance. Map each dependency to its fallback."},
+{id:78,cat:"Reliability",a:"Bulkhead isolation",b:"Shared pool",leanA:"One slow dependency must not starve the rest — separate thread/conn pools.",leanB:"Resource-constrained and dependencies are equally critical.",senior:"Like ship bulkheads: isolate resources per dependency so one flooded compartment doesn't sink the ship. Costs more total resources for blast-radius containment."},
+{id:79,cat:"Reliability",a:"Active-active",b:"Active-passive",leanA:"Near-zero RTO and you use both regions' capacity — but must handle multi-region writes.",leanB:"Simpler — standby region for failover, accept some failover time.",senior:"Active-active doubles utility but forces you to solve multi-region write conflicts and split-brain. Active-passive is simpler but wastes the standby and has measurable failover time."},
+{id:80,cat:"Reliability",a:"Idempotency keys",b:"Downstream dedup",leanA:"Client retries must not double-charge — accept a client-supplied key, dedup on it.",leanB:"You can't change the producer — dedup at the consumer.",senior:"Idempotency keys make at-least-once delivery safe end-to-end and are the clean way to handle 'did my payment go through?' retries. This is a payments-interview staple."},
+{id:81,cat:"Reliability",a:"Sync backup (low RPO)",b:"Async backup (low latency)",leanA:"Can't lose committed data — replicate synchronously.",leanB:"Write latency matters more than losing the last few seconds on disaster.",senior:"RPO (how much data you can lose) vs write latency is the core DR tradeoff. State your RPO/RTO targets — that framing alone signals seniority."},
+{id:82,cat:"Reliability",a:"Hedged requests",b:"Single request",leanA:"Tail latency matters — fire a duplicate after p95 and take the first response.",leanB:"Cost-sensitive or non-idempotent — duplicates are wasteful or dangerous.",senior:"Hedging trades a little extra load for dramatically better p99 (Google's tail-at-scale trick). Only safe for idempotent reads — name that constraint."},
+{id:83,cat:"Reliability",a:"Eager eviction",b:"Tolerant health checks",leanA:"Pull a flaky node fast to protect users.",leanB:"Avoid flapping — a brief blip shouldn't yank a healthy node.",senior:"Too-aggressive health checks cause flapping and cascading removal under load; too-tolerant sends traffic to dead nodes. Tune thresholds + use outlier detection."},
+
+/* ---------------- ARCHITECTURE PATTERNS ---------------- */
+{id:84,cat:"Architecture",a:"Microservices",b:"Monolith",leanA:"Large org, independent deploys/scaling, clear bounded contexts.",leanB:"Small team, early product, or unclear domain boundaries.",senior:"Microservices trade in-process calls for network calls, transactions for sagas, and one deploy for distributed-systems ops. The senior take: <b>start monolith, extract services when team/scale pain is real</b> — don't pay the tax prematurely."},
+{id:85,cat:"Architecture",a:"Modular monolith",b:"Microservices",leanA:"Want clean module boundaries without distributed-systems overhead — deploy as one.",leanB:"Modules genuinely need independent scaling/deploys/teams.",senior:"A well-modularized monolith gives 80% of the boundary benefit with none of the network/ops tax — and it's far easier to split later than to merge services back. Strong default for new systems."},
+{id:86,cat:"Architecture",a:"Database-per-service",b:"Shared database",leanA:"True service autonomy — each owns its schema and storage.",leanB:"Quick start or strong cross-entity transactional needs.",senior:"A shared DB silently re-couples 'independent' services through the schema — change one table, break three services. Per-service DB is the real boundary, at the cost of cross-service joins/transactions (→ sagas, API composition)."},
+{id:87,cat:"Architecture",a:"CQRS",b:"Single model",leanA:"Read and write workloads diverge hard — optimize each with its own model/store.",leanB:"CRUD app where reads and writes look the same — one model is simpler.",senior:"CQRS unlocks independent read/write scaling but introduces eventual consistency between them and double the models. Don't CQRS a CRUD app — it's a complexity grenade if unwarranted."},
+{id:88,cat:"Architecture",a:"Event sourcing",b:"State-based persistence",leanA:"Full audit trail, time-travel, replay, temporal queries — store events, derive state.",leanB:"You only need current state — just store the row.",senior:"Event sourcing gives a perfect audit log and replayability but you own schema evolution of old events, snapshotting, and rebuild cost. Powerful for finance/audit; overkill for a settings page."},
+{id:89,cat:"Architecture",a:"Serverless / FaaS",b:"Long-running service",leanA:"Spiky/infrequent workloads — pay-per-use, zero idle cost, auto-scale to zero.",leanB:"Steady high traffic, long-lived connections, or latency-sensitive.",senior:"Serverless trades ops for cold starts, execution time/limits, and vendor lock-in — and gets <b>expensive</b> at steady high volume. Great for glue/spikes, poor for hot paths."},
+{id:90,cat:"Architecture",a:"Backend-for-Frontend",b:"Shared general API",leanA:"Web/mobile/TV have very different needs — tailor a BFF per client.",leanB:"Clients are similar — one API avoids duplicating logic.",senior:"BFFs kill over-fetching and client-specific glue but multiply codebases to maintain. The risk: business logic leaking into the BFF instead of the core services."},
+{id:91,cat:"Architecture",a:"Event-driven",b:"Synchronous inter-service",leanA:"Decouple producers from consumers; absorb spikes; add consumers freely.",leanB:"You need an immediate result and a simple, traceable call.",senior:"Event-driven decouples and resilient-ifies, but you trade a readable call stack for eventual consistency and distributed tracing pain. Synchronous is simpler to reason about — until a slow dependency cascades."},
+{id:92,cat:"Architecture",a:"Buy (managed)",b:"Build (self-host)",leanA:"Not your core competency — pay for managed Kafka/DB/search, focus on product.",leanB:"It's core differentiation, or scale makes managed cost/lock-in prohibitive.",senior:"Build-vs-buy is a cost-of-ops vs control/lock-in call. Default to managed for undifferentiated heavy lifting; self-host only where it's strategic or the bill/limits force it."},
+
+/* ---------------- OBSERVABILITY & OPS ---------------- */
+{id:93,cat:"Observability",a:"Full tracing",b:"Sampled tracing",leanA:"Low volume or debugging — capture every request's trace.",leanB:"High volume — sample (head/tail) to control cost and overhead.",senior:"100% tracing at scale is unaffordable and adds latency. Tail-based sampling keeps the interesting traces (errors, slow) while dropping the boring ones — the best of both."},
+{id:94,cat:"Observability",a:"Verbose logging",b:"Lean/structured logging",leanA:"Deep debugging of a thorny issue — temporarily crank it up.",leanB:"Production steady-state — log signal, not noise (cost + needle-in-haystack).",senior:"Logs at scale are a massive cost and a noise problem. Prefer structured logs + metrics for the 'what,' and reserve high-cardinality detail for traces. Dynamic log levels let you turn it up only when needed."},
+{id:95,cat:"Observability",a:"Pull metrics (Prometheus)",b:"Push metrics",leanA:"Service discovery exists; central system scrapes targets — easy health detection.",leanB:"Short-lived/batch jobs or network can't reach targets — push to a gateway.",senior:"Pull naturally detects a dead target (scrape fails) and centralizes config; push suits ephemeral jobs that vanish before a scrape. Many shops run both (pull + pushgateway)."},
+
+/* ---------------- SECURITY ---------------- */
+{id:96,cat:"Security",a:"JWT (stateless)",b:"Session token (stateful)",leanA:"Scale and decoupling — any service validates the token, no central session store.",leanB:"Need instant revocation and small tokens — look up a session id server-side.",senior:"The JWT gotcha: you can't easily revoke one before it expires (it's self-contained). Mitigate with short TTLs + refresh tokens + a denylist — admitting this trade is the senior signal."},
+{id:97,cat:"Security",a:"Encrypt everything",b:"Selective encryption",leanA:"Sensitive/regulated data — TLS in transit, encryption at rest, end-to-end where needed.",leanB:"Low-sensitivity, latency-critical internal traffic where overhead bites.",senior:"Encryption costs CPU and complicates key management/rotation, but at-rest + in-transit is table stakes now. The real tradeoff is E2E (you can't process the data) vs at-rest (you can)."},
+{id:98,cat:"Security",a:"Defense in depth",b:"Latency/simplicity",leanA:"High-value target — layer auth, WAF, rate limits, network policy.",leanB:"Each control adds latency and operational complexity.",senior:"Security is layers, but every layer is latency + a thing that can break or be misconfigured. Place controls where the value is; don't WAF an internal health check."},
+
+/* ---------------- COST & PERFORMANCE ---------------- */
+{id:99,cat:"Cost",a:"Precompute (storage)",b:"Compute on read (CPU)",leanA:"Expensive result read far more than written — compute once, store, serve.",leanB:"Written far more than read, or results too varied to enumerate.",senior:"The fundamental space-vs-time trade. Read:write ratio decides it — and tiered/cold storage lets you precompute the hot stuff while keeping the cold tail cheap."},
+{id:100,cat:"Cost",a:"Stream processing",b:"Batch processing",leanA:"Low-latency insights — process events as they arrive (fraud, alerts).",leanB:"High throughput, exact correctness, cost efficiency — process in bulk.",senior:"Streaming gives freshness but is harder to get exactly-right (windowing, late data) and pricier per event. The Lambda architecture ran both (batch for truth + stream for speed); Kappa says 'just stream and reprocess the log' to avoid two codebases — name that debate."},
+];
+
+const CATS = ["All","Data","Consistency","Cache","Messaging","Sharding","API","Scaling","Search","Reliability","Architecture","Observability","Security","Cost"];
+
+const grid = document.getElementById('grid');
+const pills = document.getElementById('pills');
+const countEl = document.getElementById('count');
+const qEl = document.getElementById('q');
+const emptyEl = document.getElementById('empty');
+
+let activeCat = "All";
+let query = "";
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+
+function cardHTML(d){
+  return `<div class="card">
+    <div class="card-top">
+      <span class="id">#${String(d.id).padStart(3,'0')}</span>
+      <span class="cat">${d.cat}</span>
+    </div>
+    <div class="title"><span class="sa">${esc(d.a)}</span><span class="vs">vs</span><span class="sb">${esc(d.b)}</span></div>
+    <div class="lean a"><span class="tag">Lean ${esc(d.a)}</span><span class="txt">${d.leanA}</span></div>
+    <div class="lean b"><span class="tag">Lean ${esc(d.b)}</span><span class="txt">${d.leanB}</span></div>
+    <div class="senior"><span class="ico">◆</span><span class="txt"><b>Senior move —</b> ${d.senior}</span></div>
+  </div>`;
+}
+
+function render(){
+  const q = query.trim().toLowerCase();
+  const list = DATA.filter(d=>{
+    const catOk = activeCat==="All" || d.cat===activeCat;
+    if(!catOk) return false;
+    if(!q) return true;
+    const hay = (d.a+" "+d.b+" "+d.cat+" "+d.leanA+" "+d.leanB+" "+d.senior).toLowerCase();
+    return hay.includes(q);
+  });
+  grid.innerHTML = list.map(cardHTML).join("");
+  emptyEl.style.display = list.length ? "none" : "block";
+  countEl.innerHTML = `<b>${list.length}</b> / ${DATA.length} shown`;
+}
+
+CATS.forEach(c=>{
+  const el = document.createElement('button');
+  el.className = "pill"+(c==="All"?" active":"");
+  el.textContent = c;
+  el.onclick = ()=>{
+    activeCat = c;
+    document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+    el.classList.add('active');
+    render();
+  };
+  pills.appendChild(el);
+});
+
+qEl.addEventListener('input', e=>{ query = e.target.value; render(); });
+
+render();
+</script>
+</body>
+</html>
