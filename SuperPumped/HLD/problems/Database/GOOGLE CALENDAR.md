@@ -333,7 +333,7 @@ Naive PostgreSQL approach:
 ────────────────────────────────────────────────
 Cron job every minute:
 SELECT * FROM reminders
-WHERE remind_at <= NOW()
+WHERE remind_at <= NOW() 
 AND sent = false
 LIMIT 1000;
 

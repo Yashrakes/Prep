@@ -18,6 +18,8 @@
 14. 1 million request oer day = 10 qps
 15. 99 percent accuracy = 14 min per day down time 
 16. 99.99 percent = 8.6 sec per day down time
+17. debezium is used for cdc to dataabse to kfka
+18. 
  
 
 

@@ -18,5 +18,6 @@
     "Polymorphism",
     "polymorphism"
   ],
-  "attachmentFolderPath": "./"
+  "attachmentFolderPath": "./",
+  "readableLineLength": false
 }
